@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+.idea
+src/user/migrations/
+src/main/migrations/
+.env
