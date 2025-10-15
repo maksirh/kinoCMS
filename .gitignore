@@ -3,4 +3,5 @@ __pycache__/
 .idea
 src/user/migrations/
 src/main/migrations/
+src/cms/migrations/
 .env

@@ -1,0 +1,72 @@
+/* headers.css */
+
+/* Темний фон для всього body */
+body {
+    background-color: #1a1a1a;
+    color: white;
+    min-height: 100vh;
+}
+
+/* Стилі для header */
+.border-bottom {
+    border-bottom: 2px solid #444 !important;
+}
+
+.bg-dark {
+    background-color: #212529 !important;
+    border-radius: 8px;
+}
+
+/* Стилі для навігаційних посилань */
+.nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #ffc107 !important;
+}
+
+.text-white-50:hover {
+    color: #ffc107 !important;
+}
+
+/* Стилі для кнопок */
+.btn-outline-light {
+    border-color: #fff;
+    color: #fff;
+}
+
+.btn-outline-light:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #e0a800;
+}
+
+
+.form-control-dark {
+    border-color: var(--bs-gray);
+}
+
+.form-control-dark:focus {
+    border-color: #fff;
+    box-shadow: 0 0 0 .25rem rgba(255, 255, 255, .25);
+}
+
+.text-small {
+    font-size: 85%;
+}
+
+.dropdown-toggle:not(:focus) {
+    outline: 0;
+}

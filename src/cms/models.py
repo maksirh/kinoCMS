@@ -78,7 +78,7 @@ class Contacts(models.Model):
 
 
 class Mailing(models.Model):
-    html_template = FilePathField()
+    # html_template = FilePathField()
     date = models.DateTimeField()
 
 
