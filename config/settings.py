@@ -42,7 +42,8 @@ INSTALLED_APPS = [
 
     'src.user',
     'src.cms',
-    'src.main'
+    'src.main',
+    'src.core.adminlte'
 ]
 
 AUTH_USER_MODEL = 'user.User'

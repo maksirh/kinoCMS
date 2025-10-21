@@ -5,10 +5,10 @@ from src.cms.models import SEO_Block, Movie, Hall, Cinema, Gallery
 from src.user.models import User
 
 
-class Main_page(models.Model):
+class MainPage(models.Model):
     phone_number1 = models.CharField(max_length=11)
     phone_number2 = models.CharField(max_length=11)
-    seo_block = models.OneToOneField(SEO_Block, on_delete=models.CASCADE)
+    seo_block = models.OneToOneField(SEO_Block, on_delete=models.CASCADE, null=True, blank=True)
 
 
 class Schedule(models.Model):
@@ -27,7 +27,7 @@ class Booking(models.Model):
 
 
 class Page(models.Model):
-    seo_block = models.OneToOneField(SEO_Block, on_delete=models.CASCADE)
+    seo_block = models.OneToOneField(SEO_Block, on_delete=models.CASCADE, null=True, blank=True)
     gallery_image = ManyToManyField(Gallery)
     title = models.CharField(max_length=120)
     description = models.TextField()

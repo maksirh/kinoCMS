@@ -1,9 +1,11 @@
 
 from django.contrib import admin
-from django.urls import path
-from src.main.views import main_page
+from django.urls import path, include
+# from src.core.adminlte.views import index
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main_page, name='main_page'),
+    path('main/', include('src.main.urls', namespace='main')),
+    path('adminlte/', include('src.core.adminlte.urls', namespace='adminlte')),
 ]
