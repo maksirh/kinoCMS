@@ -2,7 +2,7 @@ from django.db import models
 from django.forms import FilePathField
 
 
-class SEO_Block(models.Model):
+class SeoBlock(models.Model):
     url = models.URLField()
     title = models.CharField(max_length=120)
     keywords = models.CharField(max_length=120)
@@ -21,11 +21,11 @@ class Movie(models.Model):
     is_2D = models.BooleanField()
     is_3D = models.BooleanField()
     images = models.ManyToManyField(Gallery)
-    seo_block = models.OneToOneField(SEO_Block, on_delete=models.CASCADE, null=True, blank=True)
+    seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
 
 
 class Cinema(models.Model):
-    seo_block = models.OneToOneField(SEO_Block, on_delete=models.CASCADE, null=True, blank=True)
+    seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
     gallery_image = models.ManyToManyField(Gallery)
     title = models.CharField(max_length=120)
     description = models.TextField()
@@ -36,7 +36,7 @@ class Cinema(models.Model):
 class Hall(models.Model):
     id_cinema = models.ForeignKey(Cinema, on_delete=models.CASCADE)
     gallery_image = models.ManyToManyField(Gallery)
-    seo_block = models.OneToOneField(SEO_Block, on_delete=models.CASCADE, null=True, blank=True)
+    seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
     number = models.CharField(max_length=120)
     description = models.TextField()
     image = models.ImageField()
@@ -74,7 +74,7 @@ class ContactComponent(models.Model):
 
 class Contacts(models.Model):
     component = models.ManyToManyField(ContactComponent)
-    seo_block = models.OneToOneField(SEO_Block, on_delete=models.CASCADE, null=True, blank=True)
+    seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
 
 
 class Mailing(models.Model):
