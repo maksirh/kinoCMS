@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,9 +11,11 @@
     <link href="{% static 'css/headers.css' %}" rel="stylesheet">
 
 </head>
+
 <body>
     <div class="container">
-        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-dark text-white">
+        <header
+            class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-dark text-white">
             <div class="col-md-3 mb-2 mb-md-0">
                 <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none text-white">
                     <span class="fs-4 fw-bold">🎬 KinoCMS</span>
@@ -34,32 +37,79 @@
         </header>
     </div>
 
-    {% block content %}{% endblock %}
+    {% block content %}
+
+    {% endblock %}
 
     <div class="container">
-      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <div class="col-md-4 d-flex align-items-center">
-          <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1" aria-label="Bootstrap">
-                <img src="{% static 'img/logo.png' %}" width="30" height="30" alt="logo">
-          </a>
-          <span class="mb-3 mb-md-0 text-body-secondary">© 2025 Company, Inc</span>
-        </div>
-        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-          <li class="ms-3">
-            <a class="text-body-secondary" href="#" aria-label="Instagram">
-                <img src="{% static 'img/logo_facebook.jpg' %}" width="30" height="30" alt="Facebook">
-            </a>
-          </li>
-          <li class="ms-3">
-            <a class="text-body-secondary" href="#" aria-label="Facebook">
-                <img src="{% static 'img/logo_inst.jpg' %}" width="30" height="30" alt="Instagram">
-            </a>
-          </li>
-        </ul>
-      </footer>
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1"
+                    aria-label="Bootstrap">
+                    <img src="{% static 'img/logo.png' %}" width="30" height="30" alt="logo">
+                </a>
+                <span class="mb-3 mb-md-0 text-body-secondary">© 2025 Company, Inc</span>
+            </div>
+
+
+            <div class="col mb-3">
+                <h5>Афіша</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0 text-body-secondary"></a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0 text-body-secondary">Розклад</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0 text-body-secondary">Скоро в прокаті</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0 text-body-secondary">Кінотеатри</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0 text-body-secondary">Акції</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col mb-3">
+                <h5>Про кінотеатр</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0 text-body-secondary">Новини</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0 text-body-secondary">Реклама</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0 text-body-secondary">Кафе-Бар</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link p-0 text-body-secondary">Контакти</a>
+                    </li>
+                </ul>
+            </div>
+
+
+
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                <li class="ms-3">
+                    <a class="text-body-secondary" href="#" aria-label="Instagram">
+                        <img src="{% static 'img/logo_facebook.jpg' %}" width="30" height="30" alt="Facebook">
+                    </a>
+                </li>
+                <li class="ms-3">
+                    <a class="text-body-secondary" href="#" aria-label="Facebook">
+                        <img src="{% static 'img/logo_inst.jpg' %}" width="30" height="30" alt="Instagram">
+                    </a>
+                </li>
+            </ul>
+        </footer>
     </div>
 
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/color-modes.js' %}"></script>
 </body>
+
 </html>
