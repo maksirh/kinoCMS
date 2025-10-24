@@ -13,29 +13,57 @@
 </head>
 
 <body>
-    <div class="container">
-        <header
-            class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-dark text-white">
-            <div class="col-md-3 mb-2 mb-md-0">
-                <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none text-white">
-                    <span class="fs-4 fw-bold">🎬 KinoCMS</span>
-                </a>
-            </div>
+        <header class="d-flex flex-wrap align-items-center justify-content-between py-3 mb-4 border-bottom bg-dark text-white px-3">
 
-            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="{% url 'main:main_page' %} " class="nav-link px-2 text-white">Головна</a></li>
-                <li><a href="{% url 'main:poster' %}" class="nav-link px-2 text-white-50">Афіша</a></li>
-                <li><a href="#" class="nav-link px-2 text-white-50">Розклад</a></li>
-                <li><a href="#" class="nav-link px-2 text-white-50">Кінотеатри</a></li>
-                <li><a href="#" class="nav-link px-2 text-white-50">Про нас</a></li>
-            </ul>
+  <!-- Логотип і меню -->
+  <div class="d-flex align-items-center">
+    <a href="/" class="d-inline-flex text-decoration-none text-white me-4 align-items-center">
+      <img src="{% static 'img/logo.png' %}" alt="logo" width="35" height="35" class="me-2">
+      <span class="fs-4 fw-bold">KinoCMS</span>
+    </a>
 
-            <div class="col-md-3 text-end">
-                <button type="button" class="btn btn-outline-light me-2">Увійти</button>
-                <button type="button" class="btn btn-warning">Реєстрація</button>
-            </div>
-        </header>
+    <ul class="nav mb-0">
+      <li><a href="{% url 'main:main_page' %}" class="nav-link px-2 text-white fw-bold">Головна</a></li>
+      <li><a href="{% url 'main:poster' %}" class="nav-link px-2 text-white-50">Афіша</a></li>
+      <li><a href="#" class="nav-link px-2 text-white-50">Розклад</a></li>
+      <li><a href="#" class="nav-link px-2 text-white-50">Кінотеатри</a></li>
+      <li><a href="#" class="nav-link px-2 text-white-50">Про нас</a></li>
+    </ul>
+  </div>
+
+  <!-- Телефони, мова, пошук і кнопки -->
+  <div class="d-flex align-items-center">
+
+    <!-- Телефони -->
+    <div class="me-4 text-end">
+      <div>+380 000 0000</div>
+      <div>+380 000 0000</div>
     </div>
+
+    <!-- Мова -->
+    <div class="dropdown me-4">
+      <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">UA</a>
+      <ul class="dropdown-menu dropdown-menu-dark">
+        <li><a class="dropdown-item" href="#">UA</a></li>
+        <li><a class="dropdown-item" href="#">EN</a></li>
+      </ul>
+    </div>
+
+    <!-- Пошук -->
+    <form class="me-3" role="search">
+      <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
+    </form>
+
+    <!-- Кнопки -->
+    <div class="text-end">
+      <button type="button" class="btn btn-outline-light me-2">Увійти</button>
+      <button type="button" class="btn btn-warning">Реєстрація</button>
+    </div>
+
+  </div>
+</header>
+
+
 
     {% block content %}
 

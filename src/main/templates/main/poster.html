@@ -1,6 +1,94 @@
 {% extends "base.html" %}
-
-{% block title %} Головна сторінка {% endblock title %}
+{% load static %}
+{% block title %} Афіша {% endblock title %}
 
 {% block content %}
+<div class="container my-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <aside class="col-12 col-md-3 mb-4 mb-md-0">
+            <div class="sidebar-menu p-3">
+                <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px">
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active" aria-current="page">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link link-body-emphasis">
+                                Dashboard
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+
+                    context
+                </div>
+
+
+            </div>
+        </aside>
+
+        <!-- Poster/content -->
+        <main class="col-12 col-md-9">
+            <section class="schedule">
+                <p class="text-center fs-5 my-4">Дивіться сьогодні!</p>
+
+                <div class="row g-4">
+                    <!-- картки -->
+                    <div class="col-6 col-lg-3">
+                        <div class="card h-100">
+                            <img src="{% static 'img/temporarily/banner.png' %}" class="card-img-top" alt="img">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-3">
+                        <div class="card h-100">
+                            <img src="{% static 'img/temporarily/banner.png' %}" class="card-img-top" alt="img">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-3">
+                        <div class="card h-100">
+                            <img src="{% static 'img/temporarily/banner.png' %}" class="card-img-top" alt="img">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-3">
+                        <div class="card h-100">
+                            <img src="{% static 'img/temporarily/banner.png' %}" class="card-img-top" alt="img">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="coming-soon">
+                <p class="text-center fs-5 my-4">Скоро на екранах!</p>
+
+                <div class="row g-4">
+                    <!-- 4 картки як вище -->
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
 {% endblock %}
