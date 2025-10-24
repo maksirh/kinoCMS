@@ -17,7 +17,7 @@
 
   <!-- Логотип і меню -->
   <div class="d-flex align-items-center">
-    <a href="/" class="d-inline-flex text-decoration-none text-white me-4 align-items-center">
+    <a href=" {% url 'main:main_page' %}" class="d-inline-flex text-decoration-none text-white me-4 align-items-center">
       <img src="{% static 'img/logo.png' %}" alt="logo" width="35" height="35" class="me-2">
       <span class="fs-4 fw-bold">KinoCMS</span>
     </a>
@@ -55,10 +55,8 @@
     </form>
 
     <!-- Кнопки -->
-    <div class="text-end">
-      <button type="button" class="btn btn-outline-light me-2">Увійти</button>
-      <button type="button" class="btn btn-warning">Реєстрація</button>
-    </div>
+    <a href="{% url 'authentication:login' %}" class="btn btn-outline-light me-2">Увійти</a>
+    <a href="{% url 'user:register' %}" class="btn btn-warning">Реєстрація</a>
 
   </div>
 </header>

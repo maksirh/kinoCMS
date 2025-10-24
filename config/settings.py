@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'src.user',
     'src.cms',
     'src.main',
+    'src.authentication',
     'src.core.adminlte'
 ]
 
