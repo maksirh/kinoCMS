@@ -11,4 +11,13 @@ def schedule(request):
     return render(request, "main/schedule.html")
 
 
+def booking(request):
+    return render(request, 'main/booking.html')
+
+
+def schedule_page(request):
+    return render(request, 'main/schedule.html')
+
+
+
 

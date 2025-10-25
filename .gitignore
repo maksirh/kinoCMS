@@ -6,4 +6,4 @@ src/main/migrations/
 src/cms/migrations/
 .env
 
-static/img/temporarily/
+src/core/static/img/temporarily/

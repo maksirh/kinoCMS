@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container my-4">
+  <div class="row g-4">
+    <!-- Ліва колонка: постер і реклама -->
+    <aside class="col-12 col-md-3">
+      <img src="{% static 'img/temporarily/banner.png' %}" class="img-fluid rounded mb-3" alt="Poster">
+      <div class="border rounded d-flex align-items-center justify-content-center" style="height:300px;">
+        Реклама
+      </div>
+    </aside>
+
+    <!-- Права колонка: зал -->
+    <main class="col-12 col-md-9">
+      <!-- Верхня панель -->
+      <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+        <div class="badge text-bg-warning p-3">
+          <div class="small text-uppercase">Ціна, грн</div>
+          <div class="fs-4 fw-bold" id="pricePerSeat">55</div>
+        </div>
+        <div class="ms-auto d-flex gap-3 align-items-center">
+          <div>Білетів: <span id="tickets">0</span></div>
+          <div>Сума: <span id="sum">0</span> грн</div>
+        </div>
+      </div>
+
+      <!-- Екран -->
+      <div class="text-center my-3">
+        <hr class="mb-1">
+        <div class="fw-bold">ЕКРАН</div>
+        <hr class="mt-1">
+      </div>
+
+      <!-- Ряди місць -->
+      <div class="d-flex flex-column gap-2">
+
+        <div class="d-flex align-items-center">
+          <div class="me-2 text-nowrap small">Ряд 1</div>
+          <div class="ms-5">
+
+            {% for i in "123456789012"|make_list %}
+            <button class="seat btn btn-outline-warning me-1 mb-1" data-seat="1-{{ forloop.counter }}">{{ forloop.counter }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center">
+          <div class="me-2 text-nowrap small">Ряд 2</div>
+          <div class="ms-4">
+            {% for i in "12345678901234"|make_list %}
+            <button class="seat btn btn-outline-warning me-1 mb-1" data-seat="2-{{ forloop.counter }}">{{ forloop.counter }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Ряд 3 -->
+        <div class="d-flex align-items-center">
+          <div class="me-2 text-nowrap small">Ряд 3</div>
+          <div class="ms-3">
+            {% for i in "123456789012345"|make_list %}
+            <button class="seat btn btn-outline-warning me-1 mb-1" data-seat="3-{{ forloop.counter }}">{{ forloop.counter }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Блок центральних рядів (приклад рівного блоку) -->
+        {% for row in "456789"|make_list %}
+        <div class="d-flex align-items-center">
+          <div class="me-2 text-nowrap small">Ряд {{ row }}</div>
+          <div class="ms-2">
+            {% for i in "12345678901213"|make_list %}
+            <button class="seat btn btn-outline-warning me-1 mb-1" data-seat="{{ row }}-{{ forloop.counter }}">{{ forloop.counter }}</button>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+
+        <!-- Останній ряд із довшою лінією -->
+        <div class="d-flex align-items-center">
+          <div class="me-2 text-nowrap small">Ряд 10</div>
+          <div class="">
+            {% for i in "12345678901234567890"|make_list %}
+            <button class="seat btn btn-outline-warning me-1 mb-1" data-seat="10-{{ forloop.counter }}">{{ forloop.counter }}</button>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Легенда -->
+      <div class="d-flex align-items-center gap-3 mt-4">
+        <span class="legend seat btn btn-outline-warning disabled">Вільне</span>
+        <span class="legend seat btn btn-warning disabled">Обрано</span>
+        <span class="legend seat btn btn-secondary disabled">Зайняте</span>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Стилі для квадрата місця -->
+<style>
+  .seat {
+    width: 36px;
+    height: 36px;
+    line-height: 1;
+    padding: 0;
+    font-size: 12px;
+  }
+  .seat.selected {
+    /* вибране місце */
+    color: #000 !important;
+  }
+  .legend.seat { pointer-events: none; }
+
+  .container {
+  text-align: center;
+}
+
+
+
+</style>
+
+    <script>
+  (function () {
+    const price = Number(document.getElementById('pricePerSeat').textContent.trim()) || 55;
+    const ticketsEl = document.getElementById('tickets');
+    const sumEl = document.getElementById('sum');
+
+    // приклад зайнятих місць (можеш підставити свої з бекенда)
+    const booked = new Set(['5-7','6-8','10-3','10-19']);
+
+    document.querySelectorAll('.seat').forEach(btn => {
+      const id = btn.dataset.seat;
+      // позначаємо зайняті
+      if (booked.has(id)) {
+        btn.classList.remove('btn-outline-warning');
+        btn.classList.add('btn-secondary');
+        btn.disabled = true;
+        return;
+      }
+
+      btn.addEventListener('click', () => {
+        const isSelected = btn.classList.toggle('selected');
+        btn.classList.toggle('btn-warning', isSelected);
+        btn.classList.toggle('btn-outline-warning', !isSelected);
+        recalc();
+      });
+    });
+
+    function recalc() {
+      const selected = document.querySelectorAll('.seat.selected').length;
+      ticketsEl.textContent = selected;
+      sumEl.textContent = selected * price;
+    }
+  })();
+</script>
+
+{% endblock %}

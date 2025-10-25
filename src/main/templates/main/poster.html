@@ -5,7 +5,6 @@
 {% block content %}
 <div class="container my-4">
     <div class="row">
-        <!-- Sidebar -->
         <aside class="col-12 col-md-3 mb-4 mb-md-0">
             <div class="sidebar-menu p-3">
                 <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px">
@@ -13,17 +12,16 @@
                     <ul class="nav nav-pills flex-column mb-auto">
                         <li class="nav-item">
                             <a href="#" class="nav-link active" aria-current="page">
-                                Home
+                                Афіша
                             </a>
                         </li>
                         <li>
                             <a href="#" class="nav-link link-body-emphasis">
-                                Dashboard
+                                Скоро на екранах
                             </a>
                         </li>
                     </ul>
                     <hr>
-
                     context
                 </div>
 
@@ -31,13 +29,11 @@
             </div>
         </aside>
 
-        <!-- Poster/content -->
         <main class="col-12 col-md-9">
             <section class="schedule">
                 <p class="text-center fs-5 my-4">Дивіться сьогодні!</p>
 
                 <div class="row g-4">
-                    <!-- картки -->
                     <div class="col-6 col-lg-3">
                         <div class="card h-100">
                             <img src="{% static 'img/temporarily/banner.png' %}" class="card-img-top" alt="img">
@@ -85,7 +81,6 @@
                 <p class="text-center fs-5 my-4">Скоро на екранах!</p>
 
                 <div class="row g-4">
-                    <!-- 4 картки як вище -->
                 </div>
             </section>
         </main>
