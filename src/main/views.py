@@ -19,5 +19,9 @@ def schedule_page(request):
     return render(request, 'main/schedule.html')
 
 
+def news_page(request):
+    return  render(request, 'main/news.html')
+
+
 
 
