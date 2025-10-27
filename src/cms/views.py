@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def cinema_page(request):
+    return render(request, 'cms/cinema.html')

@@ -1,0 +1,151 @@
+ {% extends "base.html" %}
+ {% load static %}
+
+{% block content %}
+
+<main class="container my-4">
+  <div class="row g-4">
+    <aside class="col-lg-3 order-lg-1">
+      <div class="card mb-3">
+        <div class="ratio ratio-3x4">
+          <div class="bg-light d-flex align-items-center justify-content-center">Реклама</div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <h6 class="text-uppercase text-muted mb-2">Кількість залів</h6>
+          <ul class="list-group">
+            <li class="list-group-item">Зал 1</li>
+            <li class="list-group-item">Зал 2</li>
+            <li class="list-group-item">Зал 3</li>
+            <li class="list-group-item">Зал 4</li>
+            <li class="list-group-item">Зал 5</li>
+            <li class="list-group-item">Зал 6</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <h6 class="text-uppercase text-muted mb-2">Сьогодні</h6>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">Сеанс 1 <span class="badge text-bg-secondary">12:20</span></li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">Сеанс 2 <span class="badge text-bg-secondary">14:30</span></li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">Сеанс 3 <span class="badge text-bg-secondary">16:45</span></li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">Сеанс 4 <span class="badge text-bg-secondary">19:10</span></li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">Сеанс 5 <span class="badge text-bg-secondary">21:00</span></li>
+          </ul>
+          <a href="#" class="btn btn-success w-100 mt-3">Розклад всіх сеансів</a>
+        </div>
+      </div>
+    </aside>
+
+    <section class="col-lg-9 order-lg-2">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <img src="https://picsum.photos/seed/logo/72/72" class="rounded me-3" alt="">
+            <div>
+              <h3 class="mb-1">Кінотеатр «Оскар»</h3>
+              <div class="btn-group" role="group">
+                <span class="btn btn-outline-secondary btn-sm">IMAX</span>
+                <span class="btn btn-outline-secondary btn-sm">D-BOX</span>
+                <span class="btn btn-outline-secondary btn-sm">DOLBY ATMOS</span>
+                <span class="btn btn-outline-danger btn-sm">VIP</span>
+              </div>
+            </div>
+            <a href="#" class="btn btn-primary ms-auto">Розклад сеансів</a>
+          </div>
+
+          <p class="mb-2">Сучасний мультиплекс у центрі міста з комфортними залами, професійним звуком та великою кількістю прем’єр. Доступні студентські знижки, сімейні квитки та окремий VIP-зал.</p>
+          <p class="mb-0">Поруч зручно припаркуватися, працює кафе-бар та дитяча кімната. Онлайн-бронювання квитків і швидкий кіоск самостійної видачі.</p>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-header fw-semibold">Умови та сервіси</div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="p-3 border rounded">
+                <h6 class="mb-2 text-primary">Дитяча кімната</h6>
+                <p class="mb-0">Окремий простір для дітей з доглядом та ігровою зоною під час сеансів.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 border rounded">
+                <h6 class="mb-2 text-primary">VIP-зал</h6>
+                <p class="mb-0">Комфортні крісла, обслуговування та розширене меню напоїв і закусок.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 border rounded">
+                <h6 class="mb-2 text-primary">Бар Hitchcock</h6>
+                <p class="mb-0">Попкорн, начос, десерти, коктейлі та спеціальні комбо-набори.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 border rounded">
+                <h6 class="mb-2 text-primary">Подарункові сертифікати</h6>
+                <p class="mb-0">Сертифікати на будь-яку суму та абонементи на прем’єри.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-header fw-semibold">Фотогалерея</div>
+        <div id="gallery" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="https://picsum.photos/seed/hall1/1200/500" class="d-block w-100" alt="">
+            </div>
+            <div class="carousel-item">
+              <img src="https://picsum.photos/seed/hall2/1200/500" class="d-block w-100" alt="">
+            </div>
+            <div class="carousel-item">
+              <img src="https://picsum.photos/seed/hall3/1200/500" class="d-block w-100" alt="">
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#gallery" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#gallery" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#gallery" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#gallery" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#gallery" data-bs-slide-to="2"></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h6 class="text-uppercase text-muted mb-2">Адреса</h6>
+              <p class="mb-1">м. Київ, просп. Перемоги, 10</p>
+              <p class="mb-0">Метро «Університет», ТРЦ «Центр»</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h6 class="text-uppercase text-muted mb-2">Контакти</h6>
+              <p class="mb-1">Каса: +38 (044) 000-00-00</p>
+              <p class="mb-0">Email: info@oscar.example</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+
+{% endblock %}
