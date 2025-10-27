@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import main_page, poster, booking, schedule_page, news_page
+from .views import main_page, poster, booking, schedule_page, news_page, cafe_bar_page
 
 app_name = 'main'
 
@@ -9,6 +9,7 @@ urlpatterns = [
     path('booking/', booking, name='booking'),
     path('schedule/', schedule_page, name='schedule_page'),
     path('news/', news_page, name='news_page'),
+    path('cafe', cafe_bar_page, name='cafe_bar_page'),
 ]
 
 

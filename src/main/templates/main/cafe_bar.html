@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<main class="container my-5">
+  <div class="row g-4">
+    <section class="col-lg-9">
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <img src="https://picsum.photos/seed/cafe1/800/500" class="img-fluid rounded" alt="">
+        </div>
+        <div class="col-md-4">
+          <img src="https://picsum.photos/seed/cafe2/800/500" class="img-fluid rounded" alt="">
+        </div>
+        <div class="col-md-4">
+          <img src="https://picsum.photos/seed/cafe3/800/500" class="img-fluid rounded" alt="">
+        </div>
+      </div>
+
+      <h2 class="h3 text-center mb-3">Меню</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Head 1</th>
+              <th>Head 2</th>
+              <th>Head 3</th>
+              <th class="text-center" style="width:90px;">Вибір</th>
+              <th class="text-center" style="width:90px;">Опція</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cell 1</td>
+              <td>Cell 2</td>
+              <td>Cell 3</td>
+              <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+              <td class="text-center"><input class="form-check-input" type="radio" name="r1"></td>
+            </tr>
+            <tr>
+              <td>Cell 4</td>
+              <td>Cell 5</td>
+              <td>Cell 6</td>
+              <td class="text-center"><input class="form-check-input" type="checkbox" checked></td>
+              <td class="text-center"><input class="form-check-input" type="radio" name="r1" checked></td>
+            </tr>
+            <tr>
+              <td>Cell 7</td>
+              <td>Cell 8</td>
+              <td>Cell 9</td>
+              <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+              <td class="text-center"><input class="form-check-input" type="radio" name="r1"></td>
+            </tr>
+            <tr>
+              <td>Cell 10</td>
+              <td>Cell 11</td>
+              <td>Cell 12</td>
+              <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+              <td class="text-center"><input class="form-check-input" type="radio" name="r1"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row g-4 mt-1">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Комбо-набори</h5>
+              <p class="card-text">Попкорн, начос, напої та десерти за спеціальними цінами для глядачів вечірніх сеансів.</p>
+              <a href="#" class="btn btn-outline-primary">Детальніше</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">Дитяче меню</h5>
+              <p class="card-text">Соки, міні-піци, морозиво та корисні снеки. Доступні святкові набори для груп.</p>
+              <a href="#" class="btn btn-outline-primary">Дивитись меню</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="col-lg-3">
+      <div class="card mb-4">
+        <div class="ratio ratio-3x4">
+          <div class="d-flex align-items-center justify-content-center bg-light border">
+            <span class="text-muted">Реклама</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <h6 class="text-uppercase text-muted mb-3">Ми в соцмережах</h6>
+          <div class="d-flex flex-wrap gap-2">
+            <img src="https://i.pravatar.cc/48?img=1" class="rounded" alt="">
+            <img src="https://i.pravatar.cc/48?img=2" class="rounded" alt="">
+            <img src="https://i.pravatar.cc/48?img=3" class="rounded" alt="">
+            <img src="https://i.pravatar.cc/48?img=4" class="rounded" alt="">
+            <img src="https://i.pravatar.cc/48?img=5" class="rounded" alt="">
+            <img src="https://i.pravatar.cc/48?img=6" class="rounded" alt="">
+          </div>
+          <a href="#" class="btn btn-primary w-100 mt-3">Підписатись</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h6 class="text-uppercase text-muted mb-3">Години роботи</h6>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between"><span>Пн–Чт</span><span>10:00–22:00</span></li>
+            <li class="list-group-item d-flex justify-content-between"><span>Пт–Сб</span><span>10:00–23:59</span></li>
+            <li class="list-group-item d-flex justify-content-between"><span>Нд</span><span>10:00–22:00</span></li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+{% endblock %}

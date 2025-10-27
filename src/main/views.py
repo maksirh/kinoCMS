@@ -23,5 +23,9 @@ def news_page(request):
     return  render(request, 'main/news.html')
 
 
+def cafe_bar_page(request):
+    return render(request, 'main/cafe_bar.html')
+
+
 
 
