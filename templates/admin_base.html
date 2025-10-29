@@ -25,60 +25,40 @@
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-
-  <!-- Navbar (тільки верхнє меню) -->
-  <nav class="app-header navbar navbar-expand bg-body">
-    <div class="container-fluid">
-      <!-- Ліва частина -->
-      <ul class="navbar-nav">
-        <!-- Кнопка відкриття/закриття сайдбару -->
-        <li class="nav-item">
-          <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
-            <i class="bi bi-list"></i>
-          </a>
-        </li>
-
-        <li class="nav-item d-none d-md-block">
-          <a href="#" class="nav-link">Home</a>
-        </li>
-      </ul>
-
-      <!-- Права частина -->
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-bell"></i></a>
-        </li>
-        <li class="nav-item dropdown user-menu">
-          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-            <img src="{% static 'assets/img/user2-160x160.jpg' %}" class="user-image rounded-circle" alt="User">
-            <span class="d-none d-md-inline">Admin</span>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Профіль</a></li>
-            <li><a class="dropdown-item" href="#">Вихід</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- Sidebar (тільки бічне меню) -->
-  <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-    <!-- Brand -->
-    <div class="sidebar-brand">
-      <a href="{% url 'admin:index' %}" class="brand-link">
-        <span class="brand-text fw-bold">KinoCMS Admin</span>
-      </a>
-    </div>
-
-    <!-- Вміст сайдбару -->
-    <div class="sidebar-wrapper">
-      <nav class="mt-2">
-        <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
+  <div class="app-wrapper">
+    <!-- NAVBAR -->
+    <nav class="app-header navbar navbar-expand bg-body">
+      <div class="container-fluid">
+        <ul class="navbar-nav">
+          <!-- БУРГЕР для сайдбару -->
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+              <i class="bi bi-list"></i>
+            </a>
+          </li>
+          <!-- ...інші пункти -->
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <!-- ...правий бік -->
+        </ul>
+      </div>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+      <div class="sidebar-wrapper">
+         <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
+          <li class="nav-item">
+            <a href="{% url 'adminlte:statistics' %}" class="nav-link">
               <i class="nav-icon bi bi-speedometer2"></i>
-              <p>Дашборд</p>
+              <p>Статистика</p>
+            </a>
+          </li>
+
+           <li class="nav-item">
+            <a href="{% url 'adminlte:statistics' %}" class="nav-link">
+              <i class="nav-icon bi bi-speedometer2"></i>
+              <p>Банери/Слайдери</p>
             </a>
           </li>
 
@@ -109,34 +89,62 @@
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon bi bi-calendar-event"></i>
-              <p>Сеанси</p>
+              <p>Кінотеатри</p>
             </a>
           </li>
 
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon bi bi-grid-3x3-gap"></i>
-              <p>Зали</p>
+              <p>Новини</p>
             </a>
           </li>
 
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon bi bi-cup-hot"></i>
-              <p>Кафе-Бар</p>
+              <p>Акції</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon bi bi-cup-hot"></i>
+              <p>Сторінки</p>
+            </a>
+          </li>
+
+           <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon bi bi-cup-hot"></i>
+              <p>Користувачі</p>
+            </a>
+          </li>
+
+           <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon bi bi-cup-hot"></i>
+              <p>Розсилання</p>
             </a>
           </li>
         </ul>
-      </nav>
-    </div>
-  </aside>
+      </div>
+    </aside>
 
-  <!-- Основний вміст сторінки -->
-  <main class="app-main">
-    <div class="app-content pt-3 px-3">
-      {% block content %}{% endblock %}
-    </div>
-  </main>
+    <!-- MAIN -->
+    <main class="app-main">
+      <div class="app-content pt-3 px-3">
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+  </div>
+
+  <!-- JS внизу -->
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/overlayscrollbars/overlayscrollbars.umd.min.js' %}"></script>
+  <script src="{% static 'vendor/adminlte/js/adminlte.min.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
 
   <!-- JS: підключати внизу -->
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
@@ -156,6 +164,5 @@
     });
   </script>
 
-  {% block extra_js %}{% endblock %}
 </body>
 </html>

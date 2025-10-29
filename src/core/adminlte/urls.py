@@ -3,5 +3,5 @@ from . import views
 
 app_name = 'adminlte'
 
-urlpatterns = [path('', views.index, name='index'),
+urlpatterns = [path('', views.index, name='statistics'),
 ]
