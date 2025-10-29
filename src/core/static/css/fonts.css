@@ -1,0 +1,22 @@
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('src/core/static/fonts/source-sans-3/source-sans-3-latin-400-normal.woff2') format('woff2'),
+       url('src/core/static/fonts/source-sans-3/source-sans-3-latin-400-normal.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('src/core/static/fonts/source-sans-3/source-sans-3-latin-700-normal.woff2') format('woff2'),
+       url('src/core/static/fonts/source-sans-3/source-sans-3-latin-700-normal.woff') format('woff');
+}
+
+
+body {
+  font-family: 'Source Sans 3', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
