@@ -1,0 +1,256 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<body class="bg-body-tertiary">
+
+  <div class="container py-4">
+
+    <div class="card mb-3">
+      <div class="card-body row g-2 align-items-end">
+        <div class="col-sm-6 col-lg-4">
+          <label class="form-label mb-1">Пошук</label>
+          <input type="search" class="form-control" id="q" placeholder="Назва…">
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <label class="form-label mb-1">Показувати</label>
+          <select class="form-select" id="visible">
+            <option value="">Всі</option>
+            <option value="1">Тільки видимі</option>
+            <option value="0">Тільки приховані</option>
+          </select>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <button type="button" class="btn btn-outline-secondary me-2" id="reset-filters">Скинути</button>
+          <button type="button" class="btn btn-primary" id="apply-filters">Застосувати</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Список фільмів — зараз у прокаті</h5>
+        <div class="btn-group btn-group-sm">
+          <button type="button" class="btn btn-outline-secondary" data-bulk="#grid-now" data-action="show">Показати всі</button>
+          <button type="button" class="btn btn-outline-secondary" data-bulk="#grid-now" data-action="hide">Приховати всі</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="text-secondary small mb-2">Перетягуй бейдж “≡” для зміни порядку.</p>
+
+        <div class="row g-3" id="grid-now">
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="movie-card card h-100 shadow-sm position-relative" data-title="Місія неможлива">
+              <span class="position-absolute top-0 start-0 m-2 badge rounded-pill bg-secondary handle">≡</span>
+              <div class="ratio ratio-3x4 poster">3×4 POSTER</div>
+              <div class="card-body p-2">
+                <div class="form-check form-switch mb-1">
+                  <input class="form-check-input vis-toggle" type="checkbox" checked>
+                  <label class="form-check-label small">Показувати</label>
+                </div>
+                <div class="small fw-semibold text-truncate" title="Місія неможлива">Місія неможлива</div>
+                <div class="small text-secondary text-truncate">Екшн</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="movie-card card h-100 shadow-sm position-relative" data-title="Оппенгеймер">
+              <span class="position-absolute top-0 start-0 m-2 badge rounded-pill bg-secondary handle">≡</span>
+              <div class="ratio ratio-3x4 poster">3×4 POSTER</div>
+              <div class="card-body p-2">
+                <div class="form-check form-switch mb-1">
+                  <input class="form-check-input vis-toggle" type="checkbox" checked>
+                  <label class="form-check-label small">Показувати</label>
+                </div>
+                <div class="small fw-semibold text-truncate" title="Оппенгеймер">Оппенгеймер</div>
+                <div class="small text-secondary text-truncate">Драма</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="movie-card card h-100 shadow-sm position-relative" data-title="Барбі">
+              <span class="position-absolute top-0 start-0 m-2 badge rounded-pill bg-secondary handle">≡</span>
+              <div class="ratio ratio-3x4 poster">3×4 POSTER</div>
+              <div class="card-body p-2">
+                <div class="form-check form-switch mb-1">
+                  <input class="form-check-input vis-toggle" type="checkbox">
+                  <label class="form-check-label small">Показувати</label>
+                </div>
+                <div class="small fw-semibold text-truncate" title="Барбі">Барбі</div>
+                <div class="small text-secondary text-truncate">Комедія</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="movie-card card h-100 shadow-sm position-relative" data-title="Дюна 2">
+              <span class="position-absolute top-0 start-0 m-2 badge rounded-pill bg-secondary handle">≡</span>
+              <div class="ratio ratio-3x4 poster">3×4 POSTER</div>
+              <div class="card-body p-2">
+                <div class="form-check form-switch mb-1">
+                  <input class="form-check-input vis-toggle" type="checkbox" checked>
+                  <label class="form-check-label small">Показувати</label>
+                </div>
+                <div class="small fw-semibold text-truncate" title="Дюна 2">Дюна 2</div>
+                <div class="small text-secondary text-truncate">Фантастика</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="movie-card card h-100 shadow-sm position-relative" data-title="Аватар">
+              <span class="position-absolute top-0 start-0 m-2 badge rounded-pill bg-secondary handle">≡</span>
+              <div class="ratio ratio-3x4 poster">3×4 POSTER</div>
+              <div class="card-body p-2">
+                <div class="form-check form-switch mb-1">
+                  <input class="form-check-input vis-toggle" type="checkbox" checked>
+                  <label class="form-check-label small">Показувати</label>
+                </div>
+                <div class="small fw-semibold text-truncate" title="Аватар">Аватар</div>
+                <div class="small text-secondary text-truncate">Фентезі</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="movie-card card h-100 shadow-sm position-relative" data-title="Джон Вік 4">
+              <span class="position-absolute top-0 start-0 m-2 badge rounded-pill bg-secondary handle">≡</span>
+              <div class="ratio ratio-3x4 poster">3×4 POSTER</div>
+              <div class="card-body p-2">
+                <div class="form-check form-switch mb-1">
+                  <input class="form-check-input vis-toggle" type="checkbox">
+                  <label class="form-check-label small">Показувати</label>
+                </div>
+                <div class="small fw-semibold text-truncate" title="Джон Вік 4">Джон Вік 4</div>
+                <div class="small text-secondary text-truncate">Екшн</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Список фільмів — скоро у прокаті</h5>
+        <div class="btn-group btn-group-sm">
+          <button type="button" class="btn btn-outline-secondary" data-bulk="#grid-soon" data-action="show">Показати всі</button>
+          <button type="button" class="btn btn-outline-secondary" data-bulk="#grid-soon" data-action="hide">Приховати всі</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row g-3" id="grid-soon">
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="movie-card card h-100 shadow-sm position-relative" data-title="Круелла 2">
+              <span class="position-absolute top-0 start-0 m-2 badge rounded-pill bg-secondary handle">≡</span>
+              <div class="ratio ratio-3x4 poster">3×4 POSTER</div>
+              <div class="card-body p-2">
+                <div class="form-check form-switch mb-1">
+                  <input class="form-check-input vis-toggle" type="checkbox" checked>
+                  <label class="form-check-label small">Показувати</label>
+                </div>
+                <div class="small fw-semibold text-truncate">Круелла 2</div>
+                <div class="small text-secondary text-truncate">Комедія</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="movie-card card h-100 shadow-sm position-relative" data-title="Шрек 5">
+              <span class="position-absolute top-0 start-0 m-2 badge rounded-pill bg-secondary handle">≡</span>
+              <div class="ratio ratio-3x4 poster">3×4 POSTER</div>
+              <div class="card-body p-2">
+                <div class="form-check form-switch mb-1">
+                  <input class="form-check-input vis-toggle" type="checkbox">
+                  <label class="form-check-label small">Показувати</label>
+                </div>
+                <div class="small fw-semibold text-truncate">Шрек 5</div>
+                <div class="small text-secondary text-truncate">Анімація</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="movie-card card h-100 shadow-sm position-relative" data-title="Трон 3">
+              <span class="position-absolute top-0 start-0 m-2 badge rounded-pill bg-secondary handle">≡</span>
+              <div class="ratio ratio-3x4 poster">3×4 POSTER</div>
+              <div class="card-body p-2">
+                <div class="form-check form-switch mb-1">
+                  <input class="form-check-input vis-toggle" type="checkbox" checked>
+                  <label class="form-check-label small">Показувати</label>
+                </div>
+                <div class="small fw-semibold text-truncate">Трон 3</div>
+                <div class="small text-secondary text-truncate">Фантастика</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="movie-card card h-100 shadow-sm position-relative" data-title="Бетмен: Перезапуск">
+              <span class="position-absolute top-0 start-0 m-2 badge rounded-pill bg-secondary handle">≡</span>
+              <div class="ratio ratio-3x4 poster">3×4 POSTER</div>
+              <div class="card-body p-2">
+                <div class="form-check form-switch mb-1">
+                  <input class="form-check-input vis-toggle" type="checkbox">
+                  <label class="form-check-label small">Показувати</label>
+                </div>
+                <div class="small fw-semibold text-truncate">Бетмен: Перезапуск</div>
+                <div class="small text-secondary text-truncate">Екшн</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+  <script>
+
+    new Sortable(document.getElementById('grid-now'),  { animation:150, handle:'.handle', ghostClass:'opacity-50' });
+    new Sortable(document.getElementById('grid-soon'), { animation:150, handle:'.handle', ghostClass:'opacity-50' });
+
+    document.querySelectorAll('.vis-toggle').forEach(t => {
+      const card = t.closest('.movie-card');
+      const setDim = () => card.classList.toggle('dim', !t.checked);
+      t.addEventListener('change', setDim);
+      setDim();
+    });
+
+    document.querySelectorAll('[data-bulk]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const grid = document.querySelector(btn.dataset.bulk);
+        const on = btn.dataset.action === 'show';
+        grid.querySelectorAll('.movie-card .vis-toggle').forEach(t => {
+          t.checked = on;
+          t.dispatchEvent(new Event('change'));
+        });
+      });
+    });
+
+    function applyFilters(){
+      const q = document.getElementById('q').value.toLowerCase().trim();
+      const vis = document.getElementById('visible').value; // "", "1", "0"
+      document.querySelectorAll('#grid-now .movie-card, #grid-soon .movie-card').forEach(card => {
+        const title = (card.dataset.title || '').toLowerCase();
+        const visible = !card.classList.contains('dim');
+        let ok = true;
+        if (q && !title.includes(q)) ok = false;
+        if (vis === '1' && !visible) ok = false;
+        if (vis === '0' && visible) ok = false;
+        card.parentElement.style.display = ok ? '' : 'none';
+      });
+    }
+    document.getElementById('apply-filters').addEventListener('click', applyFilters);
+    document.getElementById('reset-filters').addEventListener('click', () => {
+      document.getElementById('q').value = '';
+      document.getElementById('visible').value = '';
+      applyFilters();
+    });
+  </script>
+{% endblock %}

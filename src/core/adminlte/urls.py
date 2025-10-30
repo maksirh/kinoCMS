@@ -1,12 +1,12 @@
 from django.urls import path
-from . import views
+from .views import index, banners_and_sliders, films
 
 app_name = 'adminlte'
 
 urlpatterns = [
-    path('', views.index, name='statistics'),
-    path('bannersandsliders', views.banners_and_sliders, name='banners'),
-
+    path('', index, name='statistics'),
+    path('bannersandsliders', banners_and_sliders, name='banners'),
+    path('films', films, name='films'),
 
 
 ]
