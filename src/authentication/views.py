@@ -1,8 +1,25 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from ..user.models import User
 
-def login(request):
-    return render(request, 'authentication/auth_page.html')
+
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('main:main_page')
+
+        else:
+            messages.error(request, 'Username OR password is incorrect')
+
+
+    return render(request, 'authentication/auth_page.html', {})
 
 
 def register(request):
@@ -14,6 +31,7 @@ def register(request):
         email = request.POST.get('email').strip()
         password = request.POST.get('password').strip()
         address = request.POST.get('address').strip()
+        country = request.POST.get('country')
         city = request.POST.get('city')
         card_number = request.POST.get('card-number').strip()
         phone_number = request.POST.get('phone_number').strip()
@@ -26,6 +44,7 @@ def register(request):
                                         email=email,
                                         password=password,
                                         address=address,
+                                        country=country,
                                         city=city,
                                         card_number=card_number,
                                         phone_number=phone_number,
@@ -36,3 +55,6 @@ def register(request):
 
     return render(request, 'authentication/register_page.html',)
 
+
+def profile(request):
+    return render(request, 'authentication/profile.html')
