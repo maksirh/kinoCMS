@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from ..user.models import User
+from .forms import UserRegistrationForm, UserUpdateForm
 
 
 def login_user(request):
@@ -22,39 +23,48 @@ def login_user(request):
     return render(request, 'authentication/auth_page.html', {})
 
 
+def logout_user(request):
+    logout(request)
+    return redirect('main:main_page')
+
+
+
+
 def register(request):
 
     if request.method == 'POST':
-        first_name = request.POST.get('first_name').strip()
-        last_name = request.POST.get('last_name').strip()
-        username = request.POST.get('username').strip()
-        email = request.POST.get('email').strip()
-        password = request.POST.get('password').strip()
-        address = request.POST.get('address').strip()
-        country = request.POST.get('country')
-        city = request.POST.get('city')
-        card_number = request.POST.get('card-number').strip()
-        phone_number = request.POST.get('phone_number').strip()
-        gender = request.POST.get('gender')
-        language = request.POST.get('language')
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('authentication:login')
 
-        user = User.objects.create_user(first_name=first_name,
-                                        last_name=last_name,
-                                        username=username,
-                                        email=email,
-                                        password=password,
-                                        address=address,
-                                        country=country,
-                                        city=city,
-                                        card_number=card_number,
-                                        phone_number=phone_number,
-                                        gender=gender,
-                                        language=language)
+        else:
+            print(form.errors)
+            messages.error(request, 'Error')
 
-        return redirect('authentication:login')
+    else:
+        form = UserRegistrationForm()
 
-    return render(request, 'authentication/register_page.html',)
+    return render(request, 'authentication/register_page.html', {'form': form})
 
 
+@login_required
 def profile(request):
-    return render(request, 'authentication/profile.html')
+    if request.method == "POST":
+        form = UserUpdateForm(request.POST, instance=request.user)
+        print("POST keys:", list(request.POST.keys()))
+        print("is_valid:", form.is_valid())
+        print("errors:", form.errors)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Профіль оновлено")
+            return redirect("authentication:profile")
+        messages.error(request, "Перевірте форму, є помилки.")
+    else:
+        form = UserUpdateForm(instance=request.user)
+
+    return render(request, "authentication/profile.html", {"form": form})
+
+
+
+
