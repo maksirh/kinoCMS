@@ -5,5 +5,5 @@ src/user/migrations/
 src/main/migrations/
 src/cms/migrations/
 .env
-
+src/core/media/
 src/core/static/img/temporarily/

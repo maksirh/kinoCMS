@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from ..user.models import User
 from .forms import UserRegistrationForm, UserUpdateForm
 
 
@@ -52,9 +51,6 @@ def register(request):
 def profile(request):
     if request.method == "POST":
         form = UserUpdateForm(request.POST, instance=request.user)
-        print("POST keys:", list(request.POST.keys()))
-        print("is_valid:", form.is_valid())
-        print("errors:", form.errors)
         if form.is_valid():
             form.save()
             messages.success(request, "Профіль оновлено")

@@ -44,16 +44,17 @@ class Hall(models.Model):
 
 
 class BannerComponent(models.Model):
-    image = models.ImageField()
+    image = models.ImageField(upload_to="banners/", blank=True)
     text = models.TextField()
     url = models.URLField()
 
 
 class Banner(models.Model):
-    banner_component = models.ManyToManyField(BannerComponent)
+    banner_component = models.ManyToManyField(BannerComponent, related_name="banners", blank=True)
     speed = models.IntegerField()
     is_active = models.BooleanField()
     is_promo = models.BooleanField()
+
 
 
 class ThroughBanner(models.Model):

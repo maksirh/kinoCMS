@@ -1,180 +1,243 @@
 {% extends "admin_base.html" %}
-
-
+{% load static %}
 {% block content %}
+<style>
+  .comp-card{
+    position:relative; border:2px solid #6c757d; border-radius:8px; padding:12px; width:220px; background:#f8f9fa;
+  }
 
-<div class="container-fluid">
+   .file-holder input[type="file"]{
+    position:absolute; left:-9999px; width:1px; height:1px; opacity:0;
+  }
+  .preview-box { pointer-events:none; }
+   .comp-card textarea {
+    min-height: 96px;
+    max-width: 100%;
+    min-width: 100%;
+    resize: vertical;
+  }
+  .comp-grid{
+    display:flex; flex-wrap:wrap; gap:16px;
+  }
+  .preview-box{
+    height:110px; background:#e9ecef; border:2px solid #495057; border-radius:6px;
+    display:flex; align-items:center; justify-content:center; color:#6c757d; font-size:14px;
+    background-image:url("{% static 'img/placeholder-image.svg' %}");
+    background-repeat:no-repeat; background-position:center; background-size:64px 64px;
+  }
+  .close-x{
+    position:absolute; right:-8px; top:-8px; width:26px; height:26px; border-radius:50%;
+    background:#212529; color:#fff; border:2px solid #fff; display:flex; align-items:center; justify-content:center;
+    font-weight:700; cursor:pointer; line-height:1;
+  }
+  .add-btn{ width:100%; }
+  .mini-label{ font-size:12px; color:#6c757d; }
+  .side-add{
+    display:flex; align-items:center; justify-content:center; width:90px; height:110px;
+    border:2px dashed #6c757d; border-radius:8px; background:#f8f9fa; cursor:pointer; text-align:center; padding:8px;
+  }
+  .switch {
+    position: relative; display: inline-block; width: 44px; height: 24px; vertical-align: middle;
+  }
+  .switch input {display:none;}
+  .slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #dee2e6; transition: .2s; border-radius: 24px;
+  }
+  .slider:before {
+    position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+    background-color: white; transition: .2s; border-radius: 50%;
+  }
+  .switch input:checked + .slider { background-color: #28a745; }
+  .switch input:checked + .slider:before { transform: translateX(20px); }
+</style>
 
-  <!-- === На головній — верх === -->
-  <form method="post" enctype="multipart/form-data" id="form-top">
+<div class="container mt-4">
+  <h2 class="mb-3">{{ form.instance.pk|default:"Створення банера" }}</h2>
+
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="card mb-4">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="card-title mb-0">На головній — верх</h5>
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" name="top_enabled" id="top_enabled" checked>
-          <label class="form-check-label" for="top_enabled">Увімкнено</label>
+
+    <div class="card p-3 mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div><span class="mini-label">Розмір:</span> <strong>1000x190</strong></div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="mini-label">Активний</span>
+          <label class="switch">
+            {{ form.is_active.as_widget|safe }}
+            <span class="slider"></span>
+          </label>
         </div>
       </div>
 
-      <div class="card-body">
-        <p class="text-secondary small mb-2">Розмір: <strong>1000×190</strong></p>
-
-        <div class="d-flex flex-wrap gap-3" id="top-list" data-name="top">
-          <!-- Банер-картка (шаблон клонування) -->
-          <div class="banner-item card p-2" style="width: 180px;">
-            <div class="d-flex justify-content-end">
-              <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle btn-remove" title="Видалити" aria-label="Видалити">&times;</button>
-            </div>
-
-            <div class="ratio ratio-16x9 mb-2 bg-body-secondary border rounded overflow-hidden">
-              <img class="banner-preview w-100 h-100 object-fit-cover" alt="preview" src="">
-            </div>
-
-            <div class="d-grid gap-2">
-              <label class="btn btn-outline-primary btn-sm mb-0">
-                Додати
-                <input class="banner-file d-none" type="file" accept="image/*" name="top_image[]">
-              </label>
-            </div>
-
-            <div class="mt-2">
-              <label class="form-label form-label-sm mb-1">URL</label>
-              <input type="url" class="form-control form-control-sm" name="top_url[]" placeholder="https://...">
-            </div>
-
-            <div class="mt-2">
-              <label class="form-label form-label-sm mb-1">Текст</label>
-              <input type="text" class="form-control form-control-sm" name="top_text[]" placeholder="Підпис банеру">
-            </div>
-          </div>
-          <!-- /банер-картка -->
+      <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label">Швидкість обертання</label>
+          {{ form.speed }}
+          {{ form.speed.errors }}
         </div>
-
-        <div class="mt-3 d-flex gap-2">
-          <button type="button" class="btn btn-outline-secondary btn-sm" data-action="add" data-target="#top-list">Додати ще фото</button>
-
-          <div class="ms-auto d-flex align-items-center gap-2">
-            <label for="top_speed" class="mb-0">Швидкість ротації:</label>
-            <select id="top_speed" name="top_speed" class="form-select form-select-sm" style="width: auto;">
-              <option value="3">3с</option>
-              <option value="5" selected>5с</option>
-              <option value="8">8с</option>
-              <option value="12">12с</option>
-            </select>
-            <button type="submit" class="btn btn-primary">Зберегти</button>
-          </div>
+        <div class="col-md-3">
+          <label class="form-label d-block">Промо</label>
+          {{ form.is_promo }}
+          {{ form.is_promo.errors }}
         </div>
       </div>
     </div>
-  </form>
 
-  <!-- === Сквозний банер на задньому фоні === -->
-  <form method="post" enctype="multipart/form-data" id="form-bg" class="mb-4">
-    {% csrf_token %}
-    <div class="card">
-      <div class="card-header"><h5 class="card-title mb-0">Сквозний банер на задньому фоні</h5></div>
-      <div class="card-body">
-        <p class="text-secondary small mb-3">Розмір: <strong>2000×3000</strong></p>
 
-        <div class="row g-3 align-items-end">
-          <div class="col-auto">
-            <div class="ratio ratio-16x9 bg-body-secondary border rounded overflow-hidden" style="width:210px;">
-              <img class="banner-preview w-100 h-100 object-fit-cover" id="bg-preview" alt="">
+    <div class="card p-3">
+      <h5 class="mb-3">Компоненти</h5>
+
+      {{ formset.management_form }}
+      {% if formset.non_form_errors %}
+        <div class="alert alert-danger">{{ formset.non_form_errors }}</div>
+      {% endif %}
+
+      <div class="comp-grid" id="components-grid">
+        {% for f in formset %}
+          {% for h in f.hidden_fields %}{{ h }}{% endfor %}
+          <div class="comp-card component-item" data-index="{{ forloop.counter0 }}">
+            <div class="close-x" title="Видалити" onclick="markDelete(this)">×</div>
+
+            <div class="preview-box mb-2" data-preview>
+                {% if f.instance.pk and f.instance.image %}
+                <img src="{{ f.instance.image.url }}" alt="" style="max-width:100%;max-height:100%;object-fit:contain;">
+            {% else %}
+                Попередній перегляд
+            {% endif %}
             </div>
-          </div>
-          <div class="col-auto d-grid">
-            <label class="btn btn-outline-primary mb-0">
-              Додати
-              <input type="file" class="d-none" id="bg-file" name="bg_image" accept="image/*">
-            </label>
-          </div>
-          <div class="col-auto d-grid">
-            <button type="button" class="btn btn-outline-danger" id="bg-remove">Видалити</button>
-          </div>
-        </div>
 
-        <div class="mt-4">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="bg_mode" id="bg_mode_photo" value="photo" checked>
-            <label class="form-check-label" for="bg_mode_photo">Фото на фоні</label>
-          </div>
-          <div class="form-check mt-1">
-            <input class="form-check-input" type="radio" name="bg_mode" id="bg_mode_plain" value="plain">
-            <label class="form-check-label" for="bg_mode_plain">Просто фон</label>
-          </div>
-        </div>
+            <button class="btn btn-secondary btn-sm add-btn mb-2" type="button" onclick="chooseFile(this)">Додати</button>
 
-        <div class="mt-3 text-end">
-          <button type="submit" class="btn btn-primary">Зберегти</button>
-        </div>
+            <div class="mb-2">
+              <span class="mini-label">URL:</span>
+              {{ f.url|default_if_none:"" }}
+              {{ f.url.errors }}
+            </div>
+            <div class="mb-2">
+              <span class="mini-label">Текст:</span>
+              {{ f.text|default_if_none:"" }}
+              {{ f.text.errors }}
+            </div>
+
+
+            <div class="file-holder">
+              {{ f.image }}
+              {{ f.image.errors }}
+            </div>
+
+            {% if f.DELETE %}
+              <div class="d-none delete-holder">{{ f.DELETE }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <!-- бокова кнопка "Додати фото" -->
+        <div class="side-add" id="add-photo" onclick="addForm()">Додати<br>фото</div>
       </div>
     </div>
-  </form>
 
-  <!-- === На головній — Новини / Акції === -->
-  <form method="post" enctype="multipart/form-data" id="form-news">
-    {% csrf_token %}
-    <div class="card">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="card-title mb-0">На головній — Новини / Акції</h5>
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" name="news_enabled" id="news_enabled" checked>
-          <label class="form-check-label" for="news_enabled">Увімкнено</label>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <p class="text-secondary small mb-2">Розмір: <strong>1000×190</strong></p>
-
-        <div class="d-flex flex-wrap gap-3" id="news-list" data-name="news">
-          <!-- клонувані елементи такі самі, як у верхньому блоці -->
-        </div>
-
-        <div class="mt-3 d-flex gap-2">
-          <button type="button" class="btn btn-outline-secondary btn-sm" data-action="add" data-target="#news-list">Додати ще фото</button>
-
-          <div class="ms-auto d-flex align-items-center gap-2">
-            <label for="news_speed" class="mb-0">Швидкість ротації:</label>
-            <select id="news_speed" name="news_speed" class="form-select form-select-sm" style="width:auto;">
-              <option value="3">3с</option>
-              <option value="5" selected>5с</option>
-              <option value="8">8с</option>
-              <option value="12">12с</option>
-            </select>
-            <button type="submit" class="btn btn-primary">Зберегти</button>
-          </div>
-        </div>
-      </div>
+    <div class="text-center my-3">
+      <button type="submit" class="btn btn-primary px-4">Зберегти</button>
     </div>
-  </form>
 
+    <template id="empty-form-template">
+      {% with ef=formset.empty_form %}
+      <div class="comp-card component-item">
+        <div class="close-x" title="Видалити" onclick="markDelete(this)">×</div>
+        <div class="preview-box mb-2" data-preview>Попередній перегляд</div>
+        <button class="btn btn-secondary btn-sm add-btn mb-2" type="button" onclick="chooseFile(this)">Додати</button>
+
+        <div class="mb-2">
+          <span class="mini-label">URL:</span>
+          {{ ef.url }}
+        </div>
+        <div class="mb-2">
+          <span class="mini-label">Текст:</span>
+          {{ ef.text }}
+        </div>
+
+        <div class="file-holder">
+          {{ ef.image }}
+        </div>
+        {% if ef.DELETE %}
+          <div class="d-none delete-holder">{{ ef.DELETE }}</div>
+        {% endif %}
+
+        {% for h in ef.hidden_fields %}{{ h }}{% endfor %}
+      </div>
+      {% endwith %}
+    </template>
+
+  </form>
 </div>
 
-<!-- Шаблон картки для клонування (прихований) -->
-<template id="tpl-banner-item">
-  <div class="banner-item card p-2" style="width: 180px;">
-    <div class="d-flex justify-content-end">
-      <button type="button" class="btn btn-sm btn-outline-secondary rounded-circle btn-remove" title="Видалити" aria-label="Видалити">&times;</button>
-    </div>
-    <div class="ratio ratio-16x9 mb-2 bg-body-secondary border rounded overflow-hidden">
-      <img class="banner-preview w-100 h-100 object-fit-cover" alt="preview" src="">
-    </div>
-    <div class="d-grid gap-2">
-      <label class="btn btn-outline-primary btn-sm mb-0">
-        Додати
-        <input class="banner-file d-none" type="file" accept="image/*">
-      </label>
-    </div>
-    <div class="mt-2">
-      <label class="form-label form-label-sm mb-1">URL</label>
-      <input type="url" class="form-control form-control-sm" placeholder="https://...">
-    </div>
-    <div class="mt-2">
-      <label class="form-label form-label-sm mb-1">Текст</label>
-      <input type="text" class="form-control form-control-sm" placeholder="Підпис банеру">
-    </div>
-  </div>
-</template>
-{% endblock %}
+<script>
+  function chooseFile(btn){
+    const card = btn.closest('.comp-card');
+    const fileInput = card.querySelector('.file-holder input[type="file"]');
+    if (fileInput){
+      fileInput.click();
+      fileInput.onchange = () => renderPreview(card, fileInput);
+    }
+  }
 
+  // прев'ю
+  function renderPreview(card, fileInput){
+    const preview = card.querySelector('[data-preview]');
+    const file = fileInput.files && fileInput.files[0];
+    if (file){
+      const reader = new FileReader();
+      reader.onload = e => {
+         preview.style.backgroundImage = 'none';
+         preview.innerHTML = `<img src="${e.target.result}" style="max-width:100%;max-height:100%;object-fit:contain;">`;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // позначити на видалення (проставити DELETE і приховати)
+  function markDelete(el){
+    const card = el.closest('.comp-card');
+    const del = card.querySelector('.delete-holder input[type="checkbox"]');
+    if (del){
+      del.checked = true;
+      card.style.opacity = .5;
+    } else {
+      card.remove();
+      decrementTotalForms();
+    }
+  }
+
+  function addForm(){
+    const tmpl = document.getElementById('empty-form-template').content.cloneNode(true);
+    const grid = document.getElementById('components-grid');
+    const total = document.getElementById('id_items-TOTAL_FORMS');
+    const index = Number(total.value);
+
+    tmpl.querySelectorAll('[name],[id],[for]').forEach(el=>{
+      if (el.name) el.name = el.name.replace('__prefix__', index);
+      if (el.id)   el.id   = el.id.replace('__prefix__', index);
+      if (el.getAttribute('for')){
+        el.setAttribute('for', el.getAttribute('for').replace('__prefix__', index));
+      }
+    });
+
+    total.value = index + 1;
+    grid.insertBefore(tmpl, document.getElementById('add-photo'));
+  }
+
+  function decrementTotalForms(){
+    const total = document.getElementById('id_items-TOTAL_FORMS');
+    if (total) {
+      const n = Math.max(0, Number(total.value) - 1);
+      total.value = n;
+    }
+  }
+
+  document.querySelectorAll('.comp-card .file-holder input[type="file"]').forEach(inp=>{
+    const card = inp.closest('.comp-card');
+    inp.addEventListener('change', ()=>renderPreview(card, inp));
+  });
+</script>
+{% endblock %}
