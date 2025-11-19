@@ -8,51 +8,103 @@ def index(request):
     return render(request, 'adminlte/dashboard.html')
 
 
-def banners_and_sliders(request, banner_id=None):
-    banner = Banner.objects.order_by('pk').first()
-    if banner is None:
-        banner = Banner.objects.create(speed=5, is_active=True, is_promo=False)
 
-    if request.method == "POST":
-        form = BannerForm(request.POST, instance=banner)
-        formset = BannerComponentFormSet(
-            request.POST, request.FILES,
-            queryset=banner.banner_component.all(),
-            prefix="items"
-        )
+def banners_edit(request):
+    banner_top = Banner.objects.order_by('pk').filter(is_promo=True).first()
+    if banner_top is None:
+        banner_top = Banner.objects.create(speed=5, is_active=True, is_promo=True)
 
-        if form.is_valid() and formset.is_valid():
-            banner = form.save()
+    banner_news = Banner.objects.order_by('pk').filter(is_promo=False).first()
+    if banner_news is None:
+        banner_news = Banner.objects.create(speed=5, is_active=True, is_promo=False)
 
-            for f in formset.deleted_forms:
-                obj = f.instance
-                if obj.pk:
-                    banner.banner_component.remove(obj)
-                    obj.delete()
+    form_top = BannerForm(instance=banner_top, prefix="top_main")
+    formset_top = BannerComponentFormSet(
+        queryset=banner_top.banner_component.all(),
+        prefix='top_items',
+    )
 
-            components = formset.save(commit=False)
-
-            instances = formset.save(commit=False)
-            for obj in instances:
-                obj.save()
-                banner.banner_component.add(obj)
-
-        return redirect("adminlte:banners")
-
-    form = BannerForm(instance=banner)
-    formset = BannerComponentFormSet(
-        queryset=banner.banner_component.all(),
-        prefix='items',
+    form_news = BannerForm(instance=banner_news, prefix="news_main")
+    formset_news = BannerComponentFormSet(
+        queryset=banner_news.banner_component.all(),
+        prefix='news_items',
     )
 
     return render(request, "adminlte/banners_edit.html", {
-        "form": form,
-        "formset": formset,
+        "form_top": form_top,
+        "formset_top": formset_top,
+        "form_news": form_news,
+        "formset_news": formset_news,
     })
 
 
+def banners_top_update(request):
+    banner = Banner.objects.order_by('pk').filter(is_promo=True).first()
+    if not banner:
+        banner = Banner.objects.create(speed=5, is_active=True, is_promo=True)
+
+    if request.method == "POST":
+        form = BannerForm(request.POST, instance=banner, prefix="top_main")
+        formset = BannerComponentFormSet(
+            request.POST, request.FILES,
+            queryset=banner.banner_component.all(),
+            prefix="top_items"
+        )
+
+        if form.is_valid() and formset.is_valid():
+            banner_instance = form.save()
+
+            for f in formset.deleted_forms:
+                comp = f.instance
+                if comp.pk:
+                    banner_instance.banner_component.remove(comp)
+
+                    comp.delete()
+
+            instances = formset.save(commit=False)
+            for comp in instances:
+                comp.save()
+                banner_instance.banner_component.add(comp)
+
+            return redirect("adminlte:banners")
+        else:
+            print("TOP Errors:", form.errors, formset.errors)
+
+    return redirect("adminlte:banners")
 
 
+def news_and_actions_update(request):
+    banner = Banner.objects.order_by('pk').filter(is_promo=False).first()
+    if not banner:
+        banner = Banner.objects.create(speed=5, is_active=True, is_promo=False)
+
+    if request.method == "POST":
+        form = BannerForm(request.POST, instance=banner, prefix="news_main")
+        formset = BannerComponentFormSet(
+            request.POST, request.FILES,
+            queryset=banner.banner_component.all(),
+            prefix="news_items"
+        )
+
+        if form.is_valid() and formset.is_valid():
+            banner_instance = form.save()
+
+            for f in formset.deleted_forms:
+                comp = f.instance
+                if comp.pk:
+                    banner_instance.banner_component.remove(comp)
+                    comp.delete()
+
+            instances = formset.save(commit=False)
+            for comp in instances:
+                comp.save()
+                banner_instance.banner_component.add(comp)
+
+            return redirect("adminlte:banners")
+        else:
+             print("NEWS Errors:", form.errors, formset.errors)
+
+    return redirect("adminlte:banners")
 
 def films(request):
     return render(request, 'adminlte/films.html')

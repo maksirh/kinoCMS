@@ -19,13 +19,13 @@
               <div class="row g-3">
                 <div class="col-sm-6">
                   <label for="first_name" class="form-label">First name</label>
-                  <input type="text" class="form-control" id="first_name" name="first_name" required value="{{ form.instance.first_name }}">
+                    {{ form.first_name }}
                   <div class="invalid-feedback">Valid first name is required.</div>
                 </div>
 
                 <div class="col-sm-6">
                   <label for="last_name" class="form-label">Last name</label>
-                  <input type="text" class="form-control" id="last_name" name="last_name" value="{{ request.user.last_name }}" required>
+                  {{ form.last_name }}
                   <div class="invalid-feedback">Valid last name is required.</div>
                 </div>
 
@@ -33,7 +33,7 @@
                   <label for="username" class="form-label">Username</label>
                   <div class="input-group has-validation">
                     <span class="input-group-text">@</span>
-                    <input type="text" class="form-control" id="username" name="username" value="{{ request.user.username }}" readonly>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ form.instance.username }}" readonly>
                     <div class="invalid-feedback">Your username is required.</div>
                   </div>
                 </div>
@@ -41,7 +41,7 @@
                 <div class="col-12">
                   <label for="email" class="form-label">Email <span
                       class="text-body-secondary">(Optional)</span></label>
-                  <input type="email" class="form-control" id="email" name="email" value="{{ request.user.email }}" placeholder="you@example.com">
+                  <input type="email" class="form-control" id="email" name="email" value="{{ form.instance.email }}" placeholder="you@example.com">
                   <div class="invalid-feedback">Please enter a valid email.</div>
                 </div>
               </div>
@@ -52,14 +52,14 @@
               <div class="row g-3">
                 <div class="col-12">
                   <label for="address" class="form-label">Address</label>
-                  <input type="text" class="form-control" id="address" name="address" value="{{ request.user.address }}" required
+                  <input type="text" class="form-control" id="address" name="address" value="{{ form.instance.address }}" required
                     placeholder="1234 Main St">
                   <div class="invalid-feedback">Please enter your shipping address.</div>
                 </div>
 
                 <div class="col-12">
                   <label for="phone_number" class="form-label">Phone number</label>
-                  <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{ request.user.phone_number }}" required>
+                  <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{ form.instance.phone_number }}" required>
                 </div>
 
 
@@ -67,8 +67,8 @@
                   <label for="language" class="form-label">Language</label>
                   <select class="form-select" id="language" name="language" required>
                       <option value="">Choose...</option>
-                      <option value="en" {% if request.user.language == "en" %}selected{% endif %}>English</option>
-                      <option value="uk" {% if request.user.language == "uk" %}selected{% endif %}>Ukrainian</option>
+                      <option value="en" {% if form.instance.language == "en" %}selected{% endif %}>English</option>
+                      <option value="uk" {% if form.instance.language == "uk" %}selected{% endif %}>Ukrainian</option>
                   </select>
                   <div class="invalid-feedback">Please provide a valid city.</div>
                 </div>
@@ -77,9 +77,9 @@
                   <label for="gender" class="form-label">Gender</label>
                   <select class="form-select" id="gender" name="gender" required>
                       <option value="">Choose...</option>
-                      <option value="M" {% if request.user.gender == "M" %}selected{% endif %}>Male</option>
-                      <option value="F" {% if request.user.gender == "F" %}selected{% endif %}>Female</option>
-                      <option value="O" {% if request.user.gender == "O" %}selected{% endif %}>Other</option>
+                      <option value="M" {% if form.instance.gender == "M" %}selected{% endif %}>Male</option>
+                      <option value="F" {% if form.instance.gender == "F" %}selected{% endif %}>Female</option>
+                      <option value="O" {% if form.instance.gender == "O" %}selected{% endif %}>Other</option>
                   </select>
                 </div>
 
@@ -88,7 +88,7 @@
                   <label for="city" class="form-label">City</label>
                   <select class="form-select" id="city" required="" name="city">
                   <option value="">Choose...</option>
-                    <option value="California" {% if request.user.city == "California" %}selected{% endif %}>California</option>
+                    <option value="California" {% if form.instance.city == "California" %}selected{% endif %}>California</option>
                     <option>California</option>
                   </select>
                   <div class="invalid-feedback">
@@ -98,7 +98,7 @@
 
                 <div class="col-md-6">
                   <label for="card_number" class="form-label">Card number</label>
-                  <input type="text" class="form-control" id="card_number" name="card_number" value="{{ request.user.card_number }}" required>
+                  <input type="text" class="form-control" id="card_number" name="card_number" value="{{ form.instance.card_number }}" required>
                   <div class="invalid-feedback">Credit card number is required</div>
                 </div>
               </div>

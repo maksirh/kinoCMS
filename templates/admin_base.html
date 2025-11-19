@@ -6,16 +6,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{% block title %}Адмінка{% endblock %}</title>
 
-  <!-- Шрифт (локально, як ти зробив) -->
   <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
 
-  <!-- Bootstrap 5 CSS (якщо не вшитий у adminlte.css) -->
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
-  <!-- Bootstrap Icons (для <i class="bi ...">) -->
   <link rel="stylesheet" href="{% static 'css/bootstrap-icons.css' %}">
 
-  <!-- OverlayScrollbars (опціонально, але бажано для сайдбару) -->
   <link rel="stylesheet" href="{% static 'css/overlayscrollbars.min.css' %}">
 
     <link rel="stylesheet" href="{% static 'css/adminlte.css' %}">
@@ -26,25 +22,20 @@
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
   <div class="app-wrapper">
-    <!-- NAVBAR -->
     <nav class="app-header navbar navbar-expand bg-body">
       <div class="container-fluid">
         <ul class="navbar-nav">
-          <!-- БУРГЕР для сайдбару -->
           <li class="nav-item">
             <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
               <i class="bi bi-list"></i>
             </a>
           </li>
-          <!-- ...інші пункти -->
         </ul>
         <ul class="navbar-nav ms-auto">
-          <!-- ...правий бік -->
         </ul>
       </div>
     </nav>
 
-    <!-- SIDEBAR -->
     <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
       <div class="sidebar-wrapper">
          <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
@@ -131,7 +122,6 @@
       </div>
     </aside>
 
-    <!-- MAIN -->
     <main class="app-main">
       <div class="app-content pt-3 px-3">
         {% block content %}{% endblock %}
@@ -139,20 +129,17 @@
     </main>
   </div>
 
-  <!-- JS внизу -->
   <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'vendor/overlayscrollbars/overlayscrollbars.umd.min.js' %}"></script>
   <script src="{% static 'vendor/adminlte/js/adminlte.min.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 
-  <!-- JS: підключати внизу -->
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'js/overlayscrollbars.umd.min.js' %}"></script>
   <script src="{% static 'js/adminlte.js' %}"  ></script>
 
 
-  <!-- Ініціалізація кастомного скролу для сайдбару (опційно) -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const el = document.querySelector('.sidebar-wrapper');

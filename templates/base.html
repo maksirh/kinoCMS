@@ -65,7 +65,7 @@
     </form>
 
       {% if request.user.is_authenticated %}
-          <a href="{% url 'authentication:profile' %}"> <h4 class="d-inline me-3">{{ user_inf.username }}</h4> </a>
+          <a href="{% url 'authentication:profile' %}"> <h4 class="d-inline me-3">{{ request.user.username }}</h4> </a>
 
           <a  href="{% url 'authentication:logout' %}"> <h4 class="d-inline">logout</h4> </a>
 

@@ -6,11 +6,12 @@ from django.forms import ModelForm, inlineformset_factory, modelformset_factory
 class BannerForm(forms.ModelForm):
     class Meta:
         model = Banner
-        fields = ["speed", "is_active", "is_promo"]
+        fields = ["speed", "is_active"]
 
 
 class BannerComponentForm(forms.ModelForm):
     image = forms.ImageField(required=False, widget=forms.FileInput(attrs={"accept": "image/*"}))
+    text = forms.CharField(required=False, widget=forms.Textarea)
     class Meta:
         model = BannerComponent
         fields = ["image", "url", "text"]
@@ -20,6 +21,6 @@ class BannerComponentForm(forms.ModelForm):
 BannerComponentFormSet = modelformset_factory(
     BannerComponent,
     form=BannerComponentForm,
-    extra=3,
+    extra=0,
     can_delete=True
 )

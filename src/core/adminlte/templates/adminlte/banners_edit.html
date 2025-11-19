@@ -53,18 +53,18 @@
 </style>
 
 <div class="container mt-4">
-  <h2 class="mb-3">{{ form.instance.pk|default:"Створення банера" }}</h2>
+  <h2 class="mb-3">Верхній банер на головній</h2>
 
-  <form method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data" action="{% url 'adminlte:banners_top_update' %}">
     {% csrf_token %}
 
-    <div class="card p-3 mb-3">
+    <div class="card p-3 mb-3">s
       <div class="d-flex justify-content-between align-items-center mb-2">
         <div><span class="mini-label">Розмір:</span> <strong>1000x190</strong></div>
         <div class="d-flex align-items-center gap-2">
           <span class="mini-label">Активний</span>
           <label class="switch">
-            {{ form.is_active.as_widget|safe }}
+            {{ form_top.is_active.as_widget|safe }}
             <span class="slider"></span>
           </label>
         </div>
@@ -73,13 +73,8 @@
       <div class="row g-3 align-items-end">
         <div class="col-md-3">
           <label class="form-label">Швидкість обертання</label>
-          {{ form.speed }}
-          {{ form.speed.errors }}
-        </div>
-        <div class="col-md-3">
-          <label class="form-label d-block">Промо</label>
-          {{ form.is_promo }}
-          {{ form.is_promo.errors }}
+          {{ form_top.speed }}
+          {{ form_top.speed.errors }}
         </div>
       </div>
     </div>
@@ -88,13 +83,13 @@
     <div class="card p-3">
       <h5 class="mb-3">Компоненти</h5>
 
-      {{ formset.management_form }}
-      {% if formset.non_form_errors %}
-        <div class="alert alert-danger">{{ formset.non_form_errors }}</div>
+      {{ formset_top.management_form }}
+      {% if formset_top.non_form_errors %}
+        <div class="alert alert-danger">{{ formset_top.non_form_errors }}</div>
       {% endif %}
 
-      <div class="comp-grid" id="components-grid">
-        {% for f in formset %}
+      <div class="comp-grid" id="grid-top">
+        {% for f in formset_top %}
           {% for h in f.hidden_fields %}{{ h }}{% endfor %}
           <div class="comp-card component-item" data-index="{{ forloop.counter0 }}">
             <div class="close-x" title="Видалити" onclick="markDelete(this)">×</div>
@@ -132,8 +127,7 @@
           </div>
         {% endfor %}
 
-        <!-- бокова кнопка "Додати фото" -->
-        <div class="side-add" id="add-photo" onclick="addForm()">Додати<br>фото</div>
+        <div class="side-add" id="add-photo" onclick="addForm('top_items', 'grid-top', 'template-top')">Додати<br>фото</div>
       </div>
     </div>
 
@@ -141,8 +135,8 @@
       <button type="submit" class="btn btn-primary px-4">Зберегти</button>
     </div>
 
-    <template id="empty-form-template">
-      {% with ef=formset.empty_form %}
+    <template id="template-top">
+      {% with ef=formset_top.empty_form %}
       <div class="comp-card component-item">
         <div class="close-x" title="Видалити" onclick="markDelete(this)">×</div>
         <div class="preview-box mb-2" data-preview>Попередній перегляд</div>
@@ -170,6 +164,109 @@
     </template>
 
   </form>
+
+    <h2 class="mb-3">Новини та акції</h2>
+  <form method="post" enctype="multipart/form-data" action="{% url 'adminlte:news_banner_update' %}">
+    {% csrf_token %}
+
+    <div class="card p-3 mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div><span class="mini-label">Розмір:</span> <strong>1000x190</strong></div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="mini-label">Активний</span>
+          <label class="switch">
+            {{ form_news.is_active.as_widget|safe }}
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label">Швидкість обертання</label>
+          {{ form_news.speed }}
+          {{ form_news.speed.errors }}
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card p-3">
+      <h5 class="mb-3">Компоненти</h5>
+
+      {{ formset_news.management_form }}
+      {% if formset_news.non_form_errors %}
+        <div class="alert alert-danger">{{ formset_news.non_form_errors }}</div>
+      {% endif %}
+
+      <div class="comp-grid" id="grid-news">
+        {% for f in formset_news %}
+          {% for h in f.hidden_fields %}{{ h }}{% endfor %}
+          <div class="comp-card component-item" data-index="{{ forloop.counter0 }}">
+            <div class="close-x" title="Видалити" onclick="markDelete(this)">×</div>
+
+            <div class="preview-box mb-2" data-preview>
+                {% if f.instance.pk and f.instance.image %}
+                <img src="{{ f.instance.image.url }}" alt="" style="max-width:100%;max-height:100%;object-fit:contain;">
+            {% else %}
+                Попередній перегляд
+            {% endif %}
+            </div>
+
+            <button class="btn btn-secondary btn-sm add-btn mb-2" type="button" onclick="chooseFile(this)">Додати</button>
+
+            <div class="mb-2">
+              <span class="mini-label">URL:</span>
+              {{ f.url|default_if_none:"" }}
+              {{ f.url.errors }}
+            </div>
+
+
+            <div class="file-holder">
+              {{ f.image }}
+              {{ f.image.errors }}
+            </div>
+
+            {% if f.DELETE %}
+              <div class="d-none delete-holder">{{ f.DELETE }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <div class="side-add" id="add-photo" onclick="addForm('news_items', 'grid-news', 'template-news')">Додати<br>фото</div>
+      </div>
+    </div>
+
+    <div class="text-center my-3">
+      <button type="submit" class="btn btn-primary px-4">Зберегти</button>
+    </div>
+
+    <template id="template-news">
+      {% with ef=formset_news.empty_form %}
+      <div class="comp-card component-item">
+        <div class="close-x" title="Видалити" onclick="markDelete(this)">×</div>
+        <div class="preview-box mb-2" data-preview>Попередній перегляд</div>
+        <button class="btn btn-secondary btn-sm add-btn mb-2" type="button" onclick="chooseFile(this)">Додати</button>
+
+        <div class="mb-2">
+          <span class="mini-label">URL:</span>
+          {{ ef.url }}
+        </div>
+
+        <div class="file-holder">
+          {{ ef.image }}
+        </div>
+        {% if ef.DELETE %}
+          <div class="d-none delete-holder">{{ ef.DELETE }}</div>
+        {% endif %}
+
+        {% for h in ef.hidden_fields %}{{ h }}{% endfor %}
+      </div>
+      {% endwith %}
+    </template>
+
+  </form>
+
 </div>
 
 <script>
@@ -182,7 +279,6 @@
     }
   }
 
-  // прев'ю
   function renderPreview(card, fileInput){
     const preview = card.querySelector('[data-preview]');
     const file = fileInput.files && fileInput.files[0];
@@ -196,23 +292,36 @@
     }
   }
 
-  // позначити на видалення (проставити DELETE і приховати)
   function markDelete(el){
     const card = el.closest('.comp-card');
     const del = card.querySelector('.delete-holder input[type="checkbox"]');
+
     if (del){
       del.checked = true;
-      card.style.opacity = .5;
+      card.style.display = 'none';
     } else {
+
+      const input = card.querySelector('input, select, textarea');
+      if (input) {
+          const nameParts = input.name.split('-');
+          const prefix = nameParts[0];
+
+          const total = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
+          if (total) {
+              total.value = Number(total.value) - 1;
+          }
+      }
+
       card.remove();
-      decrementTotalForms();
     }
   }
 
-  function addForm(){
-    const tmpl = document.getElementById('empty-form-template').content.cloneNode(true);
-    const grid = document.getElementById('components-grid');
-    const total = document.getElementById('id_items-TOTAL_FORMS');
+  function addForm(prefix, gridId, templateId){
+    const tmpl = document.getElementById(templateId).content.cloneNode(true);
+    const grid = document.getElementById(gridId);
+    const addButton = grid.querySelector('.side-add');
+
+    const total = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
     const index = Number(total.value);
 
     tmpl.querySelectorAll('[name],[id],[for]').forEach(el=>{
@@ -224,15 +333,7 @@
     });
 
     total.value = index + 1;
-    grid.insertBefore(tmpl, document.getElementById('add-photo'));
-  }
-
-  function decrementTotalForms(){
-    const total = document.getElementById('id_items-TOTAL_FORMS');
-    if (total) {
-      const n = Math.max(0, Number(total.value) - 1);
-      total.value = n;
-    }
+    grid.insertBefore(tmpl, addButton);
   }
 
   document.querySelectorAll('.comp-card .file-holder input[type="file"]').forEach(inp=>{
