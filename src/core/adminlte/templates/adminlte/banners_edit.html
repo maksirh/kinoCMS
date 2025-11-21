@@ -165,8 +165,76 @@
 
   </form>
 
-    <h2 class="mb-3">Новини та акції</h2>
-  <form method="post" enctype="multipart/form-data" action="{% url 'adminlte:news_banner_update' %}">
+    <h2 class="mb-3">Сквозний банер</h2>
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'adminlte:banners_through_update' %}">
+  {% csrf_token %}
+
+  <div class="card p-3 mb-3">
+    <h5 class="mb-3">Налаштування наскрізного банера</h5>
+    <div class="d-flex justify-content-between align-items-center">
+
+      <div class="d-flex align-items-center gap-2">
+        <span class="mini-label">Колір фону:</span>
+        {{ form_through.background }} </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <span class="mini-label">Активний</span>
+        <label class="switch">
+          {{ form_through.is_active.as_widget|safe }}
+          <span class="slider"></span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+<div class="card p-3">
+  <h5 class="mb-3">Зображення</h5>
+
+  {{ formset_through.management_form }}
+
+  <div class="comp-grid" id="grid-through">
+      {% for f in formset_through %}
+  {% for h in f.hidden_fields %}{{ h }}{% endfor %}
+
+  <div class="comp-card component-item" style="width: 100%; max-width: 350px;">
+
+    <div class="preview-box mb-2" data-preview style="height: 180px; overflow: hidden;">
+        {% if f.instance.pk and f.instance.image %}
+          <img src="{{ f.instance.image.url }}" style="width:100%; height:100%; object-fit:cover;">
+        {% else %}
+          <span class="text-muted">Зображення відсутнє</span>
+        {% endif %}
+    </div>
+
+    <div class="d-flex gap-2">
+        <button class="btn btn-secondary btn-sm w-50" type="button" onclick="chooseFile(this)">
+             {% if f.instance.image %}Змінити{% else %}Обрати фото{% endif %}
+        </button>
+
+        <button class="btn btn-danger btn-sm w-50" type="button" onclick="clearImage(this)"
+                {% if not f.instance.image %}disabled{% endif %}>
+             Видалити
+        </button>
+    </div>
+
+    <div class="file-holder d-none">
+      {{ f.image }}
+    </div>
+
+  </div>
+{% endfor %}
+  </div>
+</div>
+
+  <div class="text-center my-3">
+    <button type="submit" class="btn btn-primary px-4">Зберегти</button>
+  </div>
+
+</form>
+
+    <h2 class="mb-3">Новини та акції</h2><form method="post" enctype="multipart/form-data" action="{% url 'adminlte:news_banner_update' %}">
     {% csrf_token %}
 
     <div class="card p-3 mb-3">
@@ -291,6 +359,26 @@
       reader.readAsDataURL(file);
     }
   }
+
+  function clearImage(btn) {
+    const card = btn.closest('.comp-card');
+    const preview = card.querySelector('[data-preview]');
+    const fileInput = card.querySelector('.file-holder input[type="file"]');
+
+    const clearCheckbox = card.querySelector('.file-holder input[type="checkbox"]');
+
+    if (clearCheckbox) {
+        clearCheckbox.checked = true;
+    }
+
+    if (fileInput) {
+        fileInput.value = "";
+    }
+
+    preview.innerHTML = '<span class="text-danger">Буде видалено після збереження</span>';
+
+    btn.disabled = true;
+}
 
   function markDelete(el){
     const card = el.closest('.comp-card');
