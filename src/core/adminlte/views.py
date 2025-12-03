@@ -3,6 +3,12 @@ from .forms import *
 from django.contrib import messages
 from src.cms.models import BannerComponent, ThroughBanner
 from django.forms import formset_factory
+from src.user.models import User
+from django.contrib.auth import get_user_model
+from src.authentication.forms import UserUpdateForm
+from django.core.paginator import Paginator
+from django.db.models import Q
+
 
 def index(request):
     return render(request, 'adminlte/dashboard.html')
@@ -156,6 +162,67 @@ def films(request):
     return render(request, 'adminlte/films.html')
 
 
+User = get_user_model()
+
+def user_edit(request, pk):
+    user_obj = get_object_or_404(User, pk=pk)
+
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=user_obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Користувача {user_obj.username} оновлено!')
+            return redirect('adminlte:users_list')
+    else:
+        form = UserUpdateForm(instance=user_obj)
+
+    context = {
+        'form': form,
+        'user_obj': user_obj
+    }
+    return render(request, 'adminlte/user_edit.html', context)
+
+def user_delete(request, pk):
+    user_obj = get_object_or_404(User, pk=pk)
+
+    if request.method == "POST":
+        username = user_obj.username
+        user_obj.delete()
+        messages.warning(request, f'Користувача {username} видалено.')
+        return redirect('adminlte:users_list')
+
+    return redirect('adminlte:users_list')
+
+
+def users_list(request):
+    queryset = User.objects.all().order_by('-date_joined')
+
+    search_query = request.GET.get('q')
+
+    if search_query:
+        queryset = queryset.filter(
+            Q(username__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query)
+        )
+
+    paginator = Paginator(queryset, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'users': page_obj,
+        'page_obj': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+    }
+
+    return render(request, 'adminlte/users_list.html', context)
+
+
+def main_page(request):
+    return render(request, "adminlte/main_page.html")
 
 
 

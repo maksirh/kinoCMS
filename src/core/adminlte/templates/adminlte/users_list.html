@@ -1,3 +1,146 @@
 {% extends "admin_base.html" %}
 {% load static %}
 
+{% block content %}
+<style>
+    .table-header-gray th {
+        background-color: #cccccc;
+        color: #000;
+        vertical-align: middle;
+        border-bottom: 2px solid #999;
+        white-space: nowrap;
+    }
+    .sort-icon {
+        font-size: 0.8em;
+        margin-right: 4px;
+        cursor: pointer;
+    }
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+    .page-link-custom {
+        color: #000;
+        padding: 5px 10px;
+        text-decoration: none;
+    }
+    .page-link-custom.active {
+        background-color: #ddd;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+
+    <div class="row mb-3 align-items-center">
+        <div class="col-md-6 text-center text-md-start">
+            <h3 class="fw-bold">Користувачі</h3>
+        </div>
+        <div class="col-md-6">
+            <form method="get" class="d-flex justify-content-end">
+                <div class="input-group" style="max-width: 400px;">
+                    <input type="text" name="q" class="form-control rounded-0" placeholder="Пошук" value="{{ request.GET.q|default:'' }}">
+                    <button class="btn btn-light border rounded-0 fw-bold" type="submit">Пошук</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover border-dark align-middle">
+            <thead class="table-header-gray">
+                <tr>
+                    <th>ID</th>
+                    <th>Дата реєстрації</th>
+                    <th>Дата народження</th>
+                    <th>Email</th>
+                    <th>Телефон</th>
+                    <th>ПІБ</th>
+                    <th>username</th>
+                    <th>Місто</th>
+                    <th style="width: 150px;">Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.pk }}</td>
+                    <td>{{ user.date_joined|date:"d.m.Y" }}</td>
+                    <td>{{ user.birth_date|date:"d.m.Y"|default:"-" }}</td>
+                    <td>{{ user.email }}</td>
+
+                    <td>{{ user.phone_number|default:"-" }}</td>
+
+                    <td>{{ user.get_full_name|default:"User" }}</td>
+                    <td>{{ user.username }}</td>
+
+                    <td>{{ user.city|default:"-" }}</td>
+
+                    <td class="text-nowrap">
+                        <a href="{% url 'adminlte:user_edit' user.pk %}" class="btn btn-sm btn-outline-primary" title="Редагувати">
+                            <i class="bi bi-pencil-square"></i> Ред.
+                        </a>
+
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ user.pk }}" title="Видалити">
+                            <i class="bi bi-trash"></i> Вид.
+                        </button>
+
+                        <div class="modal fade" id="deleteModal{{ user.pk }}" tabindex="-1" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Видалення користувача</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                              </div>
+                              <div class="modal-body text-wrap">
+                                Ви впевнені, що хочете видалити користувача <strong>{{ user.username }}</strong>?
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+
+                                <form action="{% url 'adminlte:user_delete' user.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Так, видалити</button>
+                                </form>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="text-center text-muted py-4">Користувачів не знайдено</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+    <div class="pagination-container">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="page-link-custom">First</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="page-link-custom">...</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="page-link-custom active">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="page-link-custom">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="page-link-custom">...</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="page-link-custom">{{ page_obj.paginator.num_pages }}</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

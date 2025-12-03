@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, banners_top_update, films, banners_edit, news_and_actions_update, through_banner_update
+from .views import index, banners_top_update, films, banners_edit, news_and_actions_update, through_banner_update, users_list, user_edit, user_delete
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -14,7 +14,9 @@ urlpatterns = [
     path('baneers/through/update/', through_banner_update, name='banners_through_update'),
     path('banners/', banners_edit, name='films'),
     path('films', films, name='films'),
-
+    path('users/', users_list, name='users_list'),
+    path('users/edit/<int:pk>/', user_edit, name='user_edit'),
+    path('users/delete/<int:pk>/', user_delete, name='user_delete'),
 
 ]
 

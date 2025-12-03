@@ -41,7 +41,7 @@
                 <div class="col-12">
                   <label for="email" class="form-label">Email <span
                       class="text-body-secondary">(Optional)</span></label>
-                  <input type="email" class="form-control" id="email" name="email" value="{{ form.instance.email }}" placeholder="you@example.com">
+                      {{ form.email }}
                   <div class="invalid-feedback">Please enter a valid email.</div>
                 </div>
               </div>
@@ -52,24 +52,19 @@
               <div class="row g-3">
                 <div class="col-12">
                   <label for="address" class="form-label">Address</label>
-                  <input type="text" class="form-control" id="address" name="address" value="{{ form.instance.address }}" required
-                    placeholder="1234 Main St">
+                  {{ form.address }}
                   <div class="invalid-feedback">Please enter your shipping address.</div>
                 </div>
 
                 <div class="col-12">
                   <label for="phone_number" class="form-label">Phone number</label>
-                  <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{ form.instance.phone_number }}" required>
+                  {{ form.phone_number }}
                 </div>
 
 
                 <div class="col-md-4">
                   <label for="language" class="form-label">Language</label>
-                  <select class="form-select" id="language" name="language" required>
-                      <option value="">Choose...</option>
-                      <option value="en" {% if form.instance.language == "en" %}selected{% endif %}>English</option>
-                      <option value="uk" {% if form.instance.language == "uk" %}selected{% endif %}>Ukrainian</option>
-                  </select>
+                  {{ form.language }}
                   <div class="invalid-feedback">Please provide a valid city.</div>
                 </div>
 
@@ -98,7 +93,7 @@
 
                 <div class="col-md-6">
                   <label for="card_number" class="form-label">Card number</label>
-                  <input type="text" class="form-control" id="card_number" name="card_number" value="{{ form.instance.card_number }}" required>
+                  {{ form.instance.card_number }}
                   <div class="invalid-feedback">Credit card number is required</div>
                 </div>
               </div>

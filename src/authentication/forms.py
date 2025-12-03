@@ -23,5 +23,10 @@ class UserUpdateForm(forms.ModelForm):
         widgets = {
             "email": forms.EmailInput(attrs={'class': 'form-control'}),
             "first_name": forms.TextInput(attrs={'class': 'form-control'}),
+            "last_name": forms.TextInput(attrs={'class': 'form-control'}),
+            "address": forms.TextInput(attrs={'class': 'form-control'}),
+            "phone_number": forms.TextInput(attrs={'class': 'form-control'}),
+            "card_number": forms.TextInput(attrs={'class': 'form-control'}),
+            "language": forms.Select(attrs={'class': 'form-control'}),
         }
 

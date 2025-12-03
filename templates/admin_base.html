@@ -98,15 +98,63 @@
             </a>
           </li>
 
-          <li class="nav-item">
+           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon bi bi-cup-hot"></i>
-              <p>Сторінки</p>
+              <i class="nav-icon bi bi-film"></i>
+              <p>
+                Сторінки
+                <i class="end bi bi-chevron-right"></i>
+              </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Головна сторінка</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'adminlte:films' %}" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Про кінотеатр</p>
+                </a>
+              </li>
+               <li class="nav-item">
+                <a href="{% url 'adminlte:films' %}" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Кафе-бар</p>
+                </a>
+              </li>
+               <li class="nav-item">
+                <a href="{% url 'adminlte:films' %}" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Vip-зал</p>
+                </a>
+              </li>
+               <li class="nav-item">
+                <a href="{% url 'adminlte:films' %}" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Реклама</p>
+                </a>
+              </li>
+               <li class="nav-item">
+                <a href="{% url 'adminlte:films' %}" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Дитяча кімната</p>
+                </a>
+              </li>
+               <li class="nav-item">
+                <a href="{% url 'adminlte:films' %}" class="nav-link">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Контакти</p>
+                </a>
+              </li>
+
+            </ul>
           </li>
 
            <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{% url 'adminlte:users_list' %}" class="nav-link">
               <i class="nav-icon bi bi-cup-hot"></i>
               <p>Користувачі</p>
             </a>
