@@ -1,6 +1,7 @@
 from django import forms
-from src.cms.models import BannerComponent, Banner, ThroughBanner
-from django.forms import ModelForm, inlineformset_factory, modelformset_factory
+from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock
+from src.main.models import MainPage
+from django.forms import modelformset_factory
 
 
 class BannerForm(forms.ModelForm):
@@ -53,10 +54,50 @@ ThroughBannerFormSet = modelformset_factory(
     can_delete=False
 )
 
-
 BannerComponentFormSet = modelformset_factory(
     BannerComponent,
     form=BannerComponentForm,
     extra=0,
     can_delete=True
 )
+
+
+class MainPageForm(forms.ModelForm):
+    class Meta:
+        model = MainPage
+        fields = ['phone_number1', 'phone_number2', 'seo_text']
+
+        widgets = {
+            'phone_number1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '777 85 98'}),
+            'phone_number2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '777 85 98'}),
+
+            'seo_text': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 5,
+                'placeholder': 'Введіть SEO текст для головної сторінки...'
+            }),
+        }
+
+class SeoBlockForm(forms.ModelForm):
+    class Meta:
+        model = SeoBlock
+        fields = ['url', 'title', 'keywords', 'description']
+        widgets = {
+            'url': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://example.com'
+            }),
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Головна сторінка - KinoCMS'
+            }),
+            'keywords': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'кіно, квитки, прем\'єри'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Опис для пошукових систем...'
+            }),
+        }

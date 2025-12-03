@@ -222,7 +222,32 @@ def users_list(request):
 
 
 def main_page(request):
-    return render(request, "adminlte/main_page.html")
+    main_page_obj, created = MainPage.objects.get_or_create(id=1)
+
+    if not main_page_obj.seo_block:
+        seo_block_obj = SeoBlock.objects.create()
+        main_page_obj.seo_block = seo_block_obj
+        main_page_obj.save()
+    else:
+        seo_block_obj = main_page_obj.seo_block
+
+    if request.method == 'POST':
+        main_form = MainPageForm(request.POST, instance=main_page_obj)
+        seo_form = SeoBlockForm(request.POST, instance=seo_block_obj)
+
+        if main_form.is_valid() and seo_form.is_valid():
+            main_form.save()
+            seo_form.save()
+            return redirect('adminlte:main_page')
+    else:
+        main_form = MainPageForm(instance=main_page_obj)
+        seo_form = SeoBlockForm(instance=seo_block_obj)
+
+    context = {
+        'main_form': main_form,
+        'seo_form': seo_form,
+    }
+    return render(request, 'adminlte/main_page.html', context)
 
 
 

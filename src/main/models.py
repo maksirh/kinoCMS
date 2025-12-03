@@ -8,6 +8,7 @@ from src.user.models import User
 class MainPage(models.Model):
     phone_number1 = models.CharField(max_length=11)
     phone_number2 = models.CharField(max_length=11)
+    seo_text = models.TextField(blank=True, null=True)
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
 
 
