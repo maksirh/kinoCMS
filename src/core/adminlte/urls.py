@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (index, banners_top_update, films, banners_edit, news_and_actions_update, through_banner_update,
-                    users_list, user_edit, user_delete, main_page)
+                    users_list, user_edit, user_delete, main_page, about_cinema)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -19,6 +19,7 @@ urlpatterns = [
     path('users/edit/<int:pk>/', user_edit, name='user_edit'),
     path('users/delete/<int:pk>/', user_delete, name='user_delete'),
     path('pages/mainpage', main_page, name='main_page'),
+    path('pages/aboutcinema', about_cinema, name='about_cinema'),
 ]
 
 if settings.DEBUG:

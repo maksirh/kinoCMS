@@ -1,6 +1,6 @@
 from django import forms
 from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock
-from src.main.models import MainPage
+from src.main.models import MainPage, Page, Gallery
 from django.forms import modelformset_factory
 
 
@@ -78,6 +78,18 @@ class MainPageForm(forms.ModelForm):
             }),
         }
 
+class PageForm(forms.ModelForm):
+    class Meta:
+        model = Page
+        fields = ['title', 'description', 'main_image', 'is_active']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'О кинотеатре'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Текст'}),
+            'main_image': forms.FileInput(attrs={'class': 'form-control d-none', 'id': 'mainImageInput'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+
 class SeoBlockForm(forms.ModelForm):
     class Meta:
         model = SeoBlock
@@ -101,3 +113,13 @@ class SeoBlockForm(forms.ModelForm):
                 'placeholder': 'Опис для пошукових систем...'
             }),
         }
+
+GalleryFormSet = modelformset_factory(
+    Gallery,
+    fields=('image',),
+    extra=1,
+    can_delete=True,
+    widgets={
+        'image': forms.FileInput(attrs={'class': 'd-none gallery-input', 'onchange': 'previewGalleryImage(this)'})
+    }
+)

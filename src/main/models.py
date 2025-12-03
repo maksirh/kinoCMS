@@ -29,11 +29,11 @@ class Booking(models.Model):
 
 class Page(models.Model):
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
-    gallery_image = ManyToManyField(Gallery)
-    title = models.CharField(max_length=120)
-    description = models.TextField()
-    main_image = models.ImageField()
-    is_active = models.BooleanField()
+    gallery_images = ManyToManyField(Gallery, blank=True)
+    title = models.CharField(max_length=120, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    main_image = models.ImageField(blank=True, null=True)
+    is_active = models.BooleanField(default=False)
 
 
 

@@ -10,7 +10,7 @@ class SeoBlock(models.Model):
 
 
 class Gallery(models.Model):
-    image = models.ImageField()
+    image = models.ImageField(upload_to='cinema_gallery/')
 
 
 class Movie(models.Model):
