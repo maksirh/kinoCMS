@@ -250,49 +250,11 @@ def main_page(request):
     return render(request, 'adminlte/main_page.html', context)
 
 
-def about_cinema(request):
-    page, created = Page.objects.get_or_create(id=1)
 
-    if not page.seo_block:
-        page.seo_block = SeoBlock.objects.create()
-        page.save()
+def pages(request):
+    return render(request, 'adminlte/pages.html')
 
-    if request.method == 'POST':
-        page_form = PageForm(request.POST, request.FILES, instance=page)
-        seo_form = SeoBlockForm(request.POST, instance=page.seo_block)
 
-        gallery_formset = GalleryFormSet(
-            request.POST,
-            request.FILES,
-            queryset=page.gallery_images.all(),
-            prefix='gallery'
-        )
-
-        if page_form.is_valid() and seo_form.is_valid() and gallery_formset.is_valid():
-            page_obj = page_form.save()
-            seo_form.save()
-
-            gallery_images = gallery_formset.save()
-
-            for new_image in gallery_images:
-                page_obj.gallery_images.add(new_image)
-
-            for deleted_image in gallery_formset.deleted_objects:
-                page_obj.gallery_images.remove(deleted_image)
-
-            return redirect('adminlte:about_cinema')
-
-    else:
-        page_form = PageForm(instance=page)
-        seo_form = SeoBlockForm(instance=page.seo_block)
-        gallery_formset = GalleryFormSet(queryset=page.gallery_images.all(), prefix='gallery')
-
-    context = {
-        'page_form': page_form,
-        'seo_form': seo_form,
-        'gallery_formset': gallery_formset,
-        'page': page,
-    }
-    return render(request, 'adminlte/about_cinema.html', context)
-
+def page(request):
+    return render(request, 'page.html')
 

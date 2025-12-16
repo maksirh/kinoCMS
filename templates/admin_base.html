@@ -9,13 +9,11 @@
   <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
 
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-
-  <link rel="stylesheet" href="{% static 'css/bootstrap-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap-icons.min.css' %}">
 
   <link rel="stylesheet" href="{% static 'css/overlayscrollbars.min.css' %}">
 
-    <link rel="stylesheet" href="{% static 'css/adminlte.css' %}">
-
+  <link rel="stylesheet" href="{% static 'css/adminlte.css' %}">
 
   {% block extra_css %}{% endblock %}
 </head>
@@ -30,8 +28,6 @@
               <i class="bi bi-list"></i>
             </a>
           </li>
-        </ul>
-        <ul class="navbar-nav ms-auto">
         </ul>
       </div>
     </nav>
@@ -98,59 +94,11 @@
             </a>
           </li>
 
-           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon bi bi-film"></i>
-              <p>
-                Сторінки
-                <i class="end bi bi-chevron-right"></i>
-              </p>
+           <li class="nav-item">
+            <a href="{% url 'adminlte:pages' %}" class="nav-link">
+              <i class="nav-icon bi bi-cup-hot"></i>
+              <p>Сторінки</p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{% url 'adminlte:main_page' %}" class="nav-link">
-                  <i class="nav-icon bi bi-circle"></i>
-                  <p>Головна сторінка</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{% url 'adminlte:about_cinema' %}" class="nav-link">
-                  <i class="nav-icon bi bi-circle"></i>
-                  <p>Про кінотеатр</p>
-                </a>
-              </li>
-               <li class="nav-item">
-                <a href="{% url 'adminlte:films' %}" class="nav-link">
-                  <i class="nav-icon bi bi-circle"></i>
-                  <p>Кафе-бар</p>
-                </a>
-              </li>
-               <li class="nav-item">
-                <a href="{% url 'adminlte:films' %}" class="nav-link">
-                  <i class="nav-icon bi bi-circle"></i>
-                  <p>Vip-зал</p>
-                </a>
-              </li>
-               <li class="nav-item">
-                <a href="{% url 'adminlte:films' %}" class="nav-link">
-                  <i class="nav-icon bi bi-circle"></i>
-                  <p>Реклама</p>
-                </a>
-              </li>
-               <li class="nav-item">
-                <a href="{% url 'adminlte:films' %}" class="nav-link">
-                  <i class="nav-icon bi bi-circle"></i>
-                  <p>Дитяча кімната</p>
-                </a>
-              </li>
-               <li class="nav-item">
-                <a href="{% url 'adminlte:films' %}" class="nav-link">
-                  <i class="nav-icon bi bi-circle"></i>
-                  <p>Контакти</p>
-                </a>
-              </li>
-
-            </ul>
           </li>
 
            <li class="nav-item">
@@ -177,16 +125,11 @@
     </main>
   </div>
 
-  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'vendor/overlayscrollbars/overlayscrollbars.umd.min.js' %}"></script>
-  <script src="{% static 'vendor/adminlte/js/adminlte.min.js' %}"></script>
-  {% block extra_js %}{% endblock %}
-</body>
-
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'js/overlayscrollbars.umd.min.js' %}"></script>
-  <script src="{% static 'js/adminlte.js' %}"  ></script>
 
+  <script src="{% static 'js/overlayscrollbars.browser.es6.min.js' %}"></script>
+
+  <script src="{% static 'js/adminlte.js' %}"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -199,5 +142,6 @@
     });
   </script>
 
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
