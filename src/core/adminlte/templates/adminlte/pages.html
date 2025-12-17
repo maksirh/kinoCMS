@@ -20,11 +20,14 @@
     .btn-delete:hover { color: #dc3545; }
 </style>
 
+    <a href="{% url 'adminlte:add_page' %}" class="btn btn-primary rounded-pill px-3">
+    <i class="bi bi-plus-lg"></i> Додати нову сторінку
+</a>
+    <br> <br>
 <table class="table table-striped align-middle"> <thead>
     <tr>
-      <th scope="col">#</th>
       <th scope="col">Назва</th>
-      <th scope="col">Дата створення</th>
+      <th scope="col">Дата оновлення</th>
       <th scope="col">Статус</th>
       <th scope="col" style="width: 100px;">Дії</th>
     </tr>
@@ -32,39 +35,38 @@
   <tbody>
 
     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <td>Головна сторінка</td>
+      <td>{{ main_page.updated_at }}</td>
+      <td></td>
 
       <td>
-          <a href="/edit/1" class="btn-action btn-edit" title="Редагувати">
+          <a href="#" class="btn-action btn-edit" title="Редагувати">
              &#9998;
           </a>
-
-          <form action="/delete/1" method="POST" style="display:inline;">
-             {% csrf_token %} <button type="submit" class="btn-action btn-delete" title="Видалити" onclick="return confirm('Ви впевнені?')">
-                &#128465;
-             </button>
-          </form>
       </td>
     </tr>
+
+
+    {% for page in pages %}
 
     <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
+      <td>{{ page.title }}</td>
+      <td>{{ page.updated_at }}</td>
+      <td>{{ page.is_active }}</td>
 
       <td>
-          <a href="/edit/2" class="btn-action btn-edit" title="Редагувати">&#9998;</a>
-          <form action="/delete/2" method="POST" style="display:inline;">
-             {% csrf_token %}
-             <button type="submit" class="btn-action btn-delete" title="Видалити" onclick="return confirm('Ви впевнені?')">&#128465;</button>
+          <a href="{% url 'adminlte:edit_page' pk=page.id %}" class="btn-action btn-edit" title="Редагувати">&#9998;</a>
+          {% if page.is_removable %}
+                <form action="{% url 'adminlte:delete_page' pk=page.id %}" method="POST" style="display:inline;">
+             {% csrf_token %} <button type="submit" class="btn-action btn-delete" title="Видалити" onclick="return confirm('Ви впевнені?')">
+                    &#128465;
+             </button>
           </form>
+          {% endif %}
       </td>
     </tr>
 
+  {% endfor %}
   </tbody>
 </table>
 

@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (index, banners_top_update, films, banners_edit, news_and_actions_update, through_banner_update,
-                    users_list, user_edit, user_delete, pages, main_page)
+                    users_list, user_edit, user_delete, pages,
+                    main_page, page_add, page_edit, page_delete)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -20,9 +21,11 @@ urlpatterns = [
     path('users/delete/<int:pk>/', user_delete, name='user_delete'),
     path('pages/', pages, name='pages'),
     path('pages/mainpage', main_page, name='main_page'),
-
-
+    path('page/add', page_add, name='add_page'),
+    path('page/edit/<int:pk>/', page_edit, name='edit_page'),
+    path('page/delete/<int:pk>/', page_delete, name='delete_page'),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

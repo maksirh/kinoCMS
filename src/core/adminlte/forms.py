@@ -101,11 +101,9 @@ class SeoBlockForm(forms.ModelForm):
             }),
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Головна сторінка - KinoCMS'
             }),
             'keywords': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'кіно, квитки, прем\'єри'
             }),
             'description': forms.Textarea(attrs={
                 'class': 'form-control',

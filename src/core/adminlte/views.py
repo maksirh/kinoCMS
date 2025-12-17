@@ -252,9 +252,115 @@ def main_page(request):
 
 
 def pages(request):
-    return render(request, 'adminlte/pages.html')
+    main_page = MainPage.load()
+    pages = Page.objects.all().order_by('id')
+    context = {
+        "main_page": main_page,
+        "pages": pages,
+    }
+
+    return render(request, 'adminlte/pages.html', context)
 
 
-def page(request):
-    return render(request, 'page.html')
+def page_add(request):
 
+    if request.method == 'POST':
+
+        page_form = PageForm(request.POST, request.FILES)
+        seo_form = SeoBlockForm(request.POST)
+
+        gallery_formset = GalleryFormSet(
+            request.POST,
+            request.FILES,
+            queryset=Gallery.objects.none(),
+            prefix='gallery',
+        )
+
+        if page_form.is_valid() and seo_form.is_valid() and gallery_formset.is_valid():
+            seo_block = seo_form.save()
+            page = page_form.save(commit=False)
+            page.seo_block = seo_block
+            page.save()
+
+            new_images = gallery_formset.save()
+
+            if new_images:
+                page.gallery_images.add(*new_images)
+
+            return redirect('adminlte:pages')
+    else:
+        page_form = PageForm()
+        seo_form = SeoBlockForm()
+        gallery_formset = GalleryFormSet(
+            queryset=Gallery.objects.none(),
+            prefix='gallery'
+        )
+
+    context = {
+        'page_form': page_form,
+        'seo_form': seo_form,
+        'gallery_formset': gallery_formset,
+    }
+
+    return render(request, 'adminlte/page.html', context)
+
+
+def page_edit(request, pk):
+
+    page = get_object_or_404(Page, pk=pk)
+
+    seo_instance = page.seo_block
+
+    if request.method == 'POST':
+        page_form = PageForm(request.POST, request.FILES, instance=page)
+        seo_form = SeoBlockForm(request.POST, instance=seo_instance, prefix='seo')
+
+        gallery_formset = GalleryFormSet(
+            request.POST,
+            request.FILES,
+            queryset=page.gallery_images.all(),
+            prefix='gallery',
+        )
+
+        if page_form.is_valid() and seo_form.is_valid() and gallery_formset.is_valid():
+            seo_block = seo_form.save()
+            page = page_form.save(commit=False)
+
+            if request.POST.get('clear_main_image') == 'true':
+                page.main_image.delete(save=False)
+                page.main_image = None
+
+            page.seo_block = seo_block
+            page.save()
+
+            new_images = gallery_formset.save()
+
+            if new_images:
+                page.gallery_images.add(*new_images)
+
+            return redirect('adminlte:pages')
+
+
+    else:
+        page_form = PageForm(instance=page)
+        seo_form = SeoBlockForm(instance=seo_instance, prefix='seo')
+
+        gallery_formset = GalleryFormSet(
+            queryset=page.gallery_images.all(),
+            prefix='gallery',
+        )
+
+    context = {
+        'page_form': page_form,
+        'seo_form': seo_form,
+        'gallery_formset': gallery_formset,
+        'page': page,
+    }
+
+    return render(request, 'adminlte/page.html', context)
+
+
+def page_delete(request, pk):
+    page = get_object_or_404(Page, pk=pk)
+    page.delete()
+    return redirect('adminlte:pages')

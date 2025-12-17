@@ -11,6 +11,7 @@ class MainPage(models.Model):
     phone_number2 = models.CharField(max_length=11)
     seo_text = models.TextField(blank=True, null=True)
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
     def save(self, *args, **kwargs):
@@ -24,9 +25,6 @@ class MainPage(models.Model):
     def load(cls):
         obj, created = cls.objects.get_or_create(pk=1)
         return obj
-
-
-
 
 
 class Schedule(models.Model):
@@ -52,6 +50,7 @@ class Page(models.Model):
     main_image = models.ImageField(blank=True, null=True)
     is_active = models.BooleanField(default=False)
     is_removable = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
     def delete(self, *args, **kwargs):
