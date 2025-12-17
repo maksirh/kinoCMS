@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import ManyToManyField
 
@@ -10,6 +11,22 @@ class MainPage(models.Model):
     phone_number2 = models.CharField(max_length=11)
     seo_text = models.TextField(blank=True, null=True)
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
+
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        pass
+
+    @classmethod
+    def load(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+
 
 
 class Schedule(models.Model):
@@ -34,6 +51,16 @@ class Page(models.Model):
     description = models.TextField(blank=True, null=True)
     main_image = models.ImageField(blank=True, null=True)
     is_active = models.BooleanField(default=False)
+    is_removable = models.BooleanField(default=True)
+
+
+    def delete(self, *args, **kwargs):
+        if not self.is_removable:
+            raise ValidationError("Не можна видаляти")
+        super().delete(*args, **kwargs)
+
+
+
 
 
 
