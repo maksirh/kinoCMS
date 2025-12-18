@@ -1,5 +1,5 @@
 from django import forms
-from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock
+from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock, Movie
 from src.main.models import MainPage, Page, Gallery
 from django.forms import modelformset_factory
 
@@ -121,3 +121,20 @@ GalleryFormSet = modelformset_factory(
         'image': forms.FileInput(attrs={'class': 'd-none gallery-input', 'onchange': 'previewGalleryImage(this)'})
     }
 )
+
+
+class MovieForm(forms.ModelForm):
+
+    class Meta:
+        model = Movie
+        fields = ['title', 'description', 'main_image', 'trailer_url', 'is_2D', 'is_3D']
+
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'main_image': forms.FileInput(attrs={'class': 'form-control', 'id': 'mainImageInput'}),
+            'trailer_url': forms.URLInput(attrs={'class': 'form-control'}),
+            'is_2D': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_3D': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+
+        }

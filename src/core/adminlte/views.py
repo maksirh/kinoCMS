@@ -158,8 +158,8 @@ def news_and_actions_update(request):
 
     return redirect("adminlte:banners")
 
-def films(request):
-    return render(request, 'adminlte/films.html')
+def film_list(request):
+    return render(request, 'adminlte/film_list.html')
 
 
 User = get_user_model()
@@ -393,3 +393,47 @@ def edit_mainpage(request):
 
 
     return render(request, 'adminlte/main_page.html', context)
+
+def add_movie(request):
+
+    if request.method == 'POST':
+        movie_form = MovieForm(request.POST, request.FILES)
+        seo_form = SeoBlockForm(request.POST, prefix='seo')
+
+        gallery_formset = GalleryFormSet(
+            request.POST,
+            request.FILES,
+            queryset=Gallery.objects.none(),
+            prefix='gallery',
+        )
+
+        if movie_form.is_valid() and seo_form.is_valid() and gallery_formset.is_valid():
+            seo_block = seo_form.save()
+            movie = movie_form.save(commit=False)
+            movie.seo_block = seo_block
+            movie.save()
+
+            new_images = gallery_formset.save()
+            if new_images:
+                movie.images.add(*new_images)
+
+            return redirect('adminlte:film_list')
+
+    else:
+        movie_form = MovieForm()
+        seo_form = SeoBlockForm(prefix='seo')
+        gallery_formset = GalleryFormSet(
+            queryset=Gallery.objects.none(),
+            prefix='gallery'
+        )
+
+
+    context = {
+        'movie_form': movie_form,
+        'seo_form': seo_form,
+        'gallery_formset': gallery_formset,
+    }
+
+    return render(request, 'adminlte/add_film.html', context)
+
+

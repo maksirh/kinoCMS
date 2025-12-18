@@ -16,7 +16,7 @@ class Gallery(models.Model):
 class Movie(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField()
-    main_image = models.ImageField()
+    main_image = models.ImageField(upload_to='movies_main/')
     trailer_url = models.URLField()
     is_2D = models.BooleanField()
     is_3D = models.BooleanField()

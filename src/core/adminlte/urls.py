@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import (index, banners_top_update, films, banners_edit, news_and_actions_update, through_banner_update,
+from .views import (index, banners_top_update, film_list, banners_edit, news_and_actions_update, through_banner_update,
                     users_list, user_edit, user_delete, pages,
-                    main_page, page_add, page_edit, page_delete, edit_mainpage)
+                    main_page, page_add, page_edit, page_delete, edit_mainpage, add_movie)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -14,8 +14,8 @@ urlpatterns = [
     path('banners/top/update/', banners_top_update, name='banners_top_update'),
     path('banners/news/update/', news_and_actions_update, name='news_banner_update'),
     path('baneers/through/update/', through_banner_update, name='banners_through_update'),
-    path('banners/', banners_edit, name='films'),
-    path('films', films, name='films'),
+    path('films/', film_list, name='film_list'),
+    path('films/add/', add_movie, name='add_movie'),
     path('users/', users_list, name='users_list'),
     path('users/edit/<int:pk>/', user_edit, name='user_edit'),
     path('users/delete/<int:pk>/', user_delete, name='user_delete'),
