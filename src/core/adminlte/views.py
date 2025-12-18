@@ -364,3 +364,32 @@ def page_delete(request, pk):
     page = get_object_or_404(Page, pk=pk)
     page.delete()
     return redirect('adminlte:pages')
+
+
+def edit_mainpage(request):
+    main_page = get_object_or_404(MainPage, pk=1)
+    seo_instance = main_page.seo_block
+
+    if request.method == 'POST':
+        mainpage_form = MainPageForm(request.POST, request.FILES, instance=main_page)
+        seo_form = SeoBlockForm(request.POST, instance=seo_instance, prefix='seo')
+
+        if mainpage_form.is_valid() and seo_form.is_valid():
+            seo_block = seo_form.save()
+            main_page = mainpage_form.save(commit=False)
+            main_page.seo_block = seo_block
+            main_page.save()
+
+            return redirect('adminlte:pages')
+
+    else:
+        mainpage_form = MainPageForm(instance=main_page)
+        seo_form = SeoBlockForm(instance=seo_instance, prefix='seo')
+
+    context = {
+        'main_form': mainpage_form,
+        'seo_form': seo_form,
+    }
+
+
+    return render(request, 'adminlte/main_page.html', context)

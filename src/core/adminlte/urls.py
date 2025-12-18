@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (index, banners_top_update, films, banners_edit, news_and_actions_update, through_banner_update,
                     users_list, user_edit, user_delete, pages,
-                    main_page, page_add, page_edit, page_delete)
+                    main_page, page_add, page_edit, page_delete, edit_mainpage)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,6 +24,7 @@ urlpatterns = [
     path('page/add', page_add, name='add_page'),
     path('page/edit/<int:pk>/', page_edit, name='edit_page'),
     path('page/delete/<int:pk>/', page_delete, name='delete_page'),
+    path('page/mainpage/edit', edit_mainpage, name='edit_mainpage'),
 ]
 
 
