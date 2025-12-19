@@ -3,8 +3,65 @@
 
 {% block content %}
 
+<style>
+    .movie-card {
+        position: relative;
+        transition: transform 0.2s;
+    }
+    .movie-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .movie-img-placeholder {
+        background-color: #e9ecef;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .movie-img-placeholder img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .movie-img-placeholder i {
+        font-size: 3rem;
+        color: #adb5bd;
+    }
+
+    .btn-delete-movie {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: #ffcccc;
+        color: red;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        border: 1px solid red;
+        z-index: 10;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 1;
+    }
+    .btn-delete-movie:hover {
+        background: red;
+        color: white;
+    }
+</style>
+
+
     <a href="{% url 'adminlte:add_movie' %}" class="btn btn-primary rounded-pill px-3">
-    <i class="bi bi-plus-lg"></i> Додати новий фільм
+        <i class="bi bi-plus-lg"></i> Додати новий фільм
     </a>
     <br> <br>
 
@@ -15,34 +72,71 @@
         <div class="row text-center" id="current-movies-list">
             {% for movie in current_movies %}
             <div class="col-6 col-md-4 col-lg-2 mb-4">
+
                 <div class="card border-0 movie-card h-100">
-                    <a href="#" class="btn-delete-movie" data-bs-toggle="modal" data-bs-target="#deleteModal{{ movie.id }}">
-                        x
-                    </a>
 
-                    <div class="movie-img-placeholder mb-2">
-                        {% if movie.main_image %}
-                            <img src="{{ movie.main_image.url }}" alt="{{ movie.title }}">
-                        {% else %}
-                            <i class="bi bi-image"></i>
-                        {% endif %}
-                    </div>
+    <button type="button" class="btn-delete-movie" data-bs-toggle="modal" data-bs-target="#deleteModal{{ movie.id }}">
+        x
+    </button>
 
-                    <div class="fw-bold small text-dark">
-                        {{ movie.title }}
+    <a href="{% url 'adminlte:edit_movie' pk=movie.pk %}" class="text-decoration-none text-dark h-100">
+
+        <div class="movie-img-placeholder mb-2">
+            {% if movie.main_image %}
+                <img src="{{ movie.main_image.url }}" alt="{{ movie.title }}">
+            {% else %}
+                <i class="bi bi-image"></i>
+            {% endif %}
+        </div>
+
+        <div class="fw-bold small text-center">
+            {{ movie.title }}
+        </div>
+
+        {% if movie.date_of_show %}
+        <div class="small text-muted text-center">
+            {{ movie.date_of_show|date:"d.m.Y" }}
+        </div>
+        {% endif %}
+
+    </a>
+
+</div>
+
+                <div class="modal fade" id="deleteModal{{ movie.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Видалити фільм?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-start">
+                                Ви впевнені, що хочете видалити <strong>"{{ movie.title }}"</strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ні</button>
+                                <a href="#" class="btn btn-danger">Так, видалити</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
             {% empty %}
             <div class="col-12 text-muted">Немає фільмів</div>
             {% endfor %}
-        </div> <h4 class="text-center fw-bold mb-4 mt-5">Список фильмів, які покажуть скоро</h4>
+        </div>
+
+        <h4 class="text-center fw-bold mb-4 mt-5">Список фильмів, які покажуть скоро</h4>
 
         <div class="row text-center" id="soon-movies-list">
             {% for movie in soon_movies %}
             <div class="col-6 col-md-4 col-lg-2 mb-4">
                 <div class="card border-0 movie-card h-100">
-                    <a href="#" class="btn-delete-movie">x</a>
+
+                    <button type="button" class="btn-delete-movie" data-bs-toggle="modal" data-bs-target="#deleteModalSoon{{ movie.id }}">
+                        x
+                    </button>
 
                     <div class="movie-img-placeholder mb-2">
                         {% if movie.main_image %}
@@ -55,7 +149,33 @@
                     <div class="fw-bold small text-dark">
                         {{ movie.title }}
                     </div>
+                    <div class="small text-muted">{{ movie.date_of_show|date:"d.m.Y" }}</div>
                 </div>
+
+                 <div class="modal fade" id="deleteModalSoon{{ movie.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Видалити фільм?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-start">
+                                Ви впевнені, що хочете видалити <strong>"{{ movie.title }}"</strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ні</button>
+                                <a href="#" class="btn btn-danger">Так, видалити</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+            {% empty %}
+             <div class="col-12 text-muted">Немає фільмів</div>
             {% endfor %}
-        </div> </div> {% endblock %}
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from src.authentication.forms import UserUpdateForm
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.utils import timezone
 
 
 def index(request):
@@ -158,8 +159,19 @@ def news_and_actions_update(request):
 
     return redirect("adminlte:banners")
 
+
 def film_list(request):
-    return render(request, 'adminlte/film_list.html')
+    now = timezone.now()
+
+    current_movies = Movie.objects.filter(date_of_show__lte=now).order_by('-date_of_show')
+    soon_movies = Movie.objects.filter(date_of_show__gt=now).order_by('date_of_show')
+
+    contex = {
+        'current_movies': current_movies,
+        'soon_movies': soon_movies,
+    }
+
+    return render(request, 'adminlte/film_list.html', contex)
 
 
 User = get_user_model()
@@ -434,6 +446,66 @@ def add_movie(request):
         'gallery_formset': gallery_formset,
     }
 
-    return render(request, 'adminlte/add_film.html', context)
+    return render(request, 'adminlte/film.html', context)
+
+
+def edit_movie(request, pk):
+    movie = get_object_or_404(Movie, pk=pk)
+    seo_instance = movie.seo_block
+
+    if request.method == 'POST':
+        movie_form = MovieForm(request.POST, request.FILES, instance=movie)
+
+        seo_form = SeoBlockForm(request.POST, instance=seo_instance, prefix='seo')
+
+        GalleryFormSet.extra = 0
+
+        gallery_formset = GalleryFormSet(
+            request.POST,
+            request.FILES,
+            queryset=movie.images.all(),
+            prefix='gallery',
+        )
+
+        if movie_form.is_valid() and seo_form.is_valid() and gallery_formset.is_valid():
+            seo_block = seo_form.save()
+
+            movie = movie_form.save(commit=False)
+
+            if request.POST.get('clear_main_image') == 'true':
+                movie.main_image.delete(save=False)
+                movie.main_image = None
+
+            movie.seo_block = seo_block
+            movie.save()
+
+            new_images = gallery_formset.save()
+
+            if new_images:
+                movie.images.add(*new_images)
+
+            return redirect('adminlte:film_list')
+
+    else:
+        movie_form = MovieForm(instance=movie)
+        seo_form = SeoBlockForm(instance=seo_instance, prefix='seo')
+
+        GalleryFormSet.extra = 0
+
+        gallery_formset = GalleryFormSet(
+            queryset=movie.images.all(),
+            prefix='gallery',
+        )
+
+    context = {
+        'movie_form': movie_form,
+        'seo_form': seo_form,
+        'gallery_formset': gallery_formset,
+        'movie': movie,
+    }
+
+    return render(request, 'adminlte/film.html', context)
+
+
 
 

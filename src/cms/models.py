@@ -1,6 +1,6 @@
 from django.db import models
 from django.forms import FilePathField
-
+from django.utils import timezone
 
 class SeoBlock(models.Model):
     url = models.URLField()
@@ -20,6 +20,7 @@ class Movie(models.Model):
     trailer_url = models.URLField()
     is_2D = models.BooleanField()
     is_3D = models.BooleanField()
+    date_of_show = models.DateTimeField(default=timezone.now)
     images = models.ManyToManyField(Gallery)
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
 

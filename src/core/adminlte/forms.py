@@ -127,7 +127,7 @@ class MovieForm(forms.ModelForm):
 
     class Meta:
         model = Movie
-        fields = ['title', 'description', 'main_image', 'trailer_url', 'is_2D', 'is_3D']
+        fields = ['title', 'description', 'main_image', 'trailer_url', 'is_2D', 'is_3D', 'date_of_show']
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
@@ -136,5 +136,11 @@ class MovieForm(forms.ModelForm):
             'trailer_url': forms.URLInput(attrs={'class': 'form-control'}),
             'is_2D': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'is_3D': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'date_of_show': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
 
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk and self.instance.date_of_show:
+            self.fields['date_of_show'].widget.attrs['value'] = self.instance.date_of_show.strftime('%Y-%m-%dT%H:%M')
