@@ -1,3 +1,5 @@
+from multiprocessing.managers import convert_to_error
+
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.contrib import messages
@@ -665,6 +667,7 @@ def edit_cinema(request, pk):
         'seo_form': seo_form,
         'gallery_formset': gallery_formset,
         'halls': halls,
+        'cinema': cinema
     }
 
     return render(request, 'adminlte/cinema_add.html', context)
@@ -673,6 +676,63 @@ def delete_cinema(request, pk):
     cinema = get_object_or_404(Cinema, pk=pk)
     cinema.delete()
     return redirect('adminlte:cinemas_list')
+
+
+
+def hall_add(request, cinema_pk):
+
+    if request.method == 'POST':
+
+        cinema = get_object_or_404(Cinema, pk=cinema_pk)
+
+        hall_form = HallForm(request.POST, request.FILES)
+        seo_form = SeoBlockForm(request.POST, prefix='seo')
+
+        gallery_formset = GalleryFormSet(
+            request.POST,
+            request.FILES,
+            queryset=Gallery.objects.none(),
+            prefix='gallery',
+        )
+
+        if hall_form.is_valid() and seo_form.is_valid() and gallery_formset.is_valid():
+
+            seo_block = seo_form.save()
+            hall = hall_form.save(commit=False)
+            hall.id_cinema = cinema
+            hall.seo_block = seo_block
+            hall.save()
+
+            new_images = gallery_formset.save()
+
+            if new_images:
+                hall.gallery_image.add(*new_images)
+
+
+            return redirect('adminlte:edit_cinema', pk=cinema_pk)
+
+    else:
+
+        hall_form = HallForm()
+        seo_form = SeoBlockForm(prefix='seo')
+
+        GalleryFormSet.extra = 0
+        gallery_formset = GalleryFormSet(
+            queryset=Gallery.objects.none(),
+            prefix='gallery',
+        )
+
+    context = {
+        'hall_form': hall_form,
+        'seo_form': seo_form,
+        'gallery_formset': gallery_formset,
+    }
+
+    return render(request, 'adminlte/hall.html', context)
+
+
+
+
 
 
 

@@ -1,5 +1,6 @@
 from django import forms
-from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock, Movie, Cinema, ContactComponent, Contacts
+from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock, Movie, Cinema, ContactComponent, Contacts, \
+    Hall
 from src.main.models import MainPage, Page, Gallery
 from django.forms import modelformset_factory
 
@@ -187,5 +188,18 @@ ContactComponentFormset = modelformset_factory(
     can_delete=True,
 
 )
+
+
+class HallForm(forms.ModelForm):
+    class Meta:
+        model = Hall
+        fields = ['number', 'description', 'image', 'banner_image']
+
+        widgets = {
+            'number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'image': forms.FileInput(attrs={'class': 'd-none'}),
+            'banner_image': forms.FileInput(attrs={'class': 'd-none'}),
+        }
 
 

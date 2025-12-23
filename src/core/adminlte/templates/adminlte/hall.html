@@ -3,9 +3,9 @@
 
 {% block content %}
 <style>
-    .logo-preview-container {
-        width: 200px;
-        height: 120px;
+    .single-img-preview {
+        width: 150px;
+        height: 100px;
         background-color: #e9ecef;
         border: 1px solid #ced4da;
         display: flex;
@@ -14,7 +14,7 @@
         overflow: hidden;
         position: relative;
     }
-    .logo-preview-container img {
+    .single-img-preview img {
         width: 100%;
         height: 100%;
         object-fit: contain;
@@ -62,71 +62,85 @@
         font-weight: bold;
         z-index: 10;
     }
-
-    .table-halls th {
-        background-color: #e9ecef;
-    }
 </style>
 
 <div class="container-fluid mt-4">
+    <h3 class="fw-bold mb-4">
+        {% if hall_form.instance.pk %}Редагування залу{% else %}Додавання залу{% endif %}
+    </h3>
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <div class="row mb-4">
-            <div class="col-12">
-                <ul class="nav nav-tabs justify-content-end">
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-6 d-flex align-items-center">
+                <label class="form-label fw-bold me-3" style="white-space: nowrap;">Номер залу</label>
+                <div class="flex-grow-1">
+                    {{ hall_form.number }}
+                    {% if hall_form.number.errors %}<div class="text-danger small">{{ hall_form.number.errors }}</div>{% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <ul class="nav nav-tabs justify-content-end border-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Українська</a>
+                        <a class="nav-link active border border-bottom-0" href="#">Українська</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">English</a>
+                        <a class="nav-link border border-bottom-0" href="#">English</a>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <div class="row mb-3 align-items-center">
-            <label class="col-sm-2 col-form-label fw-bold">Назва кінотеатру</label>
-            <div class="col-sm-10">
-                {{ form.title }}
-                {% if form.title.errors %}<div class="text-danger small">{{ form.title.errors }}</div>{% endif %}
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label fw-bold">Опис</label>
-            <div class="col-sm-10">
-                {{ form.description }}
-            </div>
-        </div>
-
         <div class="row mb-4">
-            <label class="col-sm-2 col-form-label fw-bold">Умови / Адреса</label>
+            <label class="col-sm-2 col-form-label fw-bold">Опис залу</label>
             <div class="col-sm-10">
-                {{ form.address }}
+                {{ hall_form.description }}
             </div>
         </div>
 
         <div class="row mb-4 align-items-center">
-            <label class="col-sm-2 col-form-label fw-bold">Логотип</label>
+            <label class="col-sm-2 col-form-label fw-bold">Схема залу</label>
             <div class="col-sm-10 d-flex align-items-center">
 
-                <div class="logo-preview-container me-3">
-                    {% if form.instance.main_image %}
-                        <img src="{{ form.instance.main_image.url }}" id="logoPreview">
+                <div class="single-img-preview me-3">
+                    {% if hall_form.instance.image %}
+                        <img src="{{ hall_form.instance.image.url }}" id="schemaPreview">
+                        <i class="bi bi-image fs-2 text-muted" id="schemaIcon" style="display: none;"></i>
                     {% else %}
-                        <img src="" id="logoPreview" style="display: none;">
-                        <i class="bi bi-image" style="font-size: 2rem; color: #adb5bd;" id="logoIcon"></i>
+                        <img src="" id="schemaPreview" style="display: none;">
+                        <i class="bi bi-image fs-2 text-muted" id="schemaIcon"></i>
                     {% endif %}
                 </div>
 
                 <div class="d-none">
-                    {{ form.main_image }}
-                </div>
-                <input type="hidden" name="clear_logo" id="clear_logo_id" value="false">
+                    {{ hall_form.image }} </div>
 
-                <button type="button" class="btn btn-secondary me-2" onclick="document.getElementById('logoInput').click();">Завантажити</button>
-                <button type="button" class="btn btn-outline-danger" onclick="clearLogo()">Видалити</button>
+                <button type="button" class="btn btn-secondary me-2" onclick="triggerUpload('id_image')">Завантажити</button>
+                <button type="button" class="btn btn-outline-danger" onclick="clearSingleImage('id_image', 'schemaPreview', 'schemaIcon')">Видалити</button>
+            </div>
+        </div>
+
+        <div class="row mb-5 align-items-center">
+            <label class="col-sm-2 col-form-label fw-bold">Верхній банер</label>
+            <div class="col-sm-10 d-flex align-items-center">
+
+                <div class="single-img-preview me-3">
+                    {% if hall_form.instance.banner_image %}
+                        <img src="{{ hall_form.instance.banner_image.url }}" id="bannerPreview">
+                        <i class="bi bi-image fs-2 text-muted" id="bannerIcon" style="display: none;"></i>
+                    {% else %}
+                        <img src="" id="bannerPreview" style="display: none;">
+                        <i class="bi bi-image fs-2 text-muted" id="bannerIcon"></i>
+                    {% endif %}
+                </div>
+
+                <div class="d-none">
+                    {{ hall_form.banner_image }}
+                </div>
+
+                <button type="button" class="btn btn-secondary me-2" onclick="triggerUpload('id_banner_image')">Завантажити</button>
+                <button type="button" class="btn btn-outline-danger" onclick="clearSingleImage('id_banner_image', 'bannerPreview', 'bannerIcon')">Видалити</button>
             </div>
         </div>
 
@@ -149,7 +163,7 @@
                                 {% if g_form.instance.pk and g_form.instance.image %}
                                     <img src="{{ g_form.instance.image.url }}">
                                 {% else %}
-                                    <i class="bi bi-image placeholder-icon"></i>
+                                    <i class="bi bi-image placeholder-icon fs-2 text-muted"></i>
                                 {% endif %}
                             </div>
 
@@ -166,59 +180,12 @@
                 </div>
 
                 <div class="mt-3">
-                    <button type="button" class="btn btn-outline-primary" id="add-gallery-btn"><i class="bi bi-plus-lg"></i> Додати фото</button>
+                    <button type="button" class="btn btn-outline-success" id="add-gallery-btn">
+                        <i class="bi bi-plus-lg"></i> Додати фото
+                    </button>
                 </div>
             </div>
         </div>
-
-        <hr class="my-5">
-
-        {% if halls %}
-        <div class="row mb-5 justify-content-center">
-            <div class="col-8">
-
-                <h4 class="text-center fw-bold mb-3">Список Залів</h4>
-
-                <table class="table table-bordered table-halls align-middle">
-                    <thead>
-                        <tr>
-                            <th scope="col">Назва</th>
-                            <th scope="col">Дата створення</th>
-                            <th scope="col" style="width: 100px;">Дії</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for hall in halls %}
-                        <tr>
-                            <td>{{ hall.number }}</td>
-                            <td>
-                                {% if hall.creation_date %}
-                                    {{ hall.creation_date|date:"d.m.Y" }}
-                                {% else %}
-                                    -
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="#" class="text-dark me-2"><i class="bi bi-pencil-fill"></i></a>
-
-                                <a href="#" class="text-danger"><i class="bi bi-trash-fill"></i></a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-
-                <div class="text-center">
-                    <a href="{% url 'adminlte:hall_add' cinema_pk=cinema.pk %}" class="btn btn-success"><i class="bi bi-plus-lg"></i> Створити Зал</a>
-                </div>
-            </div>
-        </div>
-
-        {% else %}
-            <div class="alert alert-secondary text-center" role="alert">
-                <i class="bi bi-info-circle"></i> Зал буде створено автоматично після збереження кінотеатру.
-            </div>
-        {% endif %}
 
         <hr class="my-5">
 
@@ -245,8 +212,7 @@
         </div>
 
         <div class="text-center mt-5 mb-5">
-            <button type="submit" class="btn btn-secondary px-5 me-3">Зберегти</button>
-            <a href="{% url 'adminlte:cinemas_list' %}" class="btn btn-outline-secondary">Повернутись до списку</a>
+            <button type="submit" class="btn btn-secondary px-5">Зберегти</button>
         </div>
 
     </form>
@@ -260,7 +226,7 @@
         <div class="btn-remove-gallery" onclick="deleteGalleryItem(this)">x</div>
 
         <div class="gallery-preview-box">
-            <i class="bi bi-image placeholder-icon" style="font-size: 2rem; color: #adb5bd;"></i>
+            <i class="bi bi-image placeholder-icon fs-2 text-muted"></i>
         </div>
 
         <div class="mt-1">
@@ -273,34 +239,51 @@
 </div>
 
 <script>
-    const logoInput = document.getElementById('logoInput');
-    const clearLogoInput = document.getElementById('clear_logo_id');
-    const logoPreview = document.getElementById('logoPreview');
-    const logoIcon = document.getElementById('logoIcon');
 
-    if(logoInput) {
-        logoInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    logoPreview.src = e.target.result;
-                    logoPreview.style.display = 'block';
-                    if(logoIcon) logoIcon.style.display = 'none';
+    function triggerUpload(inputId) {
+        const input = document.getElementById(inputId);
+        if(input) input.click();
+    }
+
+    function clearSingleImage(inputId, previewId, iconId) {
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+        const icon = document.getElementById(iconId);
+
+        if(input) input.value = '';
+
+        preview.src = '';
+        preview.style.display = 'none';
+        icon.style.display = 'block';
+
+    }
+
+    function setupSinglePreview(inputId, previewId, iconId) {
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+        const icon = document.getElementById(iconId);
+
+        if(input) {
+            input.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                        icon.style.display = 'none';
+                    }
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
-                clearLogoInput.value = 'false';
-            }
-        });
+            });
+        }
     }
 
-    function clearLogo() {
-        if(logoInput) logoInput.value = '';
-        logoPreview.src = '';
-        logoPreview.style.display = 'none';
-        if(logoIcon) logoIcon.style.display = 'block';
-        clearLogoInput.value = 'true';
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        setupSinglePreview('id_image', 'schemaPreview', 'schemaIcon');
+        setupSinglePreview('id_banner_image', 'bannerPreview', 'bannerIcon');
+    });
+
 
     function deleteGalleryItem(btn) {
         const wrapper = btn.closest('.gallery-item');
@@ -354,5 +337,4 @@
         });
     });
 </script>
-
 {% endblock %}
