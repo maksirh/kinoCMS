@@ -1,5 +1,5 @@
 from django import forms
-from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock, Movie
+from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock, Movie, Cinema, ContactComponent, Contacts
 from src.main.models import MainPage, Page, Gallery
 from django.forms import modelformset_factory
 
@@ -30,6 +30,7 @@ class ThroughBannerForm(forms.ModelForm):
             }),
         }
 
+
 class SimpleImageComponentForm(forms.ModelForm):
     class Meta:
         model = BannerComponent
@@ -54,6 +55,7 @@ ThroughBannerFormSet = modelformset_factory(
     can_delete=False
 )
 
+
 BannerComponentFormSet = modelformset_factory(
     BannerComponent,
     form=BannerComponentForm,
@@ -77,6 +79,7 @@ class MainPageForm(forms.ModelForm):
                 'placeholder': 'Введіть SEO текст для головної сторінки...'
             }),
         }
+
 
 class PageForm(forms.ModelForm):
     class Meta:
@@ -144,3 +147,45 @@ class MovieForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if self.instance.pk and self.instance.date_of_show:
             self.fields['date_of_show'].widget.attrs['value'] = self.instance.date_of_show.strftime('%Y-%m-%dT%H:%M')
+
+
+
+class CinemaForm(forms.ModelForm):
+
+    class Meta:
+        model = Cinema
+        fields = ['title', 'description', 'main_image', 'address']
+
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'main_image': forms.FileInput(attrs={'class': 'form-control', 'id': 'logoInput'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+class ContactComponentForm(forms.ModelForm):
+    class Meta:
+        model = ContactComponent
+        fields = ['logo', 'cinema_name', 'address', 'phone_number', 'latitude', 'longitude', 'email', 'is_active']
+        widgets = {
+            'logo': forms.FileInput(attrs={'class': 'd-none'}),
+            'cinema_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'latitude': forms.NumberInput(attrs={'class': 'form-control'}),
+            'longitude': forms.NumberInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+
+ContactComponentFormset = modelformset_factory(
+    ContactComponent,
+    form = ContactComponentForm,
+    extra=0,
+    can_delete=True,
+
+)
+
+

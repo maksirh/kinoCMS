@@ -65,6 +65,7 @@ class ThroughBanner(models.Model):
 
 
 class ContactComponent(models.Model):
+    logo = models.ImageField(upload_to='contacts/', blank=True)
     cinema_name = models.CharField(max_length=120)
     address = models.CharField(max_length=120)
     phone_number = models.CharField(max_length=120)
@@ -77,6 +78,19 @@ class ContactComponent(models.Model):
 class Contacts(models.Model):
     component = models.ManyToManyField(ContactComponent)
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        pass
+
+    @classmethod
+    def load(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
 
 
 class Mailing(models.Model):

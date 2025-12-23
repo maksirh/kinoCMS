@@ -1,0 +1,130 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .cinema-card {
+        position: relative;
+        transition: transform 0.2s;
+        border: 1px solid #dee2e6;
+    }
+    .cinema-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .cinema-logo-placeholder {
+        background-color: #ffffff;
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-bottom: 1px solid #f0f0f0;
+        padding: 10px;
+    }
+
+    .cinema-logo-placeholder img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .cinema-logo-placeholder i {
+        font-size: 4rem;
+        color: #dee2e6;
+    }
+
+    .btn-delete-cinema {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: #ffcccc;
+        color: red;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        border: 1px solid red;
+        z-index: 10;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+    }
+    .btn-delete-cinema:hover {
+        background: red;
+        color: white;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+
+    <div class="d-flex justify-content-center align-items-center flex-column mb-5">
+        <h3 class="fw-bold mb-3">Список кінотеатрів</h3>
+
+        <a href="{% url 'adminlte:cinema_add' %}" class="btn btn-primary rounded-pill px-4">
+            <i class="bi bi-plus-lg"></i> Додати кінотеатр
+        </a>
+    </div>
+
+    <div class="row">
+        {% for cinema in cinemas %}
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
+
+            <div class="card cinema-card h-100">
+
+                <button type="button" class="btn-delete-cinema" data-bs-toggle="modal" data-bs-target="#deleteCinemaModal{{ cinema.id }}">
+                    x
+                </button>
+
+                <a href="{% url 'adminlte:cinema_edit' pk=cinema.pk %}" class="text-decoration-none text-dark h-100 d-flex flex-column">
+
+                    <div class="cinema-logo-placeholder">
+                        {% if cinema.logo %}
+                            <img src="{{ cinema.logo.url }}" alt="{{ cinema.title }}">
+                        {% else %}
+                            <i class="bi bi-building"></i> {% endif %}
+                    </div>
+
+                    <div class="card-body text-center flex-grow-1 d-flex flex-column justify-content-center">
+                        <h5 class="card-title fw-bold mb-1">{{ cinema.title }}</h5>
+                        <p class="card-text text-muted small mb-0">{{ cinema.city }}</p>
+                    </div>
+                </a>
+
+            </div>
+
+            <div class="modal fade" id="deleteCinemaModal{{ cinema.id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Видалити кінотеатр?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Ви дійсно хочете видалити кінотеатр <strong>"{{ cinema.title }}"</strong>?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ні</button>
+                            <a href="{% url 'adminlte:cinema_delete' pk=cinema.pk %}" class="btn btn-danger">Так, видалити</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted mt-5">
+            <h4>Список порожній</h4>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

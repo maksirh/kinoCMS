@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.contrib import messages
-from src.cms.models import BannerComponent, ThroughBanner
+from src.cms.models import BannerComponent, ThroughBanner, Contacts
 from django.forms import formset_factory
 from src.user.models import User
 from django.contrib.auth import get_user_model
@@ -265,10 +265,12 @@ def main_page(request):
 
 def pages(request):
     main_page = MainPage.load()
+    contacts = Contacts.load()
     pages = Page.objects.all().order_by('id')
     context = {
         "main_page": main_page,
         "pages": pages,
+        "contacts": contacts,
     }
 
     return render(request, 'adminlte/pages.html', context)
@@ -406,6 +408,42 @@ def edit_mainpage(request):
 
     return render(request, 'adminlte/main_page.html', context)
 
+
+def contacts(request):
+    contact_page = Contacts.load()
+    seo_instance = contact_page.seo_block
+
+    if request.method == 'POST':
+        seo_form = SeoBlockForm(request.POST, prefix='seo', instance=seo_instance)
+        formset = ContactComponentFormset(request.POST, request.FILES, queryset=contact_page.component.all())
+
+        if seo_form.is_valid() and formset.is_valid():
+            seo_block = seo_form.save()
+            contact_page.seo_block = seo_block
+            contact_page.save()
+
+            instances = formset.save()
+
+            for instance in instances:
+                contact_page.component.add(instance)
+
+
+            return redirect('adminlte:pages')
+
+
+
+    else:
+        seo_form = SeoBlockForm(instance=seo_instance ,prefix='seo')
+        formset = ContactComponentFormset(queryset=contact_page.component.all())
+
+    context = {
+        'seo_form': seo_form,
+        'formset': formset,
+    }
+
+    return render(request, 'adminlte/contacts.html', context)
+
+
 def add_movie(request):
 
     if request.method == 'POST':
@@ -506,6 +544,56 @@ def edit_movie(request, pk):
 
     return render(request, 'adminlte/film.html', context)
 
+
+def cinemas_list(request):
+    return render(request, 'adminlte/cinemas.html')
+
+
+def cinema_add(request):
+    if request.method == 'POST':
+        cinema_form = CinemaForm(request.POST, request.FILES)
+        seo_form = SeoBlockForm(request.POST, prefix='seo')
+
+        GalleryFormSet.extra = 0
+
+        gallery_formset = GalleryFormSet(
+            request.POST,
+            request.FILES,
+            queryset=Gallery.objects.none(),
+            prefix='gallery',
+        )
+
+        if cinema_form.is_valid() and seo_form.is_valid() and gallery_formset.is_valid():
+            seo_block = seo_form.save()
+
+            cinema = cinema_form.save(commit=False)
+            cinema.seo_block = seo_block
+            cinema.save()
+
+            new_images = gallery_formset.save()
+
+            if new_images:
+                cinema.gallery_image.add(*new_images)
+
+            return redirect('adminlte:cinemas_list')
+
+    else:
+        cinema_form = CinemaForm()
+        seo_form = SeoBlockForm(prefix='seo')
+
+        GalleryFormSet.extra = 0
+        gallery_formset = GalleryFormSet(
+            queryset=Gallery.objects.none(),
+            prefix='gallery'
+        )
+
+    context = {
+        'form': cinema_form,
+        'seo_form': seo_form,
+        'gallery_formset': gallery_formset,
+    }
+
+    return render(request, 'adminlte/cinema_add.html', context)
 
 
 

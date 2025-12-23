@@ -29,3 +29,4 @@ def cafe_bar_page(request):
 
 
 
+

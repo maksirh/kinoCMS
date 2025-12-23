@@ -1,0 +1,274 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .contact-card {
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        position: relative;
+    }
+    .form-switch .form-check-input {
+        width: 3em;
+        height: 1.5em;
+        cursor: pointer;
+    }
+    .logo-preview {
+        width: 150px;
+        height: 100px;
+        background-color: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #dee2e6;
+        margin-right: 15px;
+    }
+    .logo-preview img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <h3 class="text-center mb-4 fw-bold">Контакти</h3>
+
+        <div id="contact-formset-container">
+            {{ formset.management_form }}
+
+            {% for form in formset %}
+                <div class="contact-card">
+                    {{ form.id }}
+                    <div class="d-none">{{ form.DELETE }}</div>
+
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Назва кінотеатру</label>
+                            {{ form.cinema_name }}
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end align-items-center">
+                            <label class="form-check-label me-3 fw-bold">ВКЛ / ВИКЛ</label>
+                            <div class="form-check form-switch">
+                                {{ form.is_active }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Адреса</label>
+                            {{ form.address }}
+                        </div>
+                    </div>
+
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Телефон</label>
+                            {{ form.phone_number }}
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Email</label>
+                            {{ form.email }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Координати (Широта)</label>
+                            {{ form.latitude }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Координати (Довгота)</label>
+                            {{ form.longitude }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-sm-2 col-form-label fw-bold">Лого</label>
+                        <div class="col-sm-10 d-flex align-items-center">
+
+                            <div class="logo-preview me-3">
+                                {% if form.instance.pk and form.instance.logo %}
+                                    <img src="{{ form.instance.logo.url }}">
+                                {% else %}
+                                    <i class="bi bi-image fs-2 text-muted"></i>
+                                {% endif %}
+                            </div>
+
+                            <div class="d-none file-input-wrapper">
+                                {{ form.logo }}
+                            </div>
+
+                            <button type="button" class="btn btn-secondary me-2" onclick="triggerContactUpload(this)">
+                                Завантажити
+                            </button>
+
+                            <button type="button" class="btn btn-danger ms-auto" onclick="deleteContactBlock(this)">
+                                Видалити
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mb-5">
+            <button type="button" class="btn btn-outline-success rounded-pill px-4" id="add-contact-btn">
+                <i class="bi bi-plus-lg"></i> Додати ще кінотеатр
+            </button>
+        </div>
+
+        <hr>
+
+        <div class="row mb-3 mt-4">
+            <label class="col-sm-2 col-form-label fw-bold pt-0">SEO блок:</label>
+            <div class="col-sm-10">
+                <div class="row mb-2 align-items-center">
+                    <label class="col-sm-1 col-form-label text-end text-muted small">URL:</label>
+                    <div class="col-sm-11">{{ seo_form.url }}</div>
+                </div>
+                <div class="row mb-2 align-items-center">
+                    <label class="col-sm-1 col-form-label text-end text-muted small">Title:</label>
+                    <div class="col-sm-11">{{ seo_form.title }}</div>
+                </div>
+                <div class="row mb-2 align-items-center">
+                    <label class="col-sm-1 col-form-label text-end text-muted small">Keywords:</label>
+                    <div class="col-sm-11">{{ seo_form.keywords }}</div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-sm-1 col-form-label text-end text-muted small">Description:</label>
+                    <div class="col-sm-11">{{ seo_form.description }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5 mb-5">
+            <button type="submit" class="btn btn-secondary px-5">Зберегти</button>
+        </div>
+
+    </form>
+</div>
+
+<div id="empty-form" style="display:none;">
+    <div class="contact-card">
+        <input type="hidden" name="form-__prefix__-id" id="id_form-__prefix__-id">
+        <div class="d-none">
+            <input type="checkbox" name="form-__prefix__-DELETE" id="id_form-__prefix__-DELETE">
+        </div>
+
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Назва кінотеатру</label>
+                {{ formset.empty_form.cinema_name }}
+            </div>
+            <div class="col-md-6 d-flex justify-content-end align-items-center">
+                <label class="form-check-label me-3 fw-bold">ВКЛ / ВИКЛ</label>
+                <div class="form-check form-switch">
+                    {{ formset.empty_form.is_active }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <label class="form-label fw-bold">Адреса</label>
+                {{ formset.empty_form.address }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Координати (Широта)</label>
+                {{ formset.empty_form.latitude }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Координати (Довгота)</label>
+                {{ formset.empty_form.longitude }}
+            </div>
+        </div>
+
+        <div class="row mb-3 align-items-center">
+            <label class="col-sm-2 col-form-label fw-bold">Лого</label>
+            <div class="col-sm-10 d-flex align-items-center">
+
+                <div class="logo-preview me-3">
+                    <i class="bi bi-image fs-2 text-muted"></i>
+                </div>
+
+                <div class="d-none file-input-wrapper">
+                    {{ formset.empty_form.logo }}
+                </div>
+
+                <button type="button" class="btn btn-secondary me-2" onclick="triggerContactUpload(this)">
+                    Завантажити
+                </button>
+
+                <button type="button" class="btn btn-danger ms-auto" onclick="deleteContactBlock(this)">
+                    Видалити
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function triggerContactUpload(btn) {
+        const card = btn.closest('.contact-card');
+        const fileInput = card.querySelector('input[type="file"]');
+
+        if (fileInput) {
+            fileInput.click();
+
+            fileInput.onchange = function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewBox = card.querySelector('.logo-preview');
+                        previewBox.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 100%; object-fit: contain;">`;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            };
+        } else {
+            console.error("Поле файлу не знайдено! Перевірте forms.py");
+        }
+    }
+
+    function deleteContactBlock(btn) {
+        const card = btn.closest('.contact-card');
+        const deleteInput = card.querySelector('input[name$="-DELETE"]');
+
+        if (deleteInput) {
+            deleteInput.checked = true;
+            card.style.display = 'none';
+        } else {
+            card.remove();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const addBtn = document.getElementById('add-contact-btn');
+        const container = document.getElementById('contact-formset-container');
+        const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+        const emptyTemplate = document.getElementById('empty-form').innerHTML;
+
+        addBtn.addEventListener('click', function() {
+            const count = parseInt(totalForms.value);
+            const newForm = emptyTemplate.replace(/__prefix__/g, count);
+            container.insertAdjacentHTML('beforeend', newForm);
+            totalForms.value = count + 1;
+        });
+    });
+</script>
+{% endblock %}

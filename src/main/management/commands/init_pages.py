@@ -1,4 +1,6 @@
 from django.core.management.base import BaseCommand
+
+from src.cms.models import Contacts
 from src.main.models import Page, MainPage
 
 
@@ -8,6 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         main_page = MainPage.load()
+        contacts = Contacts.load()
 
         mandatory_pages = [
             "Про кінотеатр",
@@ -15,7 +18,6 @@ class Command(BaseCommand):
             "Vip - зал",
             "Реклама",
             "Дитяча кімната",
-            "Контакти"
         ]
 
         for title in mandatory_pages:

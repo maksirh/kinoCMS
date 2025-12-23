@@ -46,6 +46,18 @@
       </td>
     </tr>
 
+    <tr>
+      <td>Контакти</td>
+      <td>{{ main_page.updated_at }}</td>
+      <td></td>
+
+      <td>
+          <a href="{% url 'adminlte:contacts' %}" class="btn-action btn-edit" title="Редагувати">
+             &#9998;
+          </a>
+      </td>
+    </tr>
+
 
     {% for page in pages %}
 
