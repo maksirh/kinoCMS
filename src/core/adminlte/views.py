@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.contrib import messages
-from src.cms.models import BannerComponent, ThroughBanner, Contacts
+from src.cms.models import BannerComponent, ThroughBanner, Contacts, Hall
 from django.forms import formset_factory
 from src.user.models import User
 from django.contrib.auth import get_user_model
@@ -319,6 +319,9 @@ def page_add(request):
     return render(request, 'adminlte/page.html', context)
 
 
+
+
+
 def page_edit(request, pk):
 
     page = get_object_or_404(Page, pk=pk)
@@ -546,7 +549,11 @@ def edit_movie(request, pk):
 
 
 def cinemas_list(request):
-    return render(request, 'adminlte/cinemas.html')
+    cinemas = Cinema.objects.all()
+    context = {
+        'cinemas': cinemas,
+    }
+    return render(request, 'adminlte/cinemas.html', context)
 
 
 def cinema_add(request):
@@ -570,6 +577,12 @@ def cinema_add(request):
             cinema.seo_block = seo_block
             cinema.save()
 
+            Hall.objects.create(
+                id_cinema=cinema,
+                number='Зал 1',
+                description='Опис залу...',
+            )
+
             new_images = gallery_formset.save()
 
             if new_images:
@@ -591,9 +604,77 @@ def cinema_add(request):
         'form': cinema_form,
         'seo_form': seo_form,
         'gallery_formset': gallery_formset,
+        'halls': []
     }
 
     return render(request, 'adminlte/cinema_add.html', context)
+
+
+def edit_cinema(request, pk):
+    cinema = get_object_or_404(Cinema, pk=pk)
+    seo_instance = cinema.seo_block
+
+    halls = Hall.objects.filter(id_cinema=cinema)
+
+    if request.method == 'POST':
+        cinema_form = CinemaForm(request.POST, request.FILES, instance=cinema)
+        seo_form = SeoBlockForm(request.POST, instance=seo_instance, prefix='seo')
+
+        GalleryFormSet.extra = 0
+
+        gallery_formset = GalleryFormSet(
+            request.POST,
+            request.FILES,
+            queryset=cinema.gallery_image.all(),
+            prefix='gallery',
+        )
+
+
+        if cinema_form.is_valid() and seo_form.is_valid() and gallery_formset.is_valid():
+            seo_block = seo_form.save()
+            cinema = cinema_form.save(commit=False)
+
+            if request.POST.get('clear_main_image') == 'true':
+                cinema.main_image.delete(save=False)
+                cinema.main_image = None
+
+            cinema.seo_block = seo_block
+            cinema.save()
+
+            new_images = gallery_formset.save()
+
+            if new_images:
+                cinema.gallery_image.add(*new_images)
+
+            return redirect('adminlte:cinemas_list')
+
+    else:
+        cinema_form = CinemaForm(instance=cinema)
+        seo_form = SeoBlockForm(instance=seo_instance, prefix='seo')
+
+        GalleryFormSet.extra = 0
+
+        gallery_formset = GalleryFormSet(
+            queryset=cinema.gallery_image.all(),
+            prefix='gallery',
+        )
+
+
+    context = {
+        'form': cinema_form,
+        'seo_form': seo_form,
+        'gallery_formset': gallery_formset,
+        'halls': halls,
+    }
+
+    return render(request, 'adminlte/cinema_add.html', context)
+
+def delete_cinema(request, pk):
+    cinema = get_object_or_404(Cinema, pk=pk)
+    cinema.delete()
+    return redirect('adminlte:cinemas_list')
+
+
 
 
 

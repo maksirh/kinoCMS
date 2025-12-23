@@ -82,11 +82,11 @@
                     x
                 </button>
 
-                <a href="{% url 'adminlte:cinema_edit' pk=cinema.pk %}" class="text-decoration-none text-dark h-100 d-flex flex-column">
+                <a href="{% url 'adminlte:edit_cinema' pk=cinema.pk %}" class="text-decoration-none text-dark h-100 d-flex flex-column">
 
                     <div class="cinema-logo-placeholder">
-                        {% if cinema.logo %}
-                            <img src="{{ cinema.logo.url }}" alt="{{ cinema.title }}">
+                        {% if cinema.main_image %}
+                            <img src="{{ cinema.main_image.url }}" alt="{{ cinema.title }}">
                         {% else %}
                             <i class="bi bi-building"></i> {% endif %}
                     </div>
@@ -111,7 +111,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ні</button>
-                            <a href="{% url 'adminlte:cinema_delete' pk=cinema.pk %}" class="btn btn-danger">Так, видалити</a>
+                            <a href="{% url 'adminlte:delete_cinema' %}" class="btn btn-danger">Так, видалити</a>
                         </div>
                     </div>
                 </div>

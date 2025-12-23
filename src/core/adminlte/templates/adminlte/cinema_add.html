@@ -173,8 +173,10 @@
 
         <hr class="my-5">
 
+        {% if halls %}
         <div class="row mb-5 justify-content-center">
             <div class="col-8">
+
                 <h4 class="text-center fw-bold mb-3">Список Залів</h4>
 
                 <table class="table table-bordered table-halls align-middle">
@@ -186,22 +188,23 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for hall in halls %}
                         <tr>
-                            <td>Зал 1</td>
-                            <td>12.07.2023</td>
+                            <td>{{ hall.number }}</td>
+                            <td>
+                                {% if hall.creation_date %}
+                                    {{ hall.creation_date|date:"d.m.Y" }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
                             <td>
                                 <a href="#" class="text-dark me-2"><i class="bi bi-pencil-fill"></i></a>
+
                                 <a href="#" class="text-danger"><i class="bi bi-trash-fill"></i></a>
                             </td>
                         </tr>
-                         <tr>
-                            <td>Зал 2</td>
-                            <td>15.08.2023</td>
-                            <td>
-                                <a href="#" class="text-dark me-2"><i class="bi bi-pencil-fill"></i></a>
-                                <a href="#" class="text-danger"><i class="bi bi-trash-fill"></i></a>
-                            </td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
 
@@ -210,6 +213,12 @@
                 </div>
             </div>
         </div>
+
+        {% else %}
+            <div class="alert alert-secondary text-center" role="alert">
+                <i class="bi bi-info-circle"></i> Зал буде створено автоматично після збереження кінотеатру.
+            </div>
+        {% endif %}
 
         <hr class="my-5">
 

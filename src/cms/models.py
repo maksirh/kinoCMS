@@ -40,8 +40,9 @@ class Hall(models.Model):
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
     number = models.CharField(max_length=120)
     description = models.TextField()
-    image = models.ImageField()
-    banner_image = models.ImageField()
+    image = models.ImageField(upload_to='halls/', null=True, blank=True)
+    banner_image = models.ImageField(upload_to='halls_banners/', null=True, blank=True)
+    creation_date = models.DateField(auto_now_add=True, blank=True, null=True)
 
 
 class BannerComponent(models.Model):
