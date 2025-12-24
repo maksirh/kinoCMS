@@ -3,7 +3,7 @@ from .views import (index, banners_top_update, film_list, banners_edit, news_and
                     through_banner_update, users_list, user_edit, user_delete, pages,
                     main_page, page_add, page_edit, page_delete,
                     edit_mainpage, add_movie, edit_movie, cinemas_list,
-                    cinema_add, contacts, edit_cinema, delete_cinema, hall_add)
+                    cinema_add, contacts, edit_cinema, delete_cinema, hall_add, hall_edit, hall_delete)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -34,6 +34,8 @@ urlpatterns = [
     path('cinemas/edit/<int:pk>', edit_cinema, name='edit_cinema'),
     path('cinemas/delete/<int:pk>', delete_cinema, name='cinema_delete'),
     path('cinemas/hall/add/<int:cinema_pk>', hall_add, name='hall_add'),
+    path('cinemas/hall/edit/<int:cinema_pk>/<int:pk>', hall_edit, name='hall_edit'),
+    path('cinemas/hall/delete/<int:cinema_pk>/<int:pk>', hall_delete, name='hall_delete')
 ]
 
 

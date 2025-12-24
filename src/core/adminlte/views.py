@@ -1,5 +1,3 @@
-from multiprocessing.managers import convert_to_error
-
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.contrib import messages
@@ -699,6 +697,11 @@ def hall_add(request, cinema_pk):
 
             seo_block = seo_form.save()
             hall = hall_form.save(commit=False)
+
+            if request.POST.get('clear_main_image') == 'true':
+                hall.main_image.delete(save=False)
+                hall.main_image = None
+
             hall.id_cinema = cinema
             hall.seo_block = seo_block
             hall.save()
@@ -729,6 +732,62 @@ def hall_add(request, cinema_pk):
     }
 
     return render(request, 'adminlte/hall.html', context)
+
+
+def hall_edit(request, cinema_pk, pk):
+    hall = get_object_or_404(Hall, pk=pk)
+    seo_instance = hall.seo_block
+
+    if request.method == 'POST':
+        hall_form = HallForm(request.POST, request.FILES, instance=hall)
+        seo_form = SeoBlockForm(request.POST, instance=seo_instance, prefix='seo')
+
+        gallery_formset = GalleryFormSet(
+            request.POST,
+            request.FILES,
+            queryset=hall.gallery_image.all(),
+            prefix='gallery'
+        )
+
+        if hall_form.is_valid() and seo_form.is_valid() and gallery_formset.is_valid():
+
+            hall = hall_form.save(commit=False)
+            hall.seo_block = seo_form.save()
+            hall.save()
+
+            new_images = gallery_formset.save()
+
+            if new_images:
+                hall.gallery_image.add(*new_images)
+
+            return redirect('adminlte:edit_cinema', pk=cinema_pk)
+
+
+    else:
+        hall_form = HallForm(instance=hall)
+        seo_form = SeoBlockForm(instance=seo_instance, prefix='seo')
+
+        GalleryFormSet.extra = 0
+
+        gallery_formset = GalleryFormSet(
+            queryset=hall.gallery_image.all(),
+            prefix='gallery',
+        )
+
+
+    context = {
+        'hall_form': hall_form,
+        'seo_form': seo_form,
+        'gallery_formset': gallery_formset,
+    }
+
+    return render(request, 'adminlte/hall.html', context)
+
+
+def hall_delete(request, cinema_pk, pk):
+    hall = get_object_or_404(Hall, pk=pk)
+    hall.delete()
+    return redirect('adminlte:cinema_add', pk=cinema_pk)
 
 
 
