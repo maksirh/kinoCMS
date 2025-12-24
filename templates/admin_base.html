@@ -64,14 +64,14 @@
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{% url 'adminlte:news_and_actions' is_news=1 %}" class="nav-link">
               <i class="nav-icon bi bi-grid-3x3-gap"></i>
               <p>Новини</p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{% url 'adminlte:news_and_actions' is_news=0 %}" class="nav-link">
               <i class="nav-icon bi bi-cup-hot"></i>
               <p>Акції</p>
             </a>

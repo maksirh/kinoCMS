@@ -791,9 +791,131 @@ def hall_delete(request, cinema_pk, pk):
 
 
 
+def news_and_actions(request, is_news):
+    is_news_bool = bool(is_news)
+
+    items = NewsAndActions.objects.filter(is_news=is_news_bool).order_by('-id')
+
+    context = {
+        'items': items,
+        'is_news': is_news_bool,
+    }
+
+    return render(request, 'adminlte/news_and_actions.html', context)
 
 
 
+def news_and_actions_add(request, is_news):
+    if request.method == 'POST':
+        news_and_actions_form = NewsAndActionsForm(request.POST, request.FILES)
+        seo_form = SeoBlockForm(request.POST, prefix='seo')
+
+        gallery_formset = GalleryFormSet(
+            request.POST,
+            request.FILES,
+            queryset=Gallery.objects.none(),
+            prefix='gallery',
+        )
+
+        if news_and_actions_form.is_valid() and gallery_formset.is_valid() and seo_form.is_valid():
+
+            news_and_actions = news_and_actions_form.save(commit=False)
+            news_and_actions.is_news = bool(is_news)
+            seo_block = seo_form.save()
+
+            news_and_actions.seo_block = seo_block
+            news_and_actions.save()
+
+            new_images = gallery_formset.save()
+
+            if new_images:
+                news_and_actions.gallery_images.add(*new_images)
 
 
+            return redirect('adminlte:news_and_actions', is_news=int(is_news))
+
+    else:
+
+        news_and_actions_form = NewsAndActionsForm()
+        seo_form = SeoBlockForm(prefix='seo')
+
+        GalleryFormSet.extra = 0
+        gallery_formset = GalleryFormSet(
+            queryset=Gallery.objects.none(),
+            prefix='gallery',
+        )
+
+    context = {
+        'news_and_actions_form': news_and_actions_form,
+        'seo_form': seo_form,
+        'gallery_formset': gallery_formset,
+        'is_news': is_news,
+    }
+
+    return render(request, 'adminlte/news_and_actions_add.html', context)
+
+
+def news_and_actions_edit(request, pk):
+    news_and_actions = get_object_or_404(NewsAndActions, pk=pk)
+    seo_instance = news_and_actions.seo_block
+
+    if request.method == 'POST':
+        news_and_actions_form = NewsAndActionsForm(request.POST, request.FILES, instance=news_and_actions)
+        seo_form = SeoBlockForm(request.POST, instance=seo_instance, prefix='seo')
+
+        gallery_formset = GalleryFormSet(
+            request.POST,
+            request.FILES,
+            queryset=news_and_actions.gallery_images.all(),
+            prefix='gallery',
+        )
+
+        if news_and_actions_form.is_valid() and seo_form.is_valid() and gallery_formset.is_valid():
+
+            seo_block = seo_form.save()
+
+            news_and_actions = news_and_actions_form.save(commit=False)
+
+            if request.POST.get('clear_main_image') == 'true':
+                news_and_actions.main_image.delete(save=False)
+                news_and_actions.main_image = None
+
+            news_and_actions.seo_block = seo_block
+            news_and_actions.save()
+
+            new_images = gallery_formset.save()
+
+            if new_images:
+                news_and_actions.gallery_images.add(*new_images)
+
+            return redirect('adminlte:news_and_actions', is_news=int(news_and_actions.is_news))
+
+        else:
+            print("Errors:", news_and_actions_form.errors, gallery_formset.errors)
+
+    else:
+        news_and_actions_form = NewsAndActionsForm(instance=news_and_actions)
+        seo_form = SeoBlockForm(instance=seo_instance, prefix='seo')
+
+        GalleryFormSet.extra = 0
+        gallery_formset = GalleryFormSet(
+            queryset=news_and_actions.gallery_images.all(),
+            prefix='gallery',
+        )
+
+    context = {
+        'news_and_actions_form': news_and_actions_form,
+        'seo_form': seo_form,
+        'gallery_formset': gallery_formset,
+        'is_news': news_and_actions.is_news,
+    }
+
+    return render(request, 'adminlte/news_and_actions_add.html', context)
+
+
+def news_and_actions_delete(request, pk):
+    news_and_actions = get_object_or_404(NewsAndActions, pk=pk)
+    is_news = int(news_and_actions.is_news)
+    news_and_actions.delete()
+    return redirect('adminlte:news_and_actions', is_news=is_news)
 

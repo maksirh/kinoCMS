@@ -3,7 +3,9 @@ from .views import (index, banners_top_update, film_list, banners_edit, news_and
                     through_banner_update, users_list, user_edit, user_delete, pages,
                     main_page, page_add, page_edit, page_delete,
                     edit_mainpage, add_movie, edit_movie, cinemas_list,
-                    cinema_add, contacts, edit_cinema, delete_cinema, hall_add, hall_edit, hall_delete)
+                    cinema_add, contacts, edit_cinema, delete_cinema, hall_add,
+                    hall_edit, hall_delete, news_and_actions_add,
+                    news_and_actions, news_and_actions_edit, news_and_actions_delete)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -35,7 +37,13 @@ urlpatterns = [
     path('cinemas/delete/<int:pk>', delete_cinema, name='cinema_delete'),
     path('cinemas/hall/add/<int:cinema_pk>', hall_add, name='hall_add'),
     path('cinemas/hall/edit/<int:cinema_pk>/<int:pk>', hall_edit, name='hall_edit'),
-    path('cinemas/hall/delete/<int:cinema_pk>/<int:pk>', hall_delete, name='hall_delete')
+    path('cinemas/hall/delete/<int:cinema_pk>/<int:pk>', hall_delete, name='hall_delete'),
+    path('news_and_actions/<int:is_news>/', news_and_actions, name='news_and_actions'),
+    path('news_and_actions/add/<int:is_news>', news_and_actions_add, name='news_and_actions_add'),
+    path('news_and_actions/edit/<int:pk>/', news_and_actions_edit, name='news_and_actions_edit'),
+    path('news_and_actions/delete/<int:pk>/', news_and_actions_delete, name='news_and_actions_delete'),
+
+
 ]
 
 

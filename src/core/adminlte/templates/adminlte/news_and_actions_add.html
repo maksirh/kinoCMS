@@ -1,0 +1,309 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .image-preview-container {
+        width: 150px;
+        height: 100px;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+    }
+    .image-preview-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    .placeholder-icon {
+        font-size: 2rem;
+        color: #adb5bd;
+    }
+    .gallery-item {
+        position: relative;
+        display: inline-block;
+        margin-right: 15px;
+        margin-bottom: 15px;
+        vertical-align: top;
+    }
+    .btn-remove-gallery {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: #ffcccc;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: red;
+        font-weight: bold;
+        border: 1px solid red;
+        z-index: 10;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+
+    <h3 class="fw-bold mb-4">
+        {% if is_news %}
+            Додати Новину
+        {% else %}
+            Додати Акцію
+        {% endif %}
+    </h3>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="d-flex justify-content-end mb-3 align-items-center">
+            <span class="me-2 fw-bold">Вкл/Викл</span>
+            <div class="form-check form-switch">
+                {{ news_and_actions_form.is_active }}
+            </div>
+
+            <div class="btn-group ms-4">
+                <button type="button" class="btn btn-outline-secondary active">Українська</button>
+                <button type="button" class="btn btn-outline-secondary">Русский</button>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label fw-bold">Назва</label>
+            <div class="col-sm-10">
+                {{ news_and_actions_form.title }}
+                {% if news_and_actions_form.title.errors %}
+                    <div class="text-danger small">{{ news_and_actions_form.title.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <label class="col-sm-2 col-form-label fw-bold">Опис</label>
+            <div class="col-sm-10">
+                {{ news_and_actions_form.description }}
+            </div>
+        </div>
+
+        <div class="row mb-4 align-items-center">
+            <label class="col-sm-2 col-form-label fw-bold">Головна картинка</label>
+            <div class="col-sm-10 d-flex align-items-center">
+
+                <div class="image-preview-container me-3">
+                    <img src="" id="mainImagePreview" style="display: none;">
+                    <i class="bi bi-image placeholder-icon" id="mainImageIcon"></i>
+                </div>
+
+                <div class="d-none">
+                    {{ news_and_actions_form.main_image }}
+                </div>
+
+                <button type="button" class="btn btn-outline-secondary me-2" onclick="triggerMainUpload()">Завантажити</button>
+                <button type="button" class="btn btn-outline-danger" onclick="clearMainImage()">Видалити</button>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <label class="col-sm-2 col-form-label fw-bold">Посилання на відео</label>
+            <div class="col-sm-10">
+                {{ news_and_actions_form.video_link }}
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <label class="col-sm-2 col-form-label fw-bold">Галерея картинок</label>
+            <div class="col-sm-10">
+                <div class="mb-2 text-muted small">Розмір: 1000x190</div>
+
+                <div id="gallery-container">
+                    {{ gallery_formset.management_form }}
+
+                    {% for form in gallery_formset %}
+                        <div class="gallery-item">
+                            {{ form.id }}
+                            <span class="d-none">{{ form.DELETE }}</span>
+
+                            <div class="image-preview-container mb-2">
+                                <i class="bi bi-image placeholder-icon"></i>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="this.closest('.gallery-item').querySelector('input[type=file]').click()">Додати</button>
+                            </div>
+                            <div class="d-none">
+                                {{ form.image }}
+                            </div>
+
+                            <div class="btn-remove-gallery" onclick="deleteGalleryItem(this)">x</div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-success mt-2" id="add-gallery-btn">
+                    <i class="bi bi-plus-lg"></i> Додати фото
+                </button>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label pt-0 fw-bold">SEO блок:</label>
+            <div class="col-sm-10">
+                <div class="row mb-2 align-items-center">
+                    <label class="col-sm-1 col-form-label text-end text-muted small">URL:</label>
+                    <div class="col-sm-11">{{ seo_form.url }}</div>
+                </div>
+                <div class="row mb-2 align-items-center">
+                    <label class="col-sm-1 col-form-label text-end text-muted small">Title:</label>
+                    <div class="col-sm-11">{{ seo_form.title }}</div>
+                </div>
+                <div class="row mb-2 align-items-center">
+                    <label class="col-sm-1 col-form-label text-end text-muted small">Keywords:</label>
+                    <div class="col-sm-11">{{ seo_form.keywords }}</div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-sm-1 col-form-label text-end text-muted small">Description:</label>
+                    <div class="col-sm-11">{{ seo_form.description }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5 mb-4">
+            <button type="submit" class="btn btn-secondary px-5">Зберегти</button>
+        </div>
+
+    </form>
+</div>
+
+<div id="empty-form" style="display: none;">
+    <div class="gallery-item">
+        {{ gallery_formset.empty_form.id }}
+        <span class="d-none">{{ gallery_formset.empty_form.DELETE }}</span>
+
+        <div class="image-preview-container mb-2">
+            <i class="bi bi-image placeholder-icon"></i>
+        </div>
+
+        <div class="text-center">
+            <button type="button" class="btn btn-outline-secondary btn-sm"
+                    onclick="this.closest('.gallery-item').querySelector('input[type=file]').click()">
+                Додати
+            </button>
+        </div>
+
+        <div class="d-none">
+            {{ gallery_formset.empty_form.image }}
+        </div>
+
+        <div class="btn-remove-gallery" onclick="deleteGalleryItem(this)">x</div>
+    </div>
+</div>
+
+<script>
+
+    function getMainInput() {
+        return document.getElementById('mainImageInput') || document.querySelector('input[name="main_image"]');
+    }
+
+    const mainPreview = document.getElementById('mainImagePreview');
+    const mainIcon = document.getElementById('mainImageIcon');
+
+    function triggerMainUpload() {
+        const input = getMainInput();
+        if(input) input.click();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = getMainInput();
+        if (input) {
+            input.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        mainPreview.src = e.target.result;
+                        mainPreview.style.display = 'block';
+                        if(mainIcon) mainIcon.style.display = 'none';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    });
+
+    function clearMainImage() {
+        const input = getMainInput();
+        if(input) input.value = '';
+
+        mainPreview.src = '';
+        mainPreview.style.display = 'none';
+        if(mainIcon) mainIcon.style.display = 'block';
+
+        const clearCheckbox = document.getElementById('clear_main_image_id');
+        if(clearCheckbox) clearCheckbox.value = 'true';
+    }
+
+
+    function deleteGalleryItem(btn) {
+        const wrapper = btn.closest('.gallery-item');
+        const deleteInput = wrapper.querySelector('input[name$="-DELETE"]');
+
+        if (deleteInput) {
+            deleteInput.checked = true;
+            wrapper.style.display = 'none';
+        } else {
+            wrapper.remove();
+        }
+    }
+
+    function previewGalleryImage(input) {
+        const wrapper = input.closest('.gallery-item');
+        const imgContainer = wrapper.querySelector('.image-preview-container');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imgContainer.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:contain;">`;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const addBtn = document.getElementById('add-gallery-btn');
+        const container = document.getElementById('gallery-container');
+        const totalFormsInput = document.getElementById('id_gallery-TOTAL_FORMS');
+        const emptyFormTemplate = document.getElementById('empty-form').innerHTML;
+
+        if(addBtn) {
+            addBtn.addEventListener('click', function() {
+                const formCount = parseInt(totalFormsInput.value);
+                const newFormHtml = emptyFormTemplate.replace(/__prefix__/g, formCount);
+
+                container.insertAdjacentHTML('beforeend', newFormHtml);
+                totalFormsInput.value = formCount + 1;
+
+                const newInputs = container.querySelectorAll('input[type="file"]');
+                const lastInput = newInputs[newInputs.length - 1];
+
+                lastInput.addEventListener('change', function() {
+                    previewGalleryImage(this);
+                });
+            });
+        }
+
+        const existingInputs = container.querySelectorAll('input[type="file"]');
+        existingInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                previewGalleryImage(this);
+            });
+        });
+    });
+</script>
+
+{% endblock %}

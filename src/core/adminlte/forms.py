@@ -1,7 +1,7 @@
 from django import forms
 from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock, Movie, Cinema, ContactComponent, Contacts, \
     Hall
-from src.main.models import MainPage, Page, Gallery
+from src.main.models import MainPage, Page, Gallery, NewsAndActions
 from django.forms import modelformset_factory
 
 
@@ -201,5 +201,20 @@ class HallForm(forms.ModelForm):
             'image': forms.FileInput(attrs={'class': 'd-none'}),
             'banner_image': forms.FileInput(attrs={'class': 'd-none'}),
         }
+
+
+class NewsAndActionsForm(forms.ModelForm):
+    class Meta:
+        model = NewsAndActions
+        fields = ['title', 'description', 'main_image', 'is_active', 'video_link']
+
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'main_image': forms.FileInput(attrs={'class': 'd-none'}),
+            'video_link': forms.URLInput(attrs={'class': 'form-control'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
 
 

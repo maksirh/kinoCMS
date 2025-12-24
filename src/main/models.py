@@ -59,6 +59,19 @@ class Page(models.Model):
         super().delete(*args, **kwargs)
 
 
+class NewsAndActions(models.Model):
+    seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
+    gallery_images = ManyToManyField(Gallery, blank=True)
+    title = models.CharField(max_length=120, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    main_image = models.ImageField(blank=True, null=True)
+    is_active = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
+    video_link = models.URLField(blank=True, null=True)
+    is_news = models.BooleanField(default=True)
+
+
+
 
 
 
