@@ -548,6 +548,12 @@ def edit_movie(request, pk):
     return render(request, 'adminlte/film.html', context)
 
 
+def delete_movie(request, pk):
+    movie = get_object_or_404(Movie, pk=pk)
+    movie.delete()
+    return redirect('adminlte:film_list')
+
+
 def cinemas_list(request):
     cinemas = Cinema.objects.all()
     context = {
@@ -581,6 +587,7 @@ def cinema_add(request):
                 id_cinema=cinema,
                 number='Зал 1',
                 description='Опис залу...',
+                is_removable=False,
             )
 
             new_images = gallery_formset.save()
@@ -787,7 +794,7 @@ def hall_edit(request, cinema_pk, pk):
 def hall_delete(request, cinema_pk, pk):
     hall = get_object_or_404(Hall, pk=pk)
     hall.delete()
-    return redirect('adminlte:cinema_add', pk=cinema_pk)
+    return redirect('adminlte:edit_cinema', pk=cinema_pk)
 
 
 

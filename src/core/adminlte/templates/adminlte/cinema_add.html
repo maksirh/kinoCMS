@@ -200,8 +200,9 @@
                             </td>
                             <td>
                                 <a href="{% url 'adminlte:hall_edit' cinema_pk=cinema.pk pk=hall.pk %}" class="text-dark me-2"><i class="bi bi-pencil-fill"></i></a>
-
-                                <a href="{% url 'adminlte:hall_delete' cinema_pk=cinema.pk pk=hall.pk %}" class="text-danger"><i class="bi bi-trash-fill"></i></a>
+                                {% if hall.is_removable %}
+                                    <a href="{% url 'adminlte:hall_delete' cinema_pk=cinema.pk pk=hall.pk %}" class="text-danger"><i class="bi bi-trash-fill"></i></a>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}

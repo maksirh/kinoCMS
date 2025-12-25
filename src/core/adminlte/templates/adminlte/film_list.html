@@ -115,7 +115,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ні</button>
-                                <a href="#" class="btn btn-danger">Так, видалити</a>
+                                <a href="{% url 'adminlte:delete_film' pk=movie.id %}" class="btn btn-danger">Так, видалити</a>
                             </div>
                         </div>
                     </div>
@@ -137,6 +137,7 @@
                     <button type="button" class="btn-delete-movie" data-bs-toggle="modal" data-bs-target="#deleteModalSoon{{ movie.id }}">
                         x
                     </button>
+                <a href="{% url 'adminlte:edit_movie' pk=movie.pk %}" class="text-decoration-none text-dark h-100">
 
                     <div class="movie-img-placeholder mb-2">
                         {% if movie.main_image %}
@@ -150,6 +151,7 @@
                         {{ movie.title }}
                     </div>
                     <div class="small text-muted">{{ movie.date_of_show|date:"d.m.Y" }}</div>
+                </a>
                 </div>
 
                  <div class="modal fade" id="deleteModalSoon{{ movie.id }}" tabindex="-1" aria-hidden="true">
@@ -164,7 +166,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ні</button>
-                                <a href="#" class="btn btn-danger">Так, видалити</a>
+                                <a href="{% url 'adminlte:delete_film' pk=movie.id %}" class="btn btn-danger">Так, видалити</a>
                             </div>
                         </div>
                     </div>

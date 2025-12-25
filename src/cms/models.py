@@ -1,6 +1,8 @@
 from django.db import models
 from django.forms import FilePathField
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+
 
 class SeoBlock(models.Model):
     url = models.URLField()
@@ -43,6 +45,14 @@ class Hall(models.Model):
     image = models.ImageField(upload_to='halls/', null=True, blank=True)
     banner_image = models.ImageField(upload_to='halls_banners/', null=True, blank=True)
     creation_date = models.DateField(auto_now_add=True, blank=True, null=True)
+    is_removable = models.BooleanField(default=True)
+
+
+    def delete(self, *args, **kwargs):
+        if not self.is_removable:
+            raise ValidationError("Не можна видаляти")
+        super().delete(*args, **kwargs)
+
 
 
 class BannerComponent(models.Model):
