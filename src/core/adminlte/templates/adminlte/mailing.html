@@ -1,0 +1,126 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+<div class="card card-default mt-4">
+    <div class="card-header">
+        <h3 class="card-title fw-bold" style="font-size: 2rem;">E-mail</h3>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" id="mailingForm">
+            {% csrf_token %}
+
+            <div class="row mb-4 align-items-center">
+                <label class="col-md-2 fw-bold">Вибрати email кому слати</label>
+                <div class="col-md-6 d-flex gap-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="send_to_type" id="sendAll" value="all" checked>
+                        <label class="form-check-label fw-bold" for="sendAll">Всі користувачі</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="send_to_type" id="sendSelect" value="select">
+                        <label class="form-check-label fw-bold" for="sendSelect">Вибірково</label>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button type="button" class="btn btn-secondary disabled" id="fakeSelectBtn">Вибрати користувачів</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-md-4 fw-bold">Завантажити HTML-лист</label>
+                        <div class="col-md-8">
+                             {{ form.template_file }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                         <div class="col-md-4"></div>
+                         <div class="col-md-8 text-primary small" id="fileNamePreview">
+                             Файл не обрано
+                         </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-md-4">Шаблон у поточній розсилці:</label>
+                        <div class="col-md-8 text-primary">
+                            {% if recent_templates %}
+                                {{ recent_templates.0.filename }}
+                            {% else %}
+                                Немає
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center mt-4">
+                        <div class="col-md-4">К-сть листів: <span class="text-primary fw-bold">0</span></div>
+                        <div class="col-md-8 d-flex align-items-center gap-2">
+                            <span>Розсилка виконана на:</span>
+                            <div class="progress flex-grow-1" style="height: 20px;">
+                                <div class="progress-bar bg-success" style="width: 0%">0%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="alert alert-warning mt-4 p-2 small">
+                        Виберіть: або всім користувачам, або вибірково. Тільки щось одне.
+                    </div>
+                </div>
+
+                <div class="col-md-6 border-start ps-4">
+                    <label class="fw-bold mb-3 text-muted">Список останніх завантажених шаблонів</label>
+
+                    <ul class="list-group list-group-flush">
+                        {% for template in recent_templates %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-1">
+                            <div class="form-check">
+                               <input class="form-check-input template-radio" type="radio" name="reuse_template" id="tpl{{ template.id }}" value="{{ template.id }}">
+                                <label class="form-check-label" for="tpl{{ template.id }}">
+                                    {{ template.filename }} <span class="text-muted small">({{ template.created_at|date:"d.m.Y" }})</span>
+                                </label>
+                            </div>
+                            <a href="{% url 'adminlte:delete_template' pk=template.id %}" class="text-danger small text-decoration-none">Видалити</a>
+                        </li>
+                        {% empty %}
+                            <li class="text-muted small">Список пустий</li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="alert alert-warning mt-5 p-2 small">
+                        Відображаються останні 5 завантажених шаблонів.
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <button type="submit" class="btn btn-secondary btn-lg px-5">Почати розсилку</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const fileInput = document.getElementById('id_template_file');
+    const fileNamePreview = document.getElementById('fileNamePreview');
+    const radioButtons = document.querySelectorAll('.template-radio');
+
+    fileInput.addEventListener('change', function(e) {
+        if (this.files.length > 0) {
+            let fileName = this.files[0].name;
+            fileNamePreview.innerText = "Завантажено файл: " + fileName;
+
+            radioButtons.forEach(rb => rb.checked = false);
+        }
+    });
+
+    radioButtons.forEach(rb => {
+        rb.addEventListener('change', function() {
+            if (this.checked) {
+                fileInput.value = '';
+                fileNamePreview.innerText = "Вибрано збережений шаблон: " + this.nextElementSibling.innerText.split('(')[0];
+            }
+        });
+    });
+</script>
+{% endblock %}

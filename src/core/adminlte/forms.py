@@ -1,6 +1,6 @@
 from django import forms
 from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock, Movie, Cinema, ContactComponent, Contacts, \
-    Hall
+    Hall, Mailing
 from src.main.models import MainPage, Page, Gallery, NewsAndActions
 from django.forms import modelformset_factory
 
@@ -216,5 +216,15 @@ class NewsAndActionsForm(forms.ModelForm):
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
+
+
+class MailingForm(forms.ModelForm):
+    class Meta:
+        model = Mailing
+        fields = ['template_file']
+        widgets = {
+            'template_file': forms.FileInput(attrs={'class': 'form-control', 'accept': '.html'}),
+        }
+        
 
 

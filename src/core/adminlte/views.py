@@ -9,6 +9,7 @@ from src.authentication.forms import UserUpdateForm
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.utils import timezone
+from .tasks import send_mass_mail_task
 
 
 def index(request):
@@ -925,4 +926,58 @@ def news_and_actions_delete(request, pk):
     is_news = int(news_and_actions.is_news)
     news_and_actions.delete()
     return redirect('adminlte:news_and_actions', is_news=is_news)
+
+
+
+def mailing(request):
+    recent_templates = Mailing.objects.all()[:5]
+
+    if request.method == 'POST':
+        form = MailingForm(request.POST, request.FILES)
+
+        send_to_all = request.POST.get('send_to_type') == 'all'
+
+        if form.is_valid():
+            mailing = form.save()
+
+            if send_to_all:
+                send_mass_mail_task.delay(mailing.id, user_ids=None)
+                messages.success(request, "Розсилку всім користувачам розпочато!")
+                return redirect('adminlte:mailing')
+            else:
+                return redirect('adminlte:mailing_users', mailing_id=mailing.id)
+    else:
+        form = MailingForm()
+
+    context = {
+        'form': form,
+        'recent_templates': recent_templates,
+    }
+    return render(request, 'adminlte/mailing.html', context)
+
+
+def mailing_users_view(request, mailing_id):
+    mailing = get_object_or_404(Mailing, pk=mailing_id)
+    users = User.objects.all()
+
+    if request.method == 'POST':
+        selected_users = request.POST.getlist('user_ids')
+
+        if selected_users:
+            user_ids = [int(uid) for uid in selected_users]
+            send_mass_mail_task.delay(mailing.id, user_ids=user_ids)
+
+            messages.success(request, f"Розсилку для {len(selected_users)} користувачів розпочато!")
+            return redirect('adminlte:mailing')
+        else:
+            messages.warning(request, "Ви не обрали жодного користувача.")
+
+    return render(request, 'adminlte/mailing_users.html', {'users': users, 'mailing': mailing})
+
+
+def delete_template(request, pk):
+    template = get_object_or_404(Mailing, pk=pk)
+    template.delete()
+    return redirect('adminlte:mailing')
+
 

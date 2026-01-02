@@ -2,6 +2,7 @@ from django.db import models
 from django.forms import FilePathField
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+import os
 
 
 class SeoBlock(models.Model):
@@ -105,8 +106,14 @@ class Contacts(models.Model):
 
 
 class Mailing(models.Model):
-    # html_template = FilePathField()
-    date = models.DateTimeField()
+    subject = models.CharField(max_length=256, default="Новини кінотеатру")
+    template_file = models.FileField(upload_to='mailing_templates/')
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
+    def filename(self):
+        return os.path.basename(self.template_file.name)
+
+    class Meta:
+        ordering = ['-created_at']
 
 

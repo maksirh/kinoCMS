@@ -5,7 +5,8 @@ from .views import (index, banners_top_update, film_list, banners_edit, news_and
                     edit_mainpage, add_movie, edit_movie, delete_movie, cinemas_list,
                     cinema_add, contacts, edit_cinema, delete_cinema, hall_add,
                     hall_edit, hall_delete, news_and_actions_add,
-                    news_and_actions, news_and_actions_edit, news_and_actions_delete)
+                    news_and_actions, news_and_actions_edit, news_and_actions_delete,
+                    mailing, mailing_users_view, delete_template)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -43,7 +44,9 @@ urlpatterns = [
     path('news_and_actions/add/<int:is_news>', news_and_actions_add, name='news_and_actions_add'),
     path('news_and_actions/edit/<int:pk>/', news_and_actions_edit, name='news_and_actions_edit'),
     path('news_and_actions/delete/<int:pk>/', news_and_actions_delete, name='news_and_actions_delete'),
-
+    path('mailing/', mailing, name="mailing"),
+    path('mailing/users/<int:mailing_id>/', mailing_users_view, name='mailing_users'),
+    path('mailing/delete/<int:pk>/', delete_template, name='delete_template'),
 
 ]
 
