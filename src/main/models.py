@@ -4,6 +4,7 @@ from django.db.models import ManyToManyField
 
 from src.cms.models import SeoBlock, Movie, Hall, Cinema, Gallery
 from src.user.models import User
+from django.utils import timezone
 
 
 class MainPage(models.Model):
@@ -71,6 +72,12 @@ class NewsAndActions(models.Model):
     is_news = models.BooleanField(default=True)
 
 
+class DailyStats(models.Model):
+    date = models.DateField(unique=True, default=timezone.now)
+    sessions = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['-date']
 
 
 

@@ -6,7 +6,7 @@ from .views import (index, banners_top_update, film_list, banners_edit, news_and
                     cinema_add, contacts, edit_cinema, delete_cinema, hall_add,
                     hall_edit, hall_delete, news_and_actions_add,
                     news_and_actions, news_and_actions_edit, news_and_actions_delete,
-                    mailing, mailing_users_view, delete_template)
+                    mailing, mailing_users_view, delete_template, dashboard_stats)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -14,7 +14,7 @@ from django.conf.urls.static import static
 app_name = 'adminlte'
 
 urlpatterns = [
-    path('', index, name='statistics'),
+    path('', dashboard_stats, name='statistics'),
     path('bannersandsliders/', banners_edit, name='banners'),
     path('banners/top/update/', banners_top_update, name='banners_top_update'),
     path('banners/news/update/', news_and_actions_update, name='news_banner_update'),

@@ -2,14 +2,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.contrib import messages
 from src.cms.models import BannerComponent, ThroughBanner, Contacts, Hall
-from django.forms import formset_factory
 from src.user.models import User
+from src.main.models import DailyStats
 from django.contrib.auth import get_user_model
 from src.authentication.forms import UserUpdateForm
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.utils import timezone
 from .tasks import send_mass_mail_task
+import datetime
+import json
+from django.db.models import Count
+
 
 
 def index(request):
@@ -981,3 +985,55 @@ def delete_template(request, pk):
     return redirect('adminlte:mailing')
 
 
+def dashboard_stats(request):
+    total_users = User.objects.count()
+
+    gender_query = User.objects.values('gender').annotate(count=Count('id'))
+
+    male_count = 0
+    female_count = 0
+
+    for item in gender_query:
+        if item['gender'] == 'M':
+            male_count = item['count']
+        elif item['gender'] == 'F':
+            female_count = item['count']
+
+    today = timezone.now().date()
+    dates = []
+    sessions_data = []
+
+    for i in range(6, -1, -1):
+        check_date = today - datetime.timedelta(days=i)
+        dates.append(check_date.strftime('%d.%m'))
+
+        stat = DailyStats.objects.filter(date=check_date).first()
+        sessions_data.append(stat.sessions if stat else 0)
+
+    channels_query = User.objects.values('source').annotate(count=Count('id')).order_by('-count')
+
+    channels_data = []
+    channels_labels = []
+
+    source_names = dict(User.SOURCE_CHOICES)
+
+    for item in channels_query:
+        key = item['source']
+        label = source_names.get(key, key)
+        channels_labels.append(label)
+        channels_data.append(item['count'])
+
+    map_query = User.objects.values('country').annotate(count=Count('id'))
+    map_data = {item['country']: item['count'] for item in map_query if item['country']}
+
+    context = {
+        'total_users': total_users,
+        'dates_json': json.dumps(dates),
+        'sessions_json': json.dumps(sessions_data),
+        'gender_data_json': json.dumps([male_count, female_count]),
+        'channels_data_json': json.dumps(channels_data),
+        'channels_labels_json': json.dumps(channels_labels),
+        'map_data_json': json.dumps(map_data),
+    }
+
+    return render(request, 'adminlte/dashboard.html', context)
