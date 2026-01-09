@@ -1,9 +1,11 @@
-from ..user.models import User
+from ..main.models import MainPage
 
 
-def user_inf(request):
+def phone_numbers(request):
+    main_page = MainPage.objects.first()
     return {
-        "user_inf": request.user if request.user.is_authenticated else None
+        "phone1": main_page.phone_number1,
+        "phone2": main_page.phone_number2,
     }
 
 

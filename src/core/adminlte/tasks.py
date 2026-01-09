@@ -42,5 +42,3 @@ def send_mass_mail_task(mailing_id, user_ids=None):
 
     except Mailing.DoesNotExist:
         return "Mailing template not found"
-    except Exception as e:
-        return f"Error: {str(e)}"

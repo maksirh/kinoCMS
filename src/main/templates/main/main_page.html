@@ -4,10 +4,63 @@
 
 {% block content %}
 
+    <style>
+    .carousel-item img {
+        height: 400px;
+        width: 100%;
+
+    object-fit: cover;
+
+    object-position: center center;
+}
+    </style>
 <div class="banner">
-    <div class="container p-3">
-        <img src="{% static 'img/temporarily/banner.png' %}" alt="banner" class="img-fluid w-75 d-block mx-auto">
+
+    {% if top_banner %}
+
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="{{ top_banner.speed}}">
+
+    <div class="carousel-inner">
+
+        {% for component in top_banner.banner_component.all %}
+
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                {% if component.url %}
+                    <a href="{{ component.url }}">
+                {% endif %}
+
+
+                {% if component.image %}
+                    <img class="d-block w-100" src="{{ component.image.url }}" alt="{{ component.text|default:'Banner Image' }}">
+                {% endif %}
+
+                {% if component.url %}
+                    </a>
+                {% endif %}
+
+                {% if component.text %}
+                        <div class="carousel-caption d-none d-md-block">
+                            <p>{{ component.text }}</p>
+                        </div>
+                    {% endif %}
+            </div>
+        {% endfor %}
     </div>
+
+    {% if top_banner.banner_component.count > 1 %}
+            <a class="carousel-control-prev" href="#mainCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#mainCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        {% endif %}
+
+    </div>
+
+{% endif %}
 </div>
 
 <div class="schedule">
@@ -16,62 +69,20 @@
     </p>
     <div class="container">
         <div class="row mb-5">
+
+            {% for today_movie in today_movies %}
             <div class="col-3">
                 <div class="card">
-                    <img src="{% static 'img/temporarily/banner.png' %}" alt="img">
+                    <img src="{{ today_movie.main_image.url }}" alt="img">
                     <div class="card-body">
-                        <h5 class="card-title">Card title that wraps to a new line</h5>
+                        <h5 class="card-title">{{ today_movie.title }}</h5>
                         <p class="card-text">
-                            This is a longer card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit
-                            longer.
+                            {{ today_movie.description }}
                         </p>
                     </div>
                 </div>
             </div>
-
-            <div class="col-3">
-                <div class="card">
-                    <img src="{% static 'img/temporarily/banner.png' %}" alt="img">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title that wraps to a new line</h5>
-                        <p class="card-text">
-                            This is a longer card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit
-                            longer.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-3">
-                <div class="card">
-                    <img src="{% static 'img/temporarily/banner.png' %}" alt="img">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title that wraps to a new line</h5>
-                        <p class="card-text">
-                            This is a longer card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit
-                            longer.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-3">
-                <div class="card">
-                    <img src="{% static 'img/temporarily/banner.png' %}" alt="img">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title that wraps to a new line</h5>
-                        <p class="card-text">
-                            This is a longer card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit
-                            longer.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
 
     </div>
@@ -82,62 +93,21 @@
     </p>
     <div class="container">
         <div class="row mb-5">
+
+            {% for recent_movie in recent_movies %}
             <div class="col-3">
                 <div class="card">
-                    <img src="{% static 'img/temporarily/banner.png' %}" alt="img">
+                    <img src="{{ recent_movie.main_image.url }}" alt="img">
                     <div class="card-body">
-                        <h5 class="card-title">Card title that wraps to a new line</h5>
+                        <h5 class="card-title">{{ recent_movie.title }}</h5>
                         <p class="card-text">
-                            This is a longer card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit
-                            longer.
+                            {{ recent_movie.description }}
                         </p>
                     </div>
                 </div>
             </div>
+            {% endfor %}
 
-            <div class="col-3">
-                <div class="card">
-                    <img src="{% static 'img/temporarily/banner.png' %}" alt="img">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title that wraps to a new line</h5>
-                        <p class="card-text">
-                            This is a longer card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit
-                            longer.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-3">
-                <div class="card">
-                    <img src="{% static 'img/temporarily/banner.png' %}" alt="img">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title that wraps to a new line</h5>
-                        <p class="card-text">
-                            This is a longer card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit
-                            longer.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-3">
-                <div class="card">
-                    <img src="{% static 'img/temporarily/banner.png' %}" alt="img">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title that wraps to a new line</h5>
-                        <p class="card-text">
-                            This is a longer card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit
-                            longer.
-                        </p>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div>
@@ -149,27 +119,19 @@
         <p style="text-align: center; font-size: 20px; font-family: 'Arial', sans-serif;">
             Новини та акції
         </p>
-        <img src="{% static 'img/temporarily/banner.png' %}" alt="banner" class="img-fluid w-75 d-block mx-auto">
+        <img src="{{ news_or_action.main_image.url }}" alt="banner" class="img-fluid w-75 d-block mx-auto">
     </div>
 </div>
 
-<div class="advertising">
-    <div class="container p-3">
-        <img width="650" height="100" src="{% static 'img/temporarily/banner.png' %}" alt="banner"
-            class="img-fluid d-block mx-auto">
-    </div>
-</div>
 
 <div class="SeoText">
     <div class="container">
         <p style="text-align: center; font-size: 25px; font-family: 'Arial', sans-serif; margin-top: 20px">
-            Seo text
+            {{ seo.title }}
         </p>
 
         <p style="text-align: center; font-size: 20px; font-family: 'Arial', sans-serif;">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus eos facilis illum iusto officia quam
-            quo?
-            Cumque illo libero perspiciatis quae sit. Deleniti dolore fuga, hic odio sint ullam unde!
+            {{ seo.description }}
         </p>
     </div>
 

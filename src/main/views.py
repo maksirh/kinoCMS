@@ -1,14 +1,42 @@
+from dateutil.utils import today
 from django.shortcuts import render
+from django.utils import timezone
+from src.cms.models import Banner, Movie
+from src.core.adminlte.views import news_and_actions
+from src.main.models import MainPage, Page, NewsAndActions
 
 
 def main_page(request):
-    return render(request, "main/main_page.html")
+
+    top_banner = Banner.objects.filter(is_active=True, is_promo=True).first()
+    movies = Movie.objects.all()
+
+    today = timezone.now().date()
+
+    today_movies = movies.filter(date_of_show__date = today)
+    recent_movies = movies.filter(date_of_show__date__gt=today)
+
+    seo = MainPage.objects.first().seo_block
+
+    random_news_or_action = NewsAndActions.objects.order_by('?').first()
+
+    context = {
+        "top_banner": top_banner,
+        "today_movies": today_movies,
+        "recent_movies": recent_movies,
+        "seo": seo,
+        "news_or_action": random_news_or_action,
+    }
+    return render(request, "main/main_page.html", context)
+
 
 def poster(request):
     return render(request, "main/poster.html")
 
+
 def schedule(request):
     return render(request, "main/schedule.html")
+
 
 
 def booking(request):

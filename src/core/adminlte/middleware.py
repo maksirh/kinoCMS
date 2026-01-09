@@ -15,7 +15,7 @@ class TrafficCounterMiddleware:
             stats.sessions += 1
             stats.save()
 
-            if request.user.is_authenticated and request.user.country == 'UA':
+            if request.user.is_authenticated:
                 ip = get_client_ip(request)
 
                 if ip != '127.0.0.1':

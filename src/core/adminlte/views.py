@@ -16,10 +16,6 @@ from django.db.models import Count
 
 
 
-def index(request):
-    return render(request, 'adminlte/dashboard.html')
-
-
 def banners_edit(request):
     banner_top = Banner.objects.order_by('pk').filter(is_promo=True).first()
     if banner_top is None:

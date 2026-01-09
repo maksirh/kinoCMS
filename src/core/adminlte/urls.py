@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (index, banners_top_update, film_list, banners_edit, news_and_actions_update,
+from .views import (banners_top_update, film_list, banners_edit, news_and_actions_update,
                     through_banner_update, users_list, user_edit, user_delete, pages,
                     main_page, page_add, page_edit, page_delete,
                     edit_mainpage, add_movie, edit_movie, delete_movie, cinemas_list,
