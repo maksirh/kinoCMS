@@ -31,7 +31,26 @@ def main_page(request):
 
 
 def poster(request):
-    return render(request, "main/poster.html")
+
+    movies = Movie.objects.all()
+
+    context = {
+        "movies": movies,
+        "is_active_poster": True,
+    }
+    return render(request, "main/poster.html", context)
+
+
+
+def poster_coming_soon(request):
+    today = timezone.now().date()
+    recent_movies = Movie.objects.all().filter(date_of_show__date__gt=today)
+    context = {
+        "movies": recent_movies,
+        "is_active_poster_coming_soon": True,
+    }
+
+    return render(request, "main/poster.html", context)
 
 
 def schedule(request):

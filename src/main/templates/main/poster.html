@@ -11,18 +11,17 @@
                     <hr>
                     <ul class="nav nav-pills flex-column mb-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link active" aria-current="page">
+                            <a href="{% url 'main:poster' %}" class="nav-link {% if is_active_poster %} active {% endif %}" aria-current="page">
                                 Афіша
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link link-body-emphasis">
+                            <a href="{% url 'main:poster_coming_soon' %}" class="nav-link {% if is_active_poster_coming_soon %} active {% endif %} link-body-emphasis">
                                 Скоро на екранах
                             </a>
                         </li>
                     </ul>
                     <hr>
-                    context
                 </div>
 
 
@@ -31,54 +30,27 @@
 
         <main class="col-12 col-md-9">
             <section class="schedule">
-                <p class="text-center fs-5 my-4">Дивіться сьогодні!</p>
 
-                <div class="row g-4">
-                    <div class="col-6 col-lg-3">
-                        <div class="card h-100">
-                            <img src="{% static 'img/temporarily/banner.png' %}" class="card-img-top" alt="img">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">...</p>
-                            </div>
-                        </div>
+           <div class="row mb-5">
+
+            {% for movie in movies %}
+            <div class="col-3">
+                <div class="card">
+                    <img src="{{ movie.main_image.url }}" alt="img">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ movie.title }}</h5>
+                        <p class="card-text">
+                            {{ movie.description }}
+                        </p>
                     </div>
-
-                    <div class="col-6 col-lg-3">
-                        <div class="card h-100">
-                            <img src="{% static 'img/temporarily/banner.png' %}" class="card-img-top" alt="img">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">...</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-6 col-lg-3">
-                        <div class="card h-100">
-                            <img src="{% static 'img/temporarily/banner.png' %}" class="card-img-top" alt="img">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">...</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-6 col-lg-3">
-                        <div class="card h-100">
-                            <img src="{% static 'img/temporarily/banner.png' %}" class="card-img-top" alt="img">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">...</p>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
+            </div>
+            {% endfor %}
+
+        </div>
             </section>
 
             <section class="coming-soon">
-                <p class="text-center fs-5 my-4">Скоро на екранах!</p>
 
                 <div class="row g-4">
                 </div>
