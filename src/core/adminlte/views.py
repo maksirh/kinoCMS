@@ -770,6 +770,11 @@ def hall_edit(request, cinema_pk, pk):
 
             return redirect('adminlte:edit_cinema', pk=cinema_pk)
 
+        else:
+            print("Hall Errors:", hall_form.errors)
+            print("SEO Errors:", seo_form.errors)
+            print("Gallery Errors:", gallery_formset.errors)
+
 
     else:
         hall_form = HallForm(instance=hall)

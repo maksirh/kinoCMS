@@ -3,6 +3,8 @@ from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock, Mov
     Hall, Mailing
 from src.main.models import MainPage, Page, Gallery, NewsAndActions
 from django.forms import modelformset_factory
+import json
+from django.core.exceptions import ValidationError
 
 
 class BannerForm(forms.ModelForm):
@@ -191,16 +193,45 @@ ContactComponentFormset = modelformset_factory(
 
 
 class HallForm(forms.ModelForm):
+    scheme_of_hall = forms.FileField(
+        label="Схема залу (JSON)",
+        required=False,
+        widget=forms.FileInput(attrs={
+            'class': 'd-none',
+            'accept': '.json,application/json',
+            'id': 'id_scheme_of_hall'
+        })
+    )
+
     class Meta:
         model = Hall
-        fields = ['number', 'description', 'image', 'banner_image']
+        fields = ['number', 'description', 'scheme_of_hall', 'banner_image']
 
         widgets = {
             'number': forms.NumberInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
-            'image': forms.FileInput(attrs={'class': 'd-none'}),
             'banner_image': forms.FileInput(attrs={'class': 'd-none'}),
         }
+
+    def clean_scheme_of_hall(self):
+        scheme_file = self.cleaned_data.get('scheme_of_hall')
+
+        if not scheme_file:
+            if self.instance.pk:
+                return self.instance.scheme_of_hall
+            return None
+
+
+        if hasattr(scheme_file, 'read'):
+            try:
+                json.load(scheme_file)
+
+                scheme_file.seek(0)
+
+            except json.JSONDecodeError:
+                raise ValidationError("Файл містить помилки або не є форматом JSON")
+
+        return scheme_file
 
 
 class NewsAndActionsForm(forms.ModelForm):

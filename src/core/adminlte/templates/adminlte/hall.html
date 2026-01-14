@@ -103,21 +103,37 @@
             <label class="col-sm-2 col-form-label fw-bold">Схема залу</label>
             <div class="col-sm-10 d-flex align-items-center">
 
-                <div class="single-img-preview me-3">
-                    {% if hall_form.instance.image %}
-                        <img src="{{ hall_form.instance.image.url }}" id="schemaPreview">
-                        <i class="bi bi-image fs-2 text-muted" id="schemaIcon" style="display: none;"></i>
-                    {% else %}
-                        <img src="" id="schemaPreview" style="display: none;">
-                        <i class="bi bi-image fs-2 text-muted" id="schemaIcon"></i>
-                    {% endif %}
-                </div>
 
                 <div class="d-none">
-                    {{ hall_form.image }} </div>
+                    {{ hall_form.scheme_of_hall }}</div>
 
-                <button type="button" class="btn btn-secondary me-2" onclick="triggerUpload('id_image')">Завантажити</button>
-                <button type="button" class="btn btn-outline-danger" onclick="clearSingleImage('id_image', 'schemaPreview', 'schemaIcon')">Видалити</button>
+                <div class="d-flex align-items-center me-3">
+    <i class="bi bi-filetype-json fs-3 me-2" id="schemaIcon"
+       style="{% if hall_form.instance.scheme_of_hall %}display: inline-block;{% else %}display: none;{% endif %}">
+    </i>
+
+    <span id="fileNameDisplay" class="{% if hall_form.instance.scheme_of_hall %}fw-bold{% else %}text-muted{% endif %}">
+        {% if hall_form.instance.scheme_of_hall %}
+            <a href="{{ hall_form.instance.scheme_of_hall.url }}" target="_blank" style="text-decoration: none; color: inherit;">
+                {{ hall_form.instance.scheme_of_hall.name }}
+            </a>
+        {% else %}
+            Файл не обрано
+        {% endif %}
+    </span>
+</div>
+
+
+                <button type="button" class="btn btn-secondary me-2"
+                onclick="document.getElementById('id_scheme_of_hall').click()">
+            Завантажити JSON
+        </button>
+
+            <button type="button" class="btn btn-outline-danger"
+                onclick="clearFile('id_scheme_of_hall', 'fileNameDisplay', 'schemaIcon')">
+            Видалити
+        </button>
+
             </div>
         </div>
 
@@ -280,7 +296,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        setupSinglePreview('id_image', 'schemaPreview', 'schemaIcon');
         setupSinglePreview('id_banner_image', 'bannerPreview', 'bannerIcon');
     });
 
@@ -336,5 +351,39 @@
             });
         });
     });
+
+
+    document.getElementById('id_scheme_of_hall').addEventListener('change', function(event) {
+        const fileInput = event.target;
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const schemaIcon = document.getElementById('schemaIcon');
+
+        if (fileInput.files.length > 0) {
+            fileNameDisplay.textContent = fileInput.files[0].name;
+            fileNameDisplay.classList.remove('text-muted');
+            fileNameDisplay.classList.add('fw-bold');
+
+            if(schemaIcon) schemaIcon.style.display = 'inline-block';
+        } else {
+            resetDisplay(fileNameDisplay, schemaIcon);
+        }
+    });
+
+    function clearFile(inputId, displayId, iconId) {
+        const fileInput = document.getElementById(inputId);
+        const fileNameDisplay = document.getElementById(displayId);
+        const schemaIcon = document.getElementById(iconId);
+
+        fileInput.value = '';
+
+        resetDisplay(fileNameDisplay, schemaIcon);
+    }
+
+    function resetDisplay(displayElement, iconElement) {
+        displayElement.textContent = 'Файл не обрано';
+        displayElement.classList.add('text-muted');
+        displayElement.classList.remove('fw-bold');
+        if(iconElement) iconElement.style.display = 'none';
+    }
 </script>
 {% endblock %}
