@@ -1,38 +1,50 @@
 {% extends "base.html" %}
 {% load static %}
 
-
 {% block content %}
-
 <div class="container my-4">
   <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
     <div class="d-flex align-items-center gap-2">
       <span class="me-2 text-uppercase small text-muted">Показувати тільки:</span>
-      <span class="badge rounded-pill bg-primary">3D</span>
-      <span class="badge rounded-pill bg-info text-dark">DBOX</span>
-      <span class="badge rounded-pill bg-danger">VIP</span>
+      <span class="badge rounded-pill bg-primary" style="cursor:pointer">3D</span>
+      <span class="badge rounded-pill bg-info text-dark" style="cursor:pointer">DBOX</span>
+      <span class="badge rounded-pill bg-danger" style="cursor:pointer">VIP</span>
     </div>
 
     <div class="ms-md-auto d-flex flex-wrap gap-2">
-      <select class="form-select form-select-sm" style="min-width: 160px">
-        <option>Кінотеатр</option><option>Сінема №1</option><option>Сінема №2</option>
+      <select id="cinema-select"
+              class="form-select form-select-sm"
+              style="min-width: 160px"
+              data-halls-url="{% url 'main:get_halls' %}">
+        <option value="">Кінотеатр: всі</option>
+        {% for cinema in cinemas %}
+          <option value="{{ cinema.id }}">{{ cinema.title }}</option>
+        {% endfor %}
       </select>
-      <input type="date" class="form-control form-control-sm" style="min-width: 160px">
-      <select class="form-select form-select-sm" style="min-width: 140px">
-        <option>Фільм: всі</option><option>Стартрек</option><option>Мавка</option>
+
+      <input type="date" id="date-select" class="form-control form-control-sm" style="min-width: 160px">
+
+      <select id="movie-select" class="form-select form-select-sm" style="min-width: 140px">
+        <option value="">Фільм: всі</option>
+        {% for movie in movies %}
+          <option value="{{ movie.id }}">{{ movie.title }}</option>
+        {% endfor %}
       </select>
-      <select class="form-select form-select-sm" style="min-width: 120px">
-        <option>Зал: всі</option><option>1</option><option>2</option><option>VIP</option>
+
+      <select id="hall-select" class="form-select form-select-sm" style="min-width: 120px">
+        <option value="">Зал: всі</option>
       </select>
     </div>
   </div>
 
   <div class="row g-4">
     <div class="col-12 col-lg-8">
-      <h6 class="text-muted mb-2">24 липня, неділя</h6>
+      <h6 id="current-date-display" class="text-muted mb-2">Оберіть дату та фільтри</h6>
 
       <div class="table-responsive">
-        <table class="table table-hover align-middle schedule-table">
+        <table class="table table-hover align-middle schedule-table"
+               id="schedule-table"
+               data-filter-url="{% url 'main:filter_schedule' %}">
           <thead class="table-dark sticky-top">
             <tr>
               <th style="width: 80px;">Час</th>
@@ -42,33 +54,8 @@
               <th style="width: 130px;" class="text-end">Бронювати</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>10:00</td>
-              <td>
-                <a href="#" class="link-light text-decoration-none">Світське життя</a>
-                <span class="badge bg-primary ms-2">3D</span>
-              </td>
-              <td class="text-center">6</td>
-              <td class="text-center">65</td>
-              <td class="text-end">
-                <a href="#" class="btn btn-sm btn-warning">Бронювати</a>
-              </td>
-            </tr>
-
-            <tr>
-              <td>10:10</td>
-              <td>
-                <a href="#" class="link-light text-decoration-none">Стартрек: За межами Всесвіту</a>
-                <span class="badge bg-danger ms-2">VIP</span>
-              </td>
-              <td class="text-center">7</td>
-              <td class="text-center">70</td>
-              <td class="text-end">
-                <a href="#" class="btn btn-sm btn-warning">Бронювати</a>
-              </td>
-            </tr>
-
+          <tbody id="schedule-table-body">
+            {% include "main/partials/schedule_rows.html" %}
           </tbody>
         </table>
       </div>
@@ -79,29 +66,80 @@
         Реклама
       </div>
     </aside>
-
-      <style>
-  .schedule-table {
-    border: 2px solid #f2b400;
-    border-radius: .5rem;
-    overflow: hidden;
-  }
-  .schedule-table thead.sticky-top {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-  }
-  .ad-box {
-    min-height: 420px;
-  }
-
-  body { background-color: #111; color: #eee; }
-  .table-hover tbody tr:hover { background: rgba(255, 193, 7, .08); }
-</style>
-
-
   </div>
 </div>
 
+<style>
+  .schedule-table { border: 2px solid #f2b400; border-radius: .5rem; overflow: hidden; background-color: #212529; }
+  .schedule-table thead.sticky-top { position: sticky; top: 0; z-index: 2; }
+  .ad-box { min-height: 420px; color: #666; }
+  body { background-color: #111; color: #eee; }
+  .table-hover tbody tr:hover { background: rgba(255, 193, 7, .12); }
+  .link-light:hover { color: #f2b400 !important; }
+</style>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const cinemaSelect = document.getElementById('cinema-select');
+    const hallSelect = document.getElementById('hall-select');
+    const movieSelect = document.getElementById('movie-select');
+    const dateInput = document.getElementById('date-select');
+    const tableBody = document.getElementById('schedule-table-body');
+    const scheduleTable = document.getElementById('schedule-table');
+
+    const hallsUrl = cinemaSelect.dataset.hallsUrl;
+    const filterUrl = scheduleTable.dataset.filterUrl;
+
+    cinemaSelect.addEventListener('change', function() {
+        const cinemaId = this.value;
+
+        if (cinemaId) {
+            fetch(`${hallsUrl}?cinema_id=${cinemaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    hallSelect.innerHTML = '<option value="">Зал: всі</option>';
+                    data.forEach(hall => {
+                        hallSelect.innerHTML += `<option value="${hall.id}">${hall.number}</option>`;
+                    });
+                    updateSchedule();
+                });
+        } else {
+            hallSelect.innerHTML = '<option value="">Зал: всі</option>';
+            updateSchedule();
+        }
+    });
+
+    function updateSchedule() {
+        const params = new URLSearchParams({
+            cinema: cinemaSelect.value,
+            hall: hallSelect.value,
+            movie: movieSelect.value,
+            date: dateInput.value
+        });
+
+        tableBody.style.opacity = '0.5';
+
+        fetch(`${filterUrl}?${params.toString()}`)
+            .then(response => response.json())
+            .then(data => {
+                tableBody.innerHTML = data.html;
+                tableBody.style.opacity = '1';
+
+                if (dateInput.value) {
+                    document.getElementById('current-date-display').innerText = dateInput.value;
+                } else {
+                    document.getElementById('current-date-display').innerText = "Оберіть дату та фільтри";
+                }
+            })
+            .catch(err => {
+                console.error('Помилка завантаження розкладу:', err);
+                tableBody.style.opacity = '1';
+            });
+    }
+
+    [hallSelect, movieSelect, dateInput].forEach(elem => {
+        elem.addEventListener('change', updateSchedule);
+    });
+});
+</script>
 {% endblock %}

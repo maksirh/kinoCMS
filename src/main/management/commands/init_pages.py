@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 
 from src.cms.models import Contacts
 from src.main.models import Page, MainPage
+from datetime import timedelta
 
 
 

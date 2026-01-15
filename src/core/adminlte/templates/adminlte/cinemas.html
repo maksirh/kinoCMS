@@ -8,6 +8,7 @@
         position: relative;
         transition: transform 0.2s;
         border: 1px solid #dee2e6;
+        background: #fff;
     }
     .cinema-card:hover {
         transform: translateY(-5px);
@@ -36,6 +37,7 @@
         color: #dee2e6;
     }
 
+    /* Стилі кнопки */
     .btn-delete-cinema {
         position: absolute;
         top: -10px;
@@ -43,18 +45,17 @@
         background: #ffcccc;
         color: red;
         border-radius: 50%;
-        width: 25px;
-        height: 25px;
+        width: 30px;
+        height: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
-        text-decoration: none;
         border: 1px solid red;
         z-index: 10;
         font-weight: bold;
-        font-size: 14px;
         line-height: 1;
         cursor: pointer;
+        padding: 0;
     }
     .btn-delete-cinema:hover {
         background: red;
@@ -78,9 +79,13 @@
 
             <div class="card cinema-card h-100">
 
-                <button type="button" class="btn-delete-cinema" data-bs-toggle="modal" data-bs-target="#deleteCinemaModal{{ cinema.id }}">
-                    x
-                </button>
+                <form action="{% url 'adminlte:cinema_delete' pk=cinema.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete-cinema"
+                            onclick="return confirm('Ви дійсно хочете видалити кінотеатр {{ cinema.title }}?');">
+                        x
+                    </button>
+                </form>
 
                 <a href="{% url 'adminlte:edit_cinema' pk=cinema.pk %}" class="text-decoration-none text-dark h-100 d-flex flex-column">
 
@@ -88,7 +93,8 @@
                         {% if cinema.main_image %}
                             <img src="{{ cinema.main_image.url }}" alt="{{ cinema.title }}">
                         {% else %}
-                            <i class="bi bi-building"></i> {% endif %}
+                            <i class="bi bi-building"></i>
+                        {% endif %}
                     </div>
 
                     <div class="card-body text-center flex-grow-1 d-flex flex-column justify-content-center">
@@ -97,24 +103,6 @@
                     </div>
                 </a>
 
-            </div>
-
-            <div class="modal fade" id="deleteCinemaModal{{ cinema.id }}" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Видалити кінотеатр?</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            Ви дійсно хочете видалити кінотеатр <strong>"{{ cinema.title }}"</strong>?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ні</button>
-                            <a href="{% url 'adminlte:cinema_delete' pk=cinema.pk %}" class="btn btn-danger">Так, видалити</a>
-                        </div>
-                    </div>
-                </div>
             </div>
 
         </div>

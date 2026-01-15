@@ -24,6 +24,7 @@ class Movie(models.Model):
     is_2D = models.BooleanField()
     is_3D = models.BooleanField()
     date_of_show = models.DateTimeField(default=timezone.now)
+    date_of_end_show = models.DateTimeField(default=timezone.now, null=True, blank=True)
     images = models.ManyToManyField(Gallery)
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
 
