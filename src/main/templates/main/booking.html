@@ -2,159 +2,190 @@
 {% load static %}
 
 {% block content %}
-
 <div class="container my-4">
   <div class="row g-4">
-    <!-- Ліва колонка: постер і реклама -->
-    <aside class="col-12 col-md-3">
-      <img src="{% static 'img/temporarily/banner.png' %}" class="img-fluid rounded mb-3" alt="Poster">
-      <div class="border rounded d-flex align-items-center justify-content-center" style="height:300px;">
+    <aside class="col-12 col-md-3 text-center">
+      <img src="{{ schedule.id_movie.main_image.url }}" class="img-fluid rounded mb-3 shadow" alt="Poster">
+      <h5 class="fw-bold">{{ schedule.id_movie.title }}</h5>
+      <p class="text-muted small">{{ schedule.date|date:"d.m" }}<br>{{ schedule.id_hall.id_cinema.title }}</p>
+
+      <div class="border rounded d-flex align-items-center justify-content-center bg-light" style="height:200px;">
         Реклама
       </div>
     </aside>
 
-    <!-- Права колонка: зал -->
     <main class="col-12 col-md-9">
-      <!-- Верхня панель -->
-      <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+      <div class="d-flex flex-wrap align-items-center gap-3 mb-3 bg-dark p-3 rounded text-white">
         <div class="badge text-bg-warning p-3">
           <div class="small text-uppercase">Ціна, грн</div>
-          <div class="fs-4 fw-bold" id="pricePerSeat">55</div>
+          <div class="fs-4 fw-bold" id="pricePerSeat">{{ schedule.price }}</div>
         </div>
-        <div class="ms-auto d-flex gap-3 align-items-center">
-          <div>Білетів: <span id="tickets">0</span></div>
-          <div>Сума: <span id="sum">0</span> грн</div>
-        </div>
-      </div>
-
-      <!-- Екран -->
-      <div class="text-center my-3">
-        <hr class="mb-1">
-        <div class="fw-bold">ЕКРАН</div>
-        <hr class="mt-1">
-      </div>
-
-      <!-- Ряди місць -->
-      <div class="d-flex flex-column gap-2">
-
-        <div class="d-flex align-items-center">
-          <div class="me-2 text-nowrap small">Ряд 1</div>
-          <div class="ms-5">
-
-            {% for i in "123456789012"|make_list %}
-            <button class="seat btn btn-outline-warning me-1 mb-1" data-seat="1-{{ forloop.counter }}">{{ forloop.counter }}</button>
-            {% endfor %}
-          </div>
-        </div>
-
-        <div class="d-flex align-items-center">
-          <div class="me-2 text-nowrap small">Ряд 2</div>
-          <div class="ms-4">
-            {% for i in "12345678901234"|make_list %}
-            <button class="seat btn btn-outline-warning me-1 mb-1" data-seat="2-{{ forloop.counter }}">{{ forloop.counter }}</button>
-            {% endfor %}
-          </div>
-        </div>
-
-        <!-- Ряд 3 -->
-        <div class="d-flex align-items-center">
-          <div class="me-2 text-nowrap small">Ряд 3</div>
-          <div class="ms-3">
-            {% for i in "123456789012345"|make_list %}
-            <button class="seat btn btn-outline-warning me-1 mb-1" data-seat="3-{{ forloop.counter }}">{{ forloop.counter }}</button>
-            {% endfor %}
-          </div>
-        </div>
-
-        <!-- Блок центральних рядів (приклад рівного блоку) -->
-        {% for row in "456789"|make_list %}
-        <div class="d-flex align-items-center">
-          <div class="me-2 text-nowrap small">Ряд {{ row }}</div>
-          <div class="ms-2">
-            {% for i in "12345678901213"|make_list %}
-            <button class="seat btn btn-outline-warning me-1 mb-1" data-seat="{{ row }}-{{ forloop.counter }}">{{ forloop.counter }}</button>
-            {% endfor %}
-          </div>
-        </div>
-        {% endfor %}
-
-        <!-- Останній ряд із довшою лінією -->
-        <div class="d-flex align-items-center">
-          <div class="me-2 text-nowrap small">Ряд 10</div>
-          <div class="">
-            {% for i in "12345678901234567890"|make_list %}
-            <button class="seat btn btn-outline-warning me-1 mb-1" data-seat="10-{{ forloop.counter }}">{{ forloop.counter }}</button>
-            {% endfor %}
-          </div>
+        <div class="ms-auto d-flex gap-4 align-items-center">
+          <div>Квитків: <span id="tickets-count" class="fw-bold text-warning">0</span></div>
+          <div>Сума: <span id="sum-amount" class="fw-bold text-warning">0</span> грн</div>
         </div>
       </div>
 
-      <!-- Легенда -->
-      <div class="d-flex align-items-center gap-3 mt-4">
-        <span class="legend seat btn btn-outline-warning disabled">Вільне</span>
-        <span class="legend seat btn btn-warning disabled">Обрано</span>
-        <span class="legend seat btn btn-secondary disabled">Зайняте</span>
+      <div class="text-center my-4">
+        <div class="screen-glow"></div>
+        <div class="fw-bold small text-muted text-uppercase tracking-widest">Екран</div>
+      </div>
+
+      <div id="hall-container" class="d-flex flex-column gap-2 overflow-auto py-3">
+        <div class="text-center text-muted py-5" id="loader">
+          <div class="spinner-border spinner-border-sm me-2"></div> Завантаження схеми залу...
+        </div>
+      </div>
+
+      <div class="d-flex flex-wrap justify-content-center gap-3 mt-5 p-3 border-top">
+        <div class="d-flex align-items-center gap-2">
+            <span class="seat btn btn-outline-warning disabled"></span> <small>Вільне</small>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="seat btn btn-warning disabled"></span> <small>Бронь</small>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="seat btn btn-secondary disabled"></span> <small>Куплено</small>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+          <button id="buy-button" class="btn btn-lg btn-success px-5 fw-bold shadow-sm">Оформити замовлення</button>
       </div>
     </main>
   </div>
 </div>
 
-<!-- Стилі для квадрата місця -->
 <style>
-  .seat {
-    width: 36px;
-    height: 36px;
-    line-height: 1;
-    padding: 0;
-    font-size: 12px;
-  }
-  .seat.selected {
-    /* вибране місце */
-    color: #000 !important;
-  }
-  .legend.seat { pointer-events: none; }
-
-  .container {
-  text-align: center;
-}
+  .seat { width: 34px; height: 34px; line-height: 1; padding: 0; font-size: 11px; transition: all 0.2s; }
+  .screen-glow { height: 6px; background: linear-gradient(to bottom, #f2b400, transparent); margin: 0 auto 10px; width: 80%; border-radius: 50%; opacity: 0.5; }
+  .tracking-widest { letter-spacing: 0.3em; }
+  #hall-container { background: #1a1a1a; border-radius: 15px; padding: 20px; }
 
 
-
+  .seat.paid { background-color: #6c757d !important; border-color: #6c757d !important; color: white !important; pointer-events: none; }
+  .seat.reserved { background-color: #f2b400 !important; border-color: #f2b400 !important; color: black !important; }
 </style>
 
-    <script>
-  (function () {
-    const price = Number(document.getElementById('pricePerSeat').textContent.trim()) || 55;
-    const ticketsEl = document.getElementById('tickets');
-    const sumEl = document.getElementById('sum');
+<script>
+(function () {
+    const scheduleId = "{{ schedule.id }}";
+    const hallSchemeUrl = "{{ hall_scheme.url }}";
+    const price = Number("{{ schedule.price }}") || 0;
 
-    // приклад зайнятих місць (можеш підставити свої з бекенда)
-    const booked = new Set(['5-7','6-8','10-3','10-19']);
+    const initialBooked = {
+        {% for t in booked_tickets %}
+        "{{ t.row }}-{{ t.seat }}": "{{ t.status }}",
+        {% endfor %}
+    };
 
-    document.querySelectorAll('.seat').forEach(btn => {
-      const id = btn.dataset.seat;
-      // позначаємо зайняті
-      if (booked.has(id)) {
-        btn.classList.remove('btn-outline-warning');
-        btn.classList.add('btn-secondary');
-        btn.disabled = true;
-        return;
-      }
+    const container = document.getElementById('hall-container');
+    const loader = document.getElementById('loader');
 
-      btn.addEventListener('click', () => {
-        const isSelected = btn.classList.toggle('selected');
-        btn.classList.toggle('btn-warning', isSelected);
-        btn.classList.toggle('btn-outline-warning', !isSelected);
-        recalc();
-      });
+    const socket = new WebSocket(`ws://${window.location.host}/ws/booking/${scheduleId}/`);
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        updateSeatUI(data.row, data.seat, data.status);
+    };
+
+    document.getElementById('buy-button').addEventListener('click', function() {
+        const reservedCount = document.querySelectorAll('.seat.reserved').length;
+
+        if (reservedCount === 0) {
+            alert("Будь ласка, спочатку оберіть місця!");
+            return;
+        }
+
+        socket.send(JSON.stringify({
+            'action': 'purchase_all'
+        }));
+
+        alert("Замовлення обробляється...");
     });
 
-    function recalc() {
-      const selected = document.querySelectorAll('.seat.selected').length;
-      ticketsEl.textContent = selected;
-      sumEl.textContent = selected * price;
+    if (hallSchemeUrl) {
+        fetch(hallSchemeUrl)
+            .then(res => res.json())
+            .then(schema => {
+                loader.remove();
+                renderHall(schema);
+            })
+            .catch(err => {
+                loader.innerHTML = '<span class="text-danger">Помилка завантаження схеми</span>';
+            });
     }
-  })();
-</script>
 
+    function renderHall(schema) {
+        schema.rows.forEach(rowData => {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'd-flex align-items-center justify-content-center gap-2 mb-1';
+
+            const label = document.createElement('div');
+            label.className = 'me-3 small text-muted';
+            label.style.width = '50px';
+            label.innerText = `Ряд ${rowData.row_number}`;
+            rowDiv.appendChild(label);
+
+            const seatsWrapper = document.createElement('div');
+            seatsWrapper.className = 'd-flex flex-wrap gap-1 justify-content-center';
+
+            for (let i = 1; i <= rowData.seats_count; i++) {
+                const btn = document.createElement('button');
+                const seatId = `${rowData.row_number}-${i}`;
+                btn.className = 'seat btn btn-outline-warning';
+                btn.innerText = i;
+                btn.dataset.row = rowData.row_number;
+                btn.dataset.seat = i;
+                btn.dataset.id = seatId;
+
+                if (initialBooked[seatId]) {
+                    updateSeatUI(rowData.row_number, i, initialBooked[seatId]);
+                }
+
+                btn.onclick = () => handleSeatClick(btn);
+                seatsWrapper.appendChild(btn);
+            }
+            rowDiv.appendChild(seatsWrapper);
+            container.appendChild(rowDiv);
+        });
+    }
+
+    function handleSeatClick(btn) {
+        if (btn.classList.contains('paid')) return;
+
+        const isReserved = btn.classList.contains('reserved');
+        const action = isReserved ? 'cancel' : 'reserve';
+
+        socket.send(JSON.stringify({
+            'row': btn.dataset.row,
+            'seat': btn.dataset.seat,
+            'action': action
+        }));
+    }
+
+    function updateSeatUI(row, seat, status) {
+        const btn = document.querySelector(`.seat[data-row="${row}"][data-seat="${seat}"]`);
+        if (!btn) return;
+
+        btn.classList.remove('btn-outline-warning', 'btn-warning', 'btn-secondary', 'reserved', 'paid');
+
+        if (status === 'P') {
+            btn.classList.add('btn-secondary', 'paid');
+            btn.disabled = true;
+        } else if (status === 'R') {
+            btn.classList.add('btn-warning', 'reserved');
+        } else {
+            btn.classList.add('btn-outline-warning');
+        }
+        recalc();
+    }
+
+    function recalc() {
+        const selected = document.querySelectorAll('.seat.reserved').length;
+        document.getElementById('tickets-count').textContent = selected;
+        document.getElementById('sum-amount').textContent = selected * price;
+    }
+})();
+</script>
 {% endblock %}

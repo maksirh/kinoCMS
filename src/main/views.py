@@ -1,9 +1,9 @@
 from dateutil.utils import today
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from src.cms.models import Banner, Movie
 from src.core.adminlte.views import news_and_actions
-from src.main.models import MainPage, Page, NewsAndActions, Hall, Schedule, Cinema
+from src.main.models import MainPage, Page, NewsAndActions, Hall, Schedule, Cinema, Ticket
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 
@@ -89,8 +89,18 @@ def schedule(request):
 
 
 
-def booking(request):
-    return render(request, 'main/booking.html')
+def booking(request, schedule_id):
+    schedule = get_object_or_404(Schedule, id=schedule_id)
+
+    booked_tickets = Ticket.objects.filter(schedule=schedule).exclude(status="E")
+
+    context = {
+        'schedule': schedule,
+        'booked_tickets': booked_tickets,
+        'hall_scheme': schedule.id_hall.scheme_of_hall
+    }
+
+    return render(request, 'main/booking.html', context)
 
 
 

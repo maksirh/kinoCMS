@@ -17,7 +17,7 @@
   <td class="text-center">{{ item.price }}</td>
 
   <td class="text-end">
-    <a href="#" class="btn btn-sm btn-warning fw-bold">Бронювати</a>
+    <a href="{% url 'main:booking' item.id %}" class="btn btn-sm btn-warning fw-bold">Бронювати</a>
   </td>
 </tr>
 {% empty %}

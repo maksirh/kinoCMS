@@ -57,6 +57,7 @@ class Hall(models.Model):
 
 
 
+
 class BannerComponent(models.Model):
     image = models.ImageField(upload_to="banners/", blank=True)
     text = models.TextField(blank=True)

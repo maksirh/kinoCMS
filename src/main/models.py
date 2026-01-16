@@ -43,6 +43,25 @@ class Booking(models.Model):
     place = models.IntegerField()
 
 
+class Ticket(models.Model):
+    STATUS_CHOICES = [
+        ('R', 'Reserved'),
+        ('P', 'Paid'),
+        ('E', 'Expired'),
+    ]
+
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, related_name='tickets')
+    row = models.PositiveIntegerField()
+    seat = models.PositiveIntegerField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='R')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('schedule', 'row', 'seat')
+
+
 class Page(models.Model):
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
     gallery_images = ManyToManyField(Gallery, blank=True)
