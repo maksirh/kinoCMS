@@ -32,7 +32,7 @@ class Schedule(models.Model):
     id_movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     id_hall = models.ForeignKey(Hall, on_delete=models.CASCADE)
     id_cinema = models.ForeignKey(Cinema, on_delete=models.CASCADE)
-    date = models.DateField()
+    date = models.DateTimeField(default=timezone.now)
     price = models.FloatField()
 
 

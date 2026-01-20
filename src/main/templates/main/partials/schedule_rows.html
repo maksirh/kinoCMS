@@ -1,6 +1,6 @@
 {% for item in schedules %}
 <tr>
-  <td>{{ item.date|date:"d.m" }}</td>
+  <td>{{ item.date|date:"d.m H:i" }}</td>
 
   <td>
     <a href="#" class="link-light text-decoration-none fw-bold">{{ item.id_movie.title }}</a>

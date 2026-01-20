@@ -73,7 +73,7 @@ def filter_schedule(request):
     if hall_id:
         schedules = schedules.filter(id_hall_id=hall_id)
     if date:
-        schedules = schedules.filter(date=date)
+        schedules = schedules.filter(date__date=date)
 
     html = render_to_string('main/partials/schedule_rows.html', {'schedules': schedules})
     return JsonResponse({'html': html})
