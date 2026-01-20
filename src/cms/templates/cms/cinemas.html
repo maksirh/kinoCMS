@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<style>
+     .cinema-card {
+        position: relative;
+        transition: transform 0.2s;
+        border: 1px solid #dee2e6;
+    }
+
+     .cinema-logo-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+    <p style="text-align: center; font-size: 20px; font-family: 'Arial', 'sans-serif';"> Наші кінотеатри</p>
+    <br>
+     <div class="row">
+        {% for cinema in cinemas %}
+        <div class="col-6 col-md-4 col-lg-4 mb-4">
+
+            <div class="card cinema-card h-100">
+
+                <a href="{% url 'cms:cinema_page' cinema.id %}" class="text-decoration-none text-dark h-100 d-flex flex-column">
+
+                    <div class="cinema-logo-placeholder">
+                        {% if cinema.main_image %}
+                            <img src="{{ cinema.main_image.url }}" alt="{{ cinema.title }}">
+                        {% else %}
+                            <i class="bi bi-building"></i>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-body text-center flex-grow-1 d-flex flex-column justify-content-center">
+                        <h5 class="card-title fw-bold mb-1" style="color: white">{{ cinema.title }}</h5>
+                    </div>
+                </a>
+
+            </div>
+
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted mt-5">
+            <h4>Кінотеатрів немає</h4>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

@@ -17,11 +17,6 @@
           <h6 class="text-uppercase text-muted mb-2">Кількість залів</h6>
           <ul class="list-group">
             <li class="list-group-item">Зал 1</li>
-            <li class="list-group-item">Зал 2</li>
-            <li class="list-group-item">Зал 3</li>
-            <li class="list-group-item">Зал 4</li>
-            <li class="list-group-item">Зал 5</li>
-            <li class="list-group-item">Зал 6</li>
           </ul>
         </div>
       </div>
@@ -31,10 +26,6 @@
           <h6 class="text-uppercase text-muted mb-2">Сьогодні</h6>
           <ul class="list-group">
             <li class="list-group-item d-flex justify-content-between align-items-center">Сеанс 1 <span class="badge text-bg-secondary">12:20</span></li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">Сеанс 2 <span class="badge text-bg-secondary">14:30</span></li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">Сеанс 3 <span class="badge text-bg-secondary">16:45</span></li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">Сеанс 4 <span class="badge text-bg-secondary">19:10</span></li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">Сеанс 5 <span class="badge text-bg-secondary">21:00</span></li>
           </ul>
           <a href="#" class="btn btn-success w-100 mt-3">Розклад всіх сеансів</a>
         </div>
@@ -45,9 +36,9 @@
       <div class="card mb-3">
         <div class="card-body">
           <div class="d-flex align-items-center mb-3">
-            <img src="https://picsum.photos/seed/logo/72/72" class="rounded me-3" alt="">
+            <img src="{{ cinema.main_image.url }}" class="rounded me-3" style="width: 115px;height: 80px" alt="">
             <div>
-              <h3 class="mb-1">Кінотеатр «Оскар»</h3>
+              <h3 class="mb-1">{{ cinema.title }}</h3>
               <div class="btn-group" role="group">
                 <span class="btn btn-outline-secondary btn-sm">IMAX</span>
                 <span class="btn btn-outline-secondary btn-sm">D-BOX</span>
@@ -58,8 +49,10 @@
             <a href="#" class="btn btn-primary ms-auto">Розклад сеансів</a>
           </div>
 
-          <p class="mb-2">Сучасний мультиплекс у центрі міста з комфортними залами, професійним звуком та великою кількістю прем’єр. Доступні студентські знижки, сімейні квитки та окремий VIP-зал.</p>
-          <p class="mb-0">Поруч зручно припаркуватися, працює кафе-бар та дитяча кімната. Онлайн-бронювання квитків і швидкий кіоск самостійної видачі.</p>
+          <p class="mb-2">
+              {{ cinema.description }}
+          </p>
+
         </div>
       </div>
 
