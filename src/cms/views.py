@@ -28,3 +28,18 @@ def cinema_page(request, cinema_id):
     }
 
     return render(request, 'cms/cinema.html', context)
+
+
+def hall_page(request, hall_id):
+
+    hall = get_object_or_404(Hall, pk=hall_id)
+
+    schedules = Schedule.objects.filter(id_hall=hall)
+
+
+    context = {
+        "hall": hall,
+        "schedules": schedules,
+    }
+
+    return render(request, "cms/hall.html", context)

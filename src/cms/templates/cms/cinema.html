@@ -23,7 +23,9 @@
           <ul class="list-group">
 
               {% for hall in halls %}
+                  <a href="{% url 'cms:hall_page' hall.id %}">
                   <li class="list-group-item">Зал {{ hall.number }}</li>
+                  </a>
               {% endfor %}
           </ul>
         </div>
