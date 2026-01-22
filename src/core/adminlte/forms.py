@@ -158,13 +158,15 @@ class CinemaForm(forms.ModelForm):
 
     class Meta:
         model = Cinema
-        fields = ['title', 'description', 'main_image', 'address']
+        fields = ['title', 'description', 'main_image', 'address', 'phone_number', 'email']
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'main_image': forms.FileInput(attrs={'class': 'form-control', 'id': 'logoInput'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
 
 

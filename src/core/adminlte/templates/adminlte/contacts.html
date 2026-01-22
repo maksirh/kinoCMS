@@ -188,6 +188,17 @@
 
         <div class="row mb-3">
             <div class="col-md-6">
+                <label class="form-label fw-bold">Телефон</label>
+                {{ formset.empty_form.phone_number }}
+            </div>
+        <div class="col-md-6">
+        <label class="form-label fw-bold">Email</label>
+        {{ formset.empty_form.email }}
+    </div>
+</div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
                 <label class="form-label fw-bold">Координати (Широта)</label>
                 {{ formset.empty_form.latitude }}
             </div>

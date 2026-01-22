@@ -19,25 +19,19 @@
     {% if top_banner %}
 
     <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="{{ top_banner.speed}}">
-
     <div class="carousel-inner">
-
         {% for component in top_banner.banner_component.all %}
-
             <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 {% if component.url %}
                     <a href="{{ component.url }}">
                 {% endif %}
 
-
                 {% if component.image %}
                     <img class="d-block w-100" src="{{ component.image.url }}" alt="{{ component.text|default:'Banner Image' }}">
                 {% endif %}
-
                 {% if component.url %}
                     </a>
                 {% endif %}
-
                 {% if component.text %}
                         <div class="carousel-caption d-none d-md-block">
                             <p>{{ component.text }}</p>

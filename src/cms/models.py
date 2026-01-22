@@ -33,6 +33,8 @@ class Cinema(models.Model):
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
     gallery_image = models.ManyToManyField(Gallery)
     title = models.CharField(max_length=120)
+    phone_number = models.CharField(max_length=120, null=True, blank=True)
+    email = models.EmailField(max_length=120, null=True, blank=True)
     description = models.TextField()
     main_image = models.ImageField()
     address = models.CharField(max_length=120)
