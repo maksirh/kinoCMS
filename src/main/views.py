@@ -1,8 +1,7 @@
 from dateutil.utils import today
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from src.cms.models import Banner, Movie
-from src.core.adminlte.views import news_and_actions
+from src.cms.models import Banner, Movie, ThroughBanner
 from src.main.models import MainPage, Page, NewsAndActions, Hall, Schedule, Cinema, Ticket
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -20,14 +19,17 @@ def main_page(request):
 
     seo = MainPage.objects.first().seo_block
 
-    random_news_or_action = NewsAndActions.objects.order_by('?').first()
+    news_or_action = Banner.objects.filter(is_active=True, is_promo=False).first()
+
+    through_banner = ThroughBanner.objects.first()
 
     context = {
         "top_banner": top_banner,
         "today_movies": current_movies,
         "recent_movies": recent_movies,
         "seo": seo,
-        "news_or_action": random_news_or_action,
+        "news_or_actions": news_or_action,
+        "through_banner": through_banner,
     }
     return render(request, "main/main_page.html", context)
 
@@ -105,7 +107,40 @@ def booking(request, schedule_id):
 
 
 def news_page(request):
-    return  render(request, 'main/news.html')
+    top_banner = Banner.objects.filter(is_active=True, is_promo=True).first()
+    news = NewsAndActions.objects.all().filter(is_news=True)
+
+    context = {
+        "top_banner": top_banner,
+        "items": news,
+    }
+
+    return render(request, "main/news_and_actions.html", context)
+
+
+def actions_page(request):
+    top_banner = Banner.objects.filter(is_active=True, is_promo=True).first()
+    actions = NewsAndActions.objects.all().filter(is_news=False)
+
+    context = {
+        "top_banner": top_banner,
+        "items": actions,
+    }
+
+    return render(request, "main/news_and_actions.html", context)
+
+
+def new_and_action(request, item_id):
+
+    news_or_action = get_object_or_404(NewsAndActions, id=item_id)
+
+    context = {
+        "item": news_or_action,
+    }
+
+    return  render(request, 'main/news_and_actions.html', context)
+
+
 
 
 def cafe_bar_page(request):
