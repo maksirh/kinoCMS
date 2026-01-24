@@ -32,7 +32,7 @@
 
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle px-2 text-white-50" href="#" id="aboutDropdown" role="button"
-       data-bs-toggle="dropdown" aria-expanded="false">
+       data-toggle="dropdown" aria-expanded="false">
       Про нас
     </a>
     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="aboutDropdown">
@@ -106,16 +106,16 @@
                         <a href="#" class="nav-link p-0 text-body-secondary"></a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="#" class="nav-link p-0 text-body-secondary">Розклад</a>
+                        <a href="{% url 'main:schedule_page' %}" class="nav-link p-0 text-body-secondary">Розклад</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="#" class="nav-link p-0 text-body-secondary">Скоро в прокаті</a>
+                        <a href="{% url 'main:poster_coming_soon' %}" class="nav-link p-0 text-body-secondary">Скоро в прокаті</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="#" class="nav-link p-0 text-body-secondary">Кінотеатри</a>
+                        <a href="{% url 'cms:cinemas_list' %}" class="nav-link p-0 text-body-secondary">Кінотеатри</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="#" class="nav-link p-0 text-body-secondary">Акції</a>
+                        <a href="{% url 'main:actions_page' %}" class="nav-link p-0 text-body-secondary">Акції</a>
                     </li>
                 </ul>
             </div>

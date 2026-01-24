@@ -3,4 +3,101 @@
 
 {% block content %}
 
+    <style>
+    .carousel-item img {
+        width: 100%;
+        height: 400px;
+
+        object-fit: cover;
+
+        object-position: center center;
+    }
+    </style>
+<div class="banner">
+
+    {% if top_banner %}
+
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="{{ top_banner.speed}}">
+    <div class="carousel-inner">
+        {% for component in top_banner.banner_component.all %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                {% if component.url %}
+                    <a href="{{ component.url }}">
+                {% endif %}
+
+                {% if component.image %}
+                    <img class="d-block w-100" src="{{ component.image.url }}" alt="{{ component.text|default:'Banner Image' }}">
+                {% endif %}
+                {% if component.url %}
+                    </a>
+                {% endif %}
+                {% if component.text %}
+                        <div class="carousel-caption d-none d-md-block">
+                            <p>{{ component.text }}</p>
+                        </div>
+                    {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if top_banner.banner_component.count > 1 %}
+            <a class="carousel-control-prev" href="#mainCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only"></span>
+            </a>
+            <a class="carousel-control-next" href="#mainCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only"></span>
+            </a>
+        {% endif %}
+
+    </div>
+
+{% endif %}
+</div>
+
+
+<article class="container mt-5 px-4 text-light">
+    <header class="mb-4 border-start border-primary border-4 ps-3">
+        <h2 class="text-uppercase fw-bold m-0" style="letter-spacing: 1px; font-family: 'Segoe UI', Roboto, sans-serif;">
+            {{ item.title }}
+        </h2>
+    </header>
+
+    <div class="row gx-lg-5 align-items-start">
+        <aside class="col-lg-4 col-md-5 mb-4">
+            <div class="position-relative shadow-lg rounded overflow-hidden border border-secondary">
+                <img src="{{ item.main_image.url }}" class="img-fluid d-block w-100" alt="{{ item.title }}">
+            </div>
+        </aside>
+
+        <section class="col-lg-8 col-md-7">
+            <div class="fs-5 lh-base text-secondary-emphasis" style="text-align: justify; white-space: pre-line;">
+                {{ item.description|linebreaks }}
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'main:news_page' %}" class="btn btn-outline-secondary btn-sm rounded-pill px-4">
+                    <i class="bi bi-arrow-left me-2"></i>{% if item.is_news %} До всіх новин {% endif %}
+                        {% if not item.is_news %} До всіх акцій {% endif %}
+                </a>
+            </div>
+        </section>
+    </div>
+
+    {% if item.gallery_images.all %}
+    <div class="mt-5 pt-4 border-top border-secondary">
+        <h4 class="mb-4">Кадри з події</h4>
+        <div class="row g-2">
+            {% for img in item.gallery_images.all %}
+            <div class="col-6 col-md-3">
+                <img src="{{ img.image.url }}" class="img-fluid rounded shadow-sm" alt="gallery">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</article>
+
+
 {% endblock %}

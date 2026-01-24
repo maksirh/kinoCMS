@@ -130,15 +130,16 @@ def actions_page(request):
     return render(request, "main/news_and_actions.html", context)
 
 
-def new_and_action(request, item_id):
-
-    news_or_action = get_object_or_404(NewsAndActions, id=item_id)
+def new_and_action(request, item_pk):
+    top_banner = Banner.objects.filter(is_active=True, is_promo=True).first()
+    news_or_action = get_object_or_404(NewsAndActions, id=item_pk)
 
     context = {
         "item": news_or_action,
+        "top_banner": top_banner
     }
 
-    return  render(request, 'main/news_and_actions.html', context)
+    return  render(request, 'main/news_or_action.html', context)
 
 
 
