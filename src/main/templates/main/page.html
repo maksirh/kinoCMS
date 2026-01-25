@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .hero-banner {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .article-title {
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: #fff;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    .article-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background-color: #0d6efd;
+        border-radius: 2px;
+    }
+
+    .description-box {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #adb5bd;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    /* Карусель галереї */
+    .gallery-container {
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #343a40;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .carousel-item img {
+        height: 550px;
+        object-fit: cover;
+    }
+
+    .section-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+</style>
+
+{% if page.main_image %}
+<div class="w-100 overflow-hidden mb-5">
+    <img src="{{ page.main_image.url }}" class="hero-banner" alt="{{ page.title }}">
+</div>
+{% endif %}
+
+<div class="container mb-5">
+    <div class="text-center mb-5">
+        <h1 class="article-title text-uppercase display-4">{{ page.title }}</h1>
+    </div>
+
+    <div class="description-box mb-5">
+        {{ page.description|linebreaks }}
+    </div>
+
+    {% if page.gallery_images.all %}
+    <div class="row justify-content-center mt-5">
+        <div class="col-lg-10">
+            <h3 class="h4 mb-4 text-center text-uppercase fw-bold">Фотогалерея</h3>
+
+            <div class="gallery-container">
+                <div id="gallery-{{ page.id }}" class="carousel slide" data-ride="carousel" data-interval="4000">
+
+                    <ol class="carousel-indicators">
+                        {% for image in page.gallery_images.all %}
+                        <li data-target="#gallery-{{ page.id }}"
+                            data-slide-to="{{ forloop.counter0 }}"
+                            {% if forloop.first %}class="active"{% endif %}>
+                        </li>
+                        {% endfor %}
+                    </ol>
+
+                    <div class="carousel-inner">
+                        {% for image in page.gallery_images.all %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ image.image.url }}" class="d-block w-100" alt="Слайд">
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if page.gallery_images.count > 1 %}
+                    <a class="carousel-control-prev" href="#gallery-{{ page.id }}" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Назад</span>
+                    </a>
+                    <a class="carousel-control-next" href="#gallery-{{ page.id }}" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Вперед</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

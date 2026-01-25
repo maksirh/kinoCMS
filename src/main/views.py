@@ -143,9 +143,15 @@ def new_and_action(request, item_pk):
 
 
 
+def page(request, page_id):
+    page_info = get_object_or_404(Page, id=page_id)
 
-def cafe_bar_page(request):
-    return render(request, 'main/cafe_bar.html')
+    context = {
+        "page": page_info,
+    }
+    return render(request, "main/page.html", context)
+
+
 
 
 

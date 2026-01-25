@@ -67,7 +67,7 @@ class Page(models.Model):
     gallery_images = ManyToManyField(Gallery, blank=True)
     title = models.CharField(max_length=120, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    main_image = models.ImageField(blank=True, null=True)
+    main_image = models.ImageField(upload_to="page_images/", blank=True, null=True)
     is_active = models.BooleanField(default=False)
     is_removable = models.BooleanField(default=True)
     updated_at = models.DateTimeField(auto_now=True)

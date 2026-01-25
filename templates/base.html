@@ -38,7 +38,7 @@
     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="aboutDropdown">
       <li><a class="dropdown-item" href="{% url 'main:news_page' %}">Новини</a></li>
       <li><a class="dropdown-item" href="#">Реклама</a></li>
-      <li><a class="dropdown-item" href="{% url 'main:cafe_bar_page' %}">Кафе</a></li>
+      <li><a class="dropdown-item" href="#">Кафе</a></li>
       <li><a class="dropdown-item" href="#">Мобільні додатки</a></li>
       <li><a class="dropdown-item" href="#">Контакти</a></li>
     </ul>
@@ -130,10 +130,13 @@
                         <a href="#" class="nav-link p-0 text-body-secondary">Реклама</a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="{% url 'main:cafe_bar_page' %}" class="nav-link p-0 text-body-secondary">Кафе-Бар</a>
+                        <a href="{% url 'main:page' 2 %}" class="nav-link p-0 text-body-secondary">Кафе-Бар</a>
                     </li>
                     <li class="nav-item mb-2">
                         <a href="#" class="nav-link p-0 text-body-secondary">Контакти</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="{% url 'main:page' 5 %}" class="nav-link p-0 text-body-secondary">Дитяча кімната</a>
                     </li>
                 </ul>
             </div>
