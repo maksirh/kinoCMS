@@ -1,4 +1,4 @@
-from ..main.models import MainPage
+from ..main.models import MainPage, Page
 
 
 def phone_numbers(request):
@@ -8,4 +8,9 @@ def phone_numbers(request):
         "phone2": main_page.phone_number2,
     }
 
+def pages_inf(request):
+    pages = Page.objects.all()
+    return {
+        "pages": pages,
+    }
 

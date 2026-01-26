@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from src.cms.models import Cinema, Hall
+from src.cms.models import Cinema, Hall, Contacts, Banner
 from src.main.models import Schedule
 from django.utils import timezone
 
@@ -43,3 +43,16 @@ def hall_page(request, hall_id):
     }
 
     return render(request, "cms/hall.html", context)
+
+
+def contacts_list(request):
+    top_banner = Banner.objects.filter(is_active=True, is_promo=True).first()
+    contacts = Contacts.objects.all()
+
+    context = {
+        "top_banner": top_banner,
+        "contacts": contacts,
+    }
+
+    return render(request, "cms/contacts.html", context)
+

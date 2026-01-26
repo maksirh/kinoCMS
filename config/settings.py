@@ -90,6 +90,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'src.core.context_processors.phone_numbers',
+                'src.core.context_processors.pages_inf',
             ],
         },
     },
