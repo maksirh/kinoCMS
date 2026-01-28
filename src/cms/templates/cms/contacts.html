@@ -4,4 +4,153 @@
 {% block content %}
 
 
+    <style>
+    .carousel-item img {
+        width: 100%;
+        height: 400px;
+
+        object-fit: cover;
+
+        object-position: center center;
+    }
+
+    .contact-logo {
+        width: 100%;
+        height: 150px;
+        object-fit: contain;
+        background: #343a40;
+        border-radius: 8px;
+    }
+
+    .map-container {
+        height: 250px;
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid #495057;
+    }
+
+    .cinema-contact-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .cinema-contact-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.08);
+    }
+    </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<div class="banner">
+
+    {% if top_banner %}
+
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="{{ top_banner.speed}}">
+    <div class="carousel-inner">
+        {% for component in top_banner.banner_component.all %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                {% if component.url %}
+                    <a href="{{ component.url }}">
+                {% endif %}
+
+                {% if component.image %}
+                    <img class="d-block w-100" src="{{ component.image.url }}" alt="{{ component.text|default:'Banner Image' }}">
+                {% endif %}
+                {% if component.url %}
+                    </a>
+                {% endif %}
+                {% if component.text %}
+                        <div class="carousel-caption d-none d-md-block">
+                            <p>{{ component.text }}</p>
+                        </div>
+                    {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if top_banner.banner_component.count > 1 %}
+            <a class="carousel-control-prev" href="#mainCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only"></span>
+            </a>
+            <a class="carousel-control-next" href="#mainCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only"></span>
+            </a>
+        {% endif %}
+
+    </div>
+
+{% endif %}
+</div>
+
+    <div class="container my-5">
+    <h1 class="text-center mb-5 text-uppercase fw-bold">Наші контакти</h1>
+
+    {% for contact_set in contacts %}
+        {% for cinema in contact_set.component.all %}
+            {% if cinema.is_active %}
+            <div class="card cinema-contact-card p-4 mb-5 shadow-lg text-light">
+                <div class="row align-items-center">
+
+                    <div class="col-lg-2 col-md-4 text-center mb-3 mb-lg-0">
+                        <h4 class="fw-bold mb-3 d-lg-none">{{ cinema.cinema_name }}</h4>
+                        {% if cinema.logo %}
+                            <img src="{{ cinema.logo.url }}" class="contact-logo p-2" alt="Logo">
+                        {% else %}
+                            <div class="contact-logo d-flex align-items-center justify-content-center">
+                                <i class="bi bi-camera-reels fs-1 text-secondary"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-lg-4 col-md-8 border-start-lg border-secondary ps-lg-4">
+                        <h3 class="fw-bold d-none d-lg-block mb-3">{{ cinema.cinema_name }}</h3>
+                        <p class="mb-2"><i class="bi bi-geo-alt-fill text-primary me-2"></i> {{ cinema.address }}</p>
+                        <p class="mb-2"><i class="bi bi-telephone-fill text-success me-2"></i> {{ cinema.phone_number }}</p>
+                        <p class="mb-0"><i class="bi bi-envelope-fill text-warning me-2"></i> {{ cinema.email }}</p>
+                    </div>
+
+                    <div class="col-lg-6 col-md-12 mt-4 mt-lg-0">
+                        <div id="map-{{ cinema.id }}" class="map-container shadow-sm"></div>
+                    </div>
+
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        {% for contact_set in contacts %}
+            {% for cinema in contact_set.component.all %}
+                {% if cinema.is_active %}
+                (function() {
+                    var lat = {{ cinema.latitude|stringformat:"f" }};
+                    var lng = {{ cinema.longitude|stringformat:"f" }};
+
+                    var map = L.map('map-{{ cinema.id }}', {
+                        center: [lat, lng],
+                        zoom: 15,
+                        scrollWheelZoom: false
+                    });
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap'
+                    }).addTo(map);
+
+                    L.marker([lat, lng]).addTo(map)
+                        .bindPopup('<b>{{ cinema.cinema_name }}</b><br>{{ cinema.address }}')
+                        .openPopup();
+                })();
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    });
+</script>
+
 {% endblock %}

@@ -1,5 +1,6 @@
- {% extends "base.html" %}
- {% load static %}
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
 
 {% block content %}
     <style>
@@ -13,18 +14,17 @@
     <aside class="col-lg-3 order-lg-1">
       <div class="card mb-3">
         <div class="ratio ratio-3x4">
-          <div class="bg-light d-flex align-items-center justify-content-center">Реклама</div>
+          <div class="bg-light d-flex align-items-center justify-content-center">{% trans "Реклама" %}</div>
         </div>
       </div>
 
       <div class="card mb-3">
         <div class="card-body">
-          <h6 class="text-uppercase text-muted mb-2">Кількість залів: {{ halls.count }}</h6>
+          <h6 class="text-uppercase text-muted mb-2">{% trans "Кількість залів" %}: {{ halls.count }}</h6>
           <ul class="list-group">
-
               {% for hall in halls %}
-                  <a href="{% url 'cms:hall_page' hall.id %}">
-                  <li class="list-group-item">Зал {{ hall.number }}</li>
+                  <a href="{% url 'cms:hall_page' hall.id %}" class="text-decoration-none">
+                  <li class="list-group-item">{% trans "Зал" %} {{ hall.number }}</li>
                   </a>
               {% endfor %}
           </ul>
@@ -33,15 +33,18 @@
 
       <div class="card mb-3">
         <div class="card-body">
-          <h6 class="text-uppercase text-muted mb-2">Сьогодні</h6>
+          <h6 class="text-uppercase text-muted mb-2">{% trans "Сьогодні" %}</h6>
           <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center">
+            <li class="list-group-item d-flex justify-content-between align-items-center flex-column">
                 {% for session in today_sessions %}
-                    {{ session.id_movie.title }} <span class="badge text-bg-secondary">{{ session.date|date:"H:i" }}</span>
+                    <div class="w-100 d-flex justify-content-between mb-1">
+                        <span>{{ session.id_movie.title }}</span>
+                        <span class="badge text-bg-secondary">{{ session.date|date:"H:i" }}</span>
+                    </div>
                 {% endfor %}
             </li>
           </ul>
-          <a href="{% url 'main:schedule_page' %}" class="btn btn-success w-100 mt-3">Розклад всіх сеансів</a>
+          <a href="{% url 'main:schedule_page' %}" class="btn btn-success w-100 mt-3">{% trans "Розклад всіх сеансів" %}</a>
         </div>
       </div>
     </aside>
@@ -50,7 +53,7 @@
       <div class="card mb-3">
         <div class="card-body">
           <div class="d-flex align-items-center mb-3">
-            <img src="{{ cinema.main_image.url }}" class="rounded me-3" style="width: 115px;height: 80px" alt="">
+            <img src="{{ cinema.main_image.url }}" class="rounded me-3" style="width: 115px;height: 80px" alt="Logo">
             <div>
               <h3 class="mb-1">{{ cinema.title }}</h3>
               <div class="btn-group" role="group">
@@ -60,99 +63,94 @@
                 <span class="btn btn-outline-danger btn-sm">VIP</span>
               </div>
             </div>
-            <a href="{% url 'main:schedule_page' %}" class="btn btn-primary ms-auto">Розклад сеансів</a>
+            <a href="{% url 'main:schedule_page' %}" class="btn btn-primary ms-auto">{% trans "Розклад сеансів" %}</a>
           </div>
 
           <p class="mb-2">
               {{ cinema.description }}
           </p>
-
         </div>
       </div>
 
       <div class="card mb-3">
-        <div class="card-header fw-semibold">Умови та сервіси</div>
+        <div class="card-header fw-semibold">{% trans "Умови та сервіси" %}</div>
         <div class="card-body">
           <div class="row g-3">
             <div class="col-md-6">
-              <div class="p-3 border rounded">
-                <h6 class="mb-2 text-primary">Дитяча кімната</h6>
-                <p class="mb-0">Окремий простір для дітей з доглядом та ігровою зоною під час сеансів.</p>
+              <div class="p-3 border rounded h-100">
+                <h6 class="mb-2 text-primary">{% trans "Дитяча кімната" %}</h6>
+                <p class="mb-0 small">{% trans "Окремий простір для дітей з доглядом та ігровою зоною під час сеансів." %}</p>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="p-3 border rounded">
-                <h6 class="mb-2 text-primary">VIP-зал</h6>
-                <p class="mb-0">Комфортні крісла, обслуговування та розширене меню напоїв і закусок.</p>
+              <div class="p-3 border rounded h-100">
+                <h6 class="mb-2 text-primary">{% trans "VIP-зал" %}</h6>
+                <p class="mb-0 small">{% trans "Комфортні крісла, обслуговування та розширене меню напоїв і закусок." %}</p>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="p-3 border rounded">
-                <h6 class="mb-2 text-primary">Бар Hitchcock</h6>
-                <p class="mb-0">Попкорн, начос, десерти, коктейлі та спеціальні комбо-набори.</p>
+              <div class="p-3 border rounded h-100">
+                <h6 class="mb-2 text-primary">{% trans "Бар Hitchcock" %}</h6>
+                <p class="mb-0 small">{% trans "Попкорн, начос, десерти, коктейлі та спеціальні комбо-набори." %}</p>
               </div>
             </div>
             <div class="col-md-6">
-              <div class="p-3 border rounded">
-                <h6 class="mb-2 text-primary">Подарункові сертифікати</h6>
-                <p class="mb-0">Сертифікати на будь-яку суму та абонементи на прем’єри.</p>
+              <div class="p-3 border rounded h-100">
+                <h6 class="mb-2 text-primary">{% trans "Подарункові сертифікати" %}</h6>
+                <p class="mb-0 small">{% trans "Сертифікати на будь-яку суму та абонементи на прем’єри." %}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-        <div class="card mb-3">
-  <div class="card-header fw-semibold">Фотогалерея</div>
+      <div class="card mb-3">
+        <div class="card-header fw-semibold">{% trans "Фотогалерея" %}</div>
+        <div id="gallery-{{ cinema.id }}" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            {% for image in cinema.gallery_image.all %}
+              <button type="button"
+                      data-bs-target="#gallery-{{ cinema.id }}"
+                      data-bs-slide-to="{{ forloop.counter0 }}"
+                      {% if forloop.first %}class="active"{% endif %}>
+              </button>
+            {% endfor %}
+          </div>
 
-  <div id="gallery-{{ cinema.id }}" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+            {% for image in cinema.gallery_image.all %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ image.image.url }}" class="d-block w-100" alt="Slide">
+              </div>
+            {% endfor %}
+          </div>
 
-    <div class="carousel-indicators">
-      {% for image in cinema.gallery_image.all %}
-        <button type="button"
-                data-target="#gallery-{{ cinema.id }}"
-                data-slide-to="{{ forloop.counter0 }}"
-                {% if forloop.first %}class="active"{% endif %}>
-        </button>
-      {% endfor %}
-    </div>
-
-    <div class="carousel-inner">
-      {% for image in cinema.gallery_image.all %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-          <img src="{{ image.image.url }}" class="d-block w-100" alt="Слайд">
+          {% if cinema.gallery_image.count > 1 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#gallery-{{ cinema.id }}" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#gallery-{{ cinema.id }}" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          {% endif %}
         </div>
-      {% endfor %}
-    </div>
-
-    {% if cinema.gallery_image.count > 1 %}
-      <a class="carousel-control-prev" href="#gallery-{{ cinema.id }}" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" href="#gallery-{{ cinema.id }}" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
-    {% endif %}
-  </div>
-</div>
+      </div>
 
       <div class="row g-3">
         <div class="col-md-6">
-          <div class="card h-100">
+          <div class="card h-100 shadow-sm">
             <div class="card-body">
-              <h6 class="text-uppercase text-muted mb-2">Адреса</h6>
-              <p>{{ cinema.address }}</p>
+              <h6 class="text-uppercase text-muted mb-2 small fw-bold">{% trans "Адреса" %}</h6>
+              <p class="mb-0">{{ cinema.address }}</p>
             </div>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="card h-100">
+          <div class="card h-100 shadow-sm">
             <div class="card-body">
-              <h6 class="text-uppercase text-muted mb-2">Контакти</h6>
-              <p class="mb-1">Каса: {{ cinema.phone_number }}</p>
-              <p class="mb-0">Email: {{ cinema.email }}</p>
+              <h6 class="text-uppercase text-muted mb-2 small fw-bold">{% trans "Контакти" %}</h6>
+              <p class="mb-1 small">{% trans "Каса" %}: {{ cinema.phone_number }}</p>
+              <p class="mb-0 small">Email: {{ cinema.email }}</p>
             </div>
           </div>
         </div>
@@ -160,6 +158,4 @@
     </section>
   </div>
 </main>
-
-
 {% endblock %}

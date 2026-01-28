@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block content %}
+{% load i18n %} {% block content %}
 <style>
     .hero-banner {
         width: 100%;
@@ -77,7 +76,7 @@
     {% if page.gallery_images.all %}
     <div class="row justify-content-center mt-5">
         <div class="col-lg-10">
-            <h3 class="h4 mb-4 text-center text-uppercase fw-bold">Фотогалерея</h3>
+            <h3 class="h4 mb-4 text-center text-uppercase fw-bold">{% trans "Фотогалерея" %}</h3>
 
             <div class="gallery-container">
                 <div id="gallery-{{ page.id }}" class="carousel slide" data-ride="carousel" data-interval="4000">
@@ -94,7 +93,7 @@
                     <div class="carousel-inner">
                         {% for image in page.gallery_images.all %}
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            <img src="{{ image.image.url }}" class="d-block w-100" alt="Слайд">
+                            <img src="{{ image.image.url }}" class="d-block w-100" alt="{% trans 'Слайд' %}">
                         </div>
                         {% endfor %}
                     </div>
@@ -102,11 +101,11 @@
                     {% if page.gallery_images.count > 1 %}
                     <a class="carousel-control-prev" href="#gallery-{{ page.id }}" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Назад</span>
+                        <span class="sr-only">{% trans "Назад" %}</span>
                     </a>
                     <a class="carousel-control-next" href="#gallery-{{ page.id }}" role="button" data-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Вперед</span>
+                        <span class="sr-only">{% trans "Вперед" %}</span>
                     </a>
                     {% endif %}
                 </div>

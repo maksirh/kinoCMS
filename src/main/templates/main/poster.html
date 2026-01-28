@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %} Афіша {% endblock title %}
+{% load i18n %} {% block title %} {% trans "Афіша" %} {% endblock title %}
 
 {% block content %}
 <div class="container my-4">
@@ -12,46 +12,40 @@
                     <ul class="nav nav-pills flex-column mb-auto">
                         <li class="nav-item">
                             <a href="{% url 'main:poster' %}" class="nav-link {% if is_active_poster %} active {% endif %}" aria-current="page">
-                                Афіша
+                                {% trans "Афіша" %}
                             </a>
                         </li>
                         <li>
                             <a href="{% url 'main:poster_coming_soon' %}" class="nav-link {% if is_active_poster_coming_soon %} active {% endif %} link-body-emphasis">
-                                Скоро на екранах
+                                {% trans "Скоро на екранах" %}
                             </a>
                         </li>
                     </ul>
                     <hr>
                 </div>
-
-
             </div>
         </aside>
 
         <main class="col-12 col-md-9">
             <section class="schedule">
-
-           <div class="row mb-5">
-
-            {% for movie in movies %}
-            <div class="col-3">
-                <div class="card">
-                    <img src="{{ movie.main_image.url }}" alt="img">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ movie.title }}</h5>
-                        <p class="card-text">
-                            {{ movie.description }}
-                        </p>
+                <div class="row mb-5">
+                    {% for movie in movies %}
+                    <div class="col-3 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{ movie.main_image.url }}" class="card-img-top" alt="{{ movie.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">{{ movie.title }}</h5>
+                                <p class="card-text small text-muted">
+                                    {{ movie.description|truncatewords:20 }}
+                                </p>
+                            </div>
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-            </div>
-            {% endfor %}
-
-        </div>
             </section>
 
             <section class="coming-soon">
-
                 <div class="row g-4">
                 </div>
             </section>

@@ -18,103 +18,66 @@
         height: 100%;
         object-fit: cover;
     }
-
-    .gallery-wrapper {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
-
-    .gallery-item {
-        position: relative;
-        width: 150px;
-        text-align: center;
-    }
-
+    .gallery-wrapper { display: flex; flex-wrap: wrap; gap: 15px; }
+    .gallery-item { position: relative; width: 150px; text-align: center; }
     .gallery-preview-box {
-        width: 150px;
-        height: 100px;
-        background-color: #e9ecef;
-        border: 1px solid #ced4da;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        margin-bottom: 5px;
+        width: 150px; height: 100px; background-color: #e9ecef;
+        border: 1px solid #ced4da; display: flex; align-items: center;
+        justify-content: center; overflow: hidden; margin-bottom: 5px;
     }
-
-    .gallery-preview-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .placeholder-icon {
-        font-size: 2rem;
-        color: #adb5bd;
-    }
-
+    .gallery-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    .placeholder-icon { font-size: 2rem; color: #adb5bd; }
     .btn-remove-gallery {
-        position: absolute;
-        top: -8px;
-        right: -8px;
-        background: white;
-        border-radius: 50%;
-        width: 24px;
-        height: 24px;
-        border: 1px solid #ccc;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        z-index: 10;
+        position: absolute; top: -8px; right: -8px; background: white;
+        border-radius: 50%; width: 24px; height: 24px; border: 1px solid #ccc;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
+        font-weight: bold; z-index: 10;
     }
-    .btn-remove-gallery:hover {
-        background: #f8d7da;
-        color: red;
-    }
+    .btn-remove-gallery:hover { background: #f8d7da; color: red; }
+    .d-none { display: none !important; }
 </style>
 
 <div class="container-fluid mt-4">
-
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <div class="row mb-4">
-            <div class="col-12">
-                <ul class="nav nav-tabs justify-content-end" id="langTabs" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="ua-tab" data-bs-toggle="tab" href="#ua" role="tab">Українська</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="ru-tab" data-bs-toggle="tab" href="#en" role="tab">English</a>
-                    </li>
+        <div class="row mb-4 border-bottom pb-2">
+            <div class="col-12 text-end">
+                <ul class="nav nav-tabs justify-content-end d-inline-flex" id="language-switcher">
+                    <li class="nav-item"><a class="nav-link active fw-bold" href="#" data-lang="uk">UA</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold" href="#" data-lang="en">EN</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="row mb-3 align-items-center">
-            <label class="col-sm-2 col-form-label fw-bold">Назва фільму</label>
+            <div class="col-sm-2">
+                <label class="form-label fw-bold lang-uk">Назва фільму</label>
+                <label class="form-label fw-bold lang-en d-none">Movie Title</label>
+            </div>
             <div class="col-sm-10">
-                {{ movie_form.title }}
-                {% if movie_form.title.errors %}
-                    <div class="text-danger small">{{ movie_form.title.errors }}</div>
-                {% endif %}
+                <div class="lang-uk">
+                    {{ movie_form.title_uk }}
+                    {% if movie_form.title_uk.errors %}<div class="text-danger small">{{ movie_form.title_uk.errors }}</div>{% endif %}
+                </div>
+                <div class="lang-en d-none">{{ movie_form.title_en }}</div>
             </div>
         </div>
 
         <div class="row mb-3">
-            <label class="col-sm-2 col-form-label fw-bold">Опис</label>
+            <div class="col-sm-2">
+                <label class="form-label fw-bold lang-uk">Опис</label>
+                <label class="form-label fw-bold lang-en d-none">Description</label>
+            </div>
             <div class="col-sm-10">
-                {{ movie_form.description }}
+                <div class="lang-uk">{{ movie_form.description_uk }}</div>
+                <div class="lang-en d-none">{{ movie_form.description_en }}</div>
             </div>
         </div>
 
         <div class="row mb-4 align-items-center">
             <label class="col-sm-2 col-form-label fw-bold">Головна картинка</label>
             <div class="col-sm-10 d-flex align-items-center">
-
                 <div class="main-image-preview me-3">
                     {% if movie_form.instance.main_image %}
                         <img src="{{ movie_form.instance.main_image.url }}" id="mainImagePreview">
@@ -123,11 +86,8 @@
                         <i class="bi bi-image placeholder-icon" id="mainImageIcon"></i>
                     {% endif %}
                 </div>
-
                 {{ movie_form.main_image }}
-
                 <input type="hidden" name="clear_main_image" id="clear_main_image_id" value="false">
-
                 <button type="button" class="btn btn-light border me-2" onclick="document.getElementById('mainImageInput').click();">Завантажити</button>
                 <button type="button" class="btn btn-light border" onclick="clearMainImage()">Видалити</button>
             </div>
@@ -136,16 +96,13 @@
         <div class="row mb-4">
             <label class="col-sm-2 col-form-label fw-bold">Галерея картинок</label>
             <div class="col-sm-10">
-                <div class="text-muted small mb-2">Розмір: 1000x190</div>
-
                 <div class="gallery-wrapper" id="gallery-container">
                     {{ gallery_formset.management_form }}
-
                     {% for form in gallery_formset %}
                         <div class="gallery-item">
                             {{ form.id }}
-                            <span class="d-none">{{ form.DELETE }}</span> <div class="btn-remove-gallery" onclick="deleteGalleryItem(this)">x</div>
-
+                            <span class="d-none">{{ form.DELETE }}</span>
+                            <div class="btn-remove-gallery" onclick="deleteGalleryItem(this)">x</div>
                             <div class="gallery-preview-box">
                                 {% if form.instance.pk and form.instance.image %}
                                     <img src="{{ form.instance.image.url }}">
@@ -153,140 +110,88 @@
                                     <i class="bi bi-image placeholder-icon"></i>
                                 {% endif %}
                             </div>
-
-                            {% if not form.instance.pk %}
-                                <div class="mt-1">
-                                    <button type="button" class="btn btn-light btn-sm border w-100" onclick="this.closest('.gallery-item').querySelector('input[type=file]').click()">Додати</button>
-                                </div>
-                                <div class="d-none">{{ form.image }}</div>
-                            {% else %}
-                                <div class="mt-1 text-success small fw-bold">Завантажено</div>
-                            {% endif %}
+                            <div class="d-none">{{ form.image }}</div>
+                            <button type="button" class="btn btn-light btn-sm border w-100" onclick="this.closest('.gallery-item').querySelector('input[type=file]').click()">
+                                {% if form.instance.pk %}Змінити{% else %}Додати{% endif %}
+                            </button>
                         </div>
                     {% endfor %}
                 </div>
-
-                <div class="mt-3">
-                    <button type="button" class="btn btn-outline-primary" id="add-gallery-btn">
-                        <i class="bi bi-plus-lg"></i> Додати ще фото
-                    </button>
-                </div>
+                <button type="button" class="btn btn-outline-primary mt-3" id="add-gallery-btn"><i class="bi bi-plus-lg"></i> Додати ще фото</button>
             </div>
         </div>
 
         <div class="row mb-3 align-items-center">
             <label class="col-sm-2 col-form-label fw-bold">Посилання на трейлер</label>
-            <div class="col-sm-10">
-                {{ movie_form.trailer_url }}
-            </div>
+            <div class="col-sm-10">{{ movie_form.trailer_url }}</div>
         </div>
 
         <div class="row mb-3 align-items-center">
             <label class="col-sm-2 col-form-label fw-bold">Дата прем'єри</label>
-            <div class="col-sm-4"> {{ movie_form.date_of_show }}
-                {% if movie_form.date_of_show.errors %}
-            <div class="text-danger small">{{ movie_form.date_of_show.errors }}</div>
-                {% endif %}
+            <div class="col-sm-4">{{ movie_form.date_of_show }}</div>
+            <label class="col-sm-2 col-form-label fw-bold text-end">Кінець прокату</label>
+            <div class="col-sm-4">{{ movie_form.date_of_end_show }}</div>
         </div>
-
-        </div>
-        <div class="row mb-3 align-items-center">
-            <label class="col-sm-2 col-form-label fw-bold">Кінець прокату</label>
-            <div class="col-sm-4"> {{ movie_form.date_of_end_show }}
-                {% if movie_form.date_of_end_show.errors %}
-            <div class="text-danger small">{{ movie_form.date_of_end_show.errors }}</div>
-                {% endif %}
-        </div>
-
-    </div>
 
         <div class="row mb-4 align-items-center">
             <label class="col-sm-2 col-form-label fw-bold">Тип кіно</label>
             <div class="col-sm-10">
-                <div class="form-check form-check-inline">
-                    {{ movie_form.is_3D }}
-                    <label class="form-check-label" for="{{ movie_form.is_3D.id_for_label }}">3D</label>
+                <div class="form-check form-check-inline">{{ movie_form.is_2D }} <label class="form-check-label">2D</label></div>
+                <div class="form-check form-check-inline">{{ movie_form.is_3D }} <label class="form-check-label">3D</label></div>
+            </div>
+        </div>
+
+        <div class="card p-4 bg-light shadow-sm mb-5">
+            <h5 class="fw-bold mb-4"><span class="lang-uk">SEO блок</span><span class="lang-en d-none">SEO Block</span></h5>
+            <div class="row mb-3 align-items-center">
+                <label class="col-sm-2 col-form-label fw-bold small">URL:</label>
+                <div class="col-sm-10">{{ seo_form.url }}</div>
+            </div>
+            <div class="row mb-3 align-items-center">
+                <label class="col-sm-2 col-form-label fw-bold small">Title:</label>
+                <div class="col-sm-10">
+                    <div class="lang-uk">{{ seo_form.title_uk }}</div>
+                    <div class="lang-en d-none">{{ seo_form.title_en }}</div>
                 </div>
-                <div class="form-check form-check-inline">
-                    {{ movie_form.is_2D }}
-                    <label class="form-check-label" for="{{ movie_form.is_2D.id_for_label }}">2D</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="imaxCheck" disabled>
-                    <label class="form-check-label text-muted" for="imaxCheck">IMAX</label>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label fw-bold small">Description:</label>
+                <div class="col-sm-10">
+                    <div class="lang-uk">{{ seo_form.description_uk }}</div>
+                    <div class="lang-en d-none">{{ seo_form.description_en }}</div>
                 </div>
             </div>
         </div>
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label fw-bold pt-0">SEO блок:</label>
-            <div class="col-sm-10">
-
-                <div class="row mb-2 align-items-center">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">URL:</label>
-                    <div class="col-sm-11">{{ seo_form.url }}</div>
-                </div>
-
-                <div class="row mb-2 align-items-center">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">Title:</label>
-                    <div class="col-sm-11">{{ seo_form.title }}</div>
-                </div>
-
-                <div class="row mb-2 align-items-center">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">Keywords:</label>
-                    <div class="col-sm-11">{{ seo_form.keywords }}</div>
-                </div>
-
-                <div class="row mb-2">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">Description:</label>
-                    <div class="col-sm-11">{{ seo_form.description }}</div>
-                </div>
-
-            </div>
+        <div class="text-center mb-5">
+            <button type="submit" class="btn btn-primary px-5 btn-lg">Зберегти</button>
         </div>
-
-        <div class="text-center mt-5 mb-5">
-            <button type="submit" class="btn btn-secondary px-5 me-3">Зберегти</button>
-            <a href="{% url 'adminlte:film_list' %}" class="btn btn-outline-secondary px-4">Повернутися до списку</a>
-        </div>
-
     </form>
 </div>
 
-<div id="empty-form" style="display: none;">
+<div id="empty-form" class="d-none">
     <div class="gallery-item">
-        <input type="hidden" name="gallery-__prefix__-id" id="id_gallery-__prefix__-id">
-        <input type="checkbox" name="gallery-__prefix__-DELETE" id="id_gallery-__prefix__-DELETE" style="display:none;">
-
+        <input type="hidden" name="gallery-__prefix__-id">
+        <input type="checkbox" name="gallery-__prefix__-DELETE" class="d-none">
         <div class="btn-remove-gallery" onclick="deleteGalleryItem(this)">x</div>
-
-        <div class="gallery-preview-box">
-            <i class="bi bi-image placeholder-icon"></i>
-        </div>
-
-        <div class="mt-1">
-            <button type="button" class="btn btn-light btn-sm border w-100" onclick="this.closest('.gallery-item').querySelector('input[type=file]').click()">Додати</button>
-        </div>
-
-        <div class="d-none">
-            <input type="file" name="gallery-__prefix__-image" accept="image/*" id="id_gallery-__prefix__-image">
-        </div>
+        <div class="gallery-preview-box"><i class="bi bi-image placeholder-icon"></i></div>
+        <button type="button" class="btn btn-light btn-sm border w-100" onclick="this.closest('.gallery-item').querySelector('input[type=file]').click()">Додати</button>
+        <div class="d-none"><input type="file" name="gallery-__prefix__-image" accept="image/*" onchange="previewGalleryImage(this)"></div>
     </div>
 </div>
 
-
 <script>
     const mainInput = document.getElementById('mainImageInput');
-    const clearInput = document.getElementById('clear_main_image_id');
     const mainPreview = document.getElementById('mainImagePreview');
     const mainIcon = document.getElementById('mainImageIcon');
+    const clearInput = document.getElementById('clear_main_image_id');
 
     if(mainInput) {
         mainInput.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = e => {
                     mainPreview.src = e.target.result;
                     mainPreview.style.display = 'block';
                     if(mainIcon) mainIcon.style.display = 'none';
@@ -298,68 +203,58 @@
     }
 
     function clearMainImage() {
-        if(mainInput) mainInput.value = '';
+        mainInput.value = '';
         mainPreview.src = '';
         mainPreview.style.display = 'none';
         if(mainIcon) mainIcon.style.display = 'block';
         clearInput.value = 'true';
     }
 
-
-    function deleteGalleryItem(btn) {
-        const wrapper = btn.closest('.gallery-item');
-        const deleteInput = wrapper.querySelector('input[name$="-DELETE"]');
-
-        if (deleteInput) {
-            deleteInput.checked = true;
-            wrapper.style.display = 'none';
-        } else {
-            wrapper.remove();
-        }
-    }
-
     function previewGalleryImage(input) {
         const wrapper = input.closest('.gallery-item');
         const imgContainer = wrapper.querySelector('.gallery-preview-box');
-
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                imgContainer.innerHTML = `<img src="${e.target.result}">`;
-            }
+            reader.onload = e => { imgContainer.innerHTML = `<img src="${e.target.result}">`; }
             reader.readAsDataURL(input.files[0]);
         }
     }
 
+    function deleteGalleryItem(btn) {
+        const item = btn.closest('.gallery-item');
+        const del = item.querySelector('input[name$="-DELETE"]');
+        if (del) { del.checked = true; item.style.display = 'none'; }
+        else { item.remove(); }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-        const addBtn = document.getElementById('add-gallery-btn');
-        const container = document.getElementById('gallery-container');
-        const totalFormsInput = document.getElementById('id_gallery-TOTAL_FORMS');
-        const emptyFormTemplate = document.getElementById('empty-form').innerHTML;
+        const addGalleryBtn = document.getElementById('add-gallery-btn');
+        const galleryContainer = document.getElementById('gallery-container');
+        const totalGalleryForms = document.getElementById('id_gallery-TOTAL_FORMS');
+        const emptyGalleryTemplate = document.getElementById('empty-form').innerHTML;
 
-        if (addBtn) {
-            addBtn.addEventListener('click', function() {
-                const formCount = parseInt(totalFormsInput.value);
-
-                const newFormHtml = emptyFormTemplate.replace(/__prefix__/g, formCount);
-                container.insertAdjacentHTML('beforeend', newFormHtml);
-
-                totalFormsInput.value = formCount + 1;
-
-                const newInputs = container.querySelectorAll('input[type="file"]');
-                const lastInput = newInputs[newInputs.length - 1];
-                lastInput.addEventListener('change', function() {
-                    previewGalleryImage(this);
-                });
+        if (addGalleryBtn) {
+            addGalleryBtn.addEventListener('click', () => {
+                const count = parseInt(totalGalleryForms.value);
+                galleryContainer.insertAdjacentHTML('beforeend', emptyGalleryTemplate.replace(/__prefix__/g, count));
+                totalGalleryForms.value = count + 1;
             });
         }
 
-        const existingInputs = container.querySelectorAll('input[type="file"]');
-        existingInputs.forEach(input => {
-            input.addEventListener('change', function() {
-                previewGalleryImage(this);
+        const switcher = document.getElementById('language-switcher');
+        if (switcher) {
+            switcher.querySelectorAll('.nav-link').forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    switcher.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    const lang = this.getAttribute('data-lang');
+
+                    document.querySelectorAll('.lang-uk').forEach(el => el.classList.toggle('d-none', lang !== 'uk'));
+                    document.querySelectorAll('.lang-en').forEach(el => el.classList.toggle('d-none', lang !== 'en'));
+                });
             });
-        });
+        }
     });
 </script>
 {% endblock %}

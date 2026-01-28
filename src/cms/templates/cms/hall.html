@@ -1,98 +1,96 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load i18n %}
 
 {% block content %}
-
-
    <div class="top_banner">
-       <img style="height: 500px; width: 100%" src="{{ hall.banner_image.url }}" alt="">
+       <img style="height: 500px; width: 100%" src="{{ hall.banner_image.url }}" alt="Banner">
    </div>
 
 <main class="container my-4">
     <div class="row g-4">
 
             <aside class="col-lg-3 order-lg-1">
-                <div class="card mb-3">
+                <div class="card mb-3 shadow-sm">
                     <div class="card-body">
-                        <h4 class="text-uppercase text-muted mb-2">Сеанси</h4>
+                        <h4 class="text-uppercase text-muted mb-2">{% trans "Сеанси" %}</h4>
                     </div>
 
-                <ul class="list-group">
+                <ul class="list-group list-group-flush">
                     {% for schedule in schedules %}
                         <a style="text-decoration: none" href="{% url 'main:booking' schedule.id %}">
-                    <li class="list-group-item d-flex justify-content-between">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
                         {{ schedule.id_movie.title }} <span class="badge text-bg-secondary">{{ schedule.date|date:"d.m H:i" }}</span>
                     </li>
                         </a>
                     {% endfor %}
                 </ul>
 
-                    <a class="btn btn-success mt-3" href="{% url 'main:schedule_page' %}">Розклад всіх сеансів</a>
+                    <a class="btn btn-success mt-3" href="{% url 'main:schedule_page' %}">{% trans "Розклад всіх сеансів" %}</a>
                 </div>
             </aside>
 
             <section class="col-lg-9 order-lg-2">
-                <h4 class="text-uppercase d-flex justify-content-center">Зал {{ hall.number }}</h4>
+                <h4 class="text-uppercase d-flex justify-content-center fw-bold">{% trans "Зал" %} {{ hall.number }}</h4>
 
-                <div class="mb-2">
+                <div class="mb-4">
                     {{ hall.description }}
                 </div>
 
-                <h4 class="mb-2 d-flex justify-content-center">Схема заду</h4>
+                <h4 class="mb-2 d-flex justify-content-center fw-bold">{% trans "Схема залу" %}</h4>
 
-                <div class="mb-2">
-                    <div id="hall-container" class="d-flex flex-column gap-2 overflow-auto py-3">
+                <div class="mb-4">
+                    <div id="hall-container" class="d-flex flex-column gap-2 overflow-auto py-3 border rounded bg-light">
                         <div class="text-center text-muted py-5" id="loader">
-                            <div class="spinner-border spinner-border-sm me-2"></div> Завантаження схеми залу...
+                            <div class="spinner-border spinner-border-sm me-2"></div> {% trans "Завантаження схеми залу..." %}
                         </div>
                     </div>
                 </div>
 
-                    <h4 class="mb-2 d-flex justify-content-center">Фотогалерея</h4>
-                <div id="gallery-{{ hall.id }}" class="carousel slide" data-ride="carousel" data-bs-interva="3000">
+                <h4 class="mb-2 d-flex justify-content-center fw-bold">{% trans "Фотогалерея" %}</h4>
+                <div id="gallery-{{ hall.id }}" class="carousel slide shadow" data-ride="carousel" data-bs-interval="3000">
 
-    <div class="carousel-indicators">
-      {% for image in hall.gallery_image.all %}
-        <button type="button"
-                data-target="#gallery-{{ cinema.id }}"
-                data-slide-to="{{ forloop.counter0 }}"
-                {% if forloop.first %}class="active"{% endif %}>
-        </button>
-      {% endfor %}
-    </div>
+                    <div class="carousel-indicators">
+                      {% for image in hall.gallery_image.all %}
+                        <button type="button"
+                                data-target="#gallery-{{ hall.id }}"
+                                data-slide-to="{{ forloop.counter0 }}"
+                                {% if forloop.first %}class="active"{% endif %}>
+                        </button>
+                      {% endfor %}
+                    </div>
 
-    <div class="carousel-inner">
-      {% for image in hall.gallery_image.all %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-          <img style="height: 500px; width: 100%; object-fit: cover" src="{{ image.image.url }}" class="d-block w-100" alt="Слайд">
-        </div>
-      {% endfor %}
-    </div>
+                    <div class="carousel-inner">
+                      {% for image in hall.gallery_image.all %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                          <img style="height: 500px; width: 100%; object-fit: cover" src="{{ image.image.url }}" class="d-block w-100" alt="{% trans 'Слайд' %}">
+                        </div>
+                      {% endfor %}
+                    </div>
 
-    {% if hall.gallery_image.count > 1 %}
-      <a class="carousel-control-prev" href="#gallery-{{ hall.id }}" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" href="#gallery-{{ hall.id }}" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
-    {% endif %}
-  </div>
+                    {% if hall.gallery_image.count > 1 %}
+                      <a class="carousel-control-prev" href="#gallery-{{ hall.id }}" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                      </a>
+                      <a class="carousel-control-next" href="#gallery-{{ hall.id }}" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                      </a>
+                    {% endif %}
+                </div>
             </section>
-
-
-
     </div>
-
-
 </main>
+
+
 
 <script>
 (function () {
     const hallSchemeUrl = "{{ hall.scheme_of_hall.url }}";
+
+    const rowTranslation = "{% trans 'Ряд' %}";
+    const errorTranslation = "{% trans 'Помилка завантаження схеми' %}";
 
     const initialBooked = {
         {% for t in booked_tickets %}
@@ -103,17 +101,15 @@
     const container = document.getElementById('hall-container');
     const loader = document.getElementById('loader');
 
-
-
     if (hallSchemeUrl) {
         fetch(hallSchemeUrl)
             .then(res => res.json())
             .then(schema => {
-                loader.remove();
+                if(loader) loader.remove();
                 renderHall(schema);
             })
             .catch(err => {
-                loader.innerHTML = '<span class="text-danger">Помилка завантаження схеми</span>';
+                if(loader) loader.innerHTML = `<span class="text-danger">${errorTranslation}</span>`;
             });
     }
 
@@ -124,8 +120,8 @@
 
             const label = document.createElement('div');
             label.className = 'me-3 small text-muted';
-            label.style.width = '50px';
-            label.innerText = `Ряд ${rowData.row_number}`;
+            label.style.width = '60px';
+            label.innerText = `${rowTranslation} ${rowData.row_number}`;
             rowDiv.appendChild(label);
 
             const seatsWrapper = document.createElement('div');
@@ -134,24 +130,19 @@
             for (let i = 1; i <= rowData.seats_count; i++) {
                 const btn = document.createElement('button');
                 const seatId = `${rowData.row_number}-${i}`;
-                btn.className = 'seat btn btn-outline-warning';
+                btn.className = 'seat btn btn-sm btn-outline-warning';
                 btn.innerText = i;
                 btn.dataset.row = rowData.row_number;
                 btn.dataset.seat = i;
                 btn.dataset.id = seatId;
 
-                if (initialBooked[seatId]) {
-                    updateSeatUI(rowData.row_number, i, initialBooked[seatId]);
-                }
 
-                btn.onclick = () => handleSeatClick(btn);
                 seatsWrapper.appendChild(btn);
             }
             rowDiv.appendChild(seatsWrapper);
             container.appendChild(rowDiv);
         });
     }
-
 })();
 </script>
 {% endblock %}

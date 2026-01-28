@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
-
-{% block content %}
+{% load i18n %} {% block content %}
 
 <style>
      .cinema-card {
@@ -19,7 +17,9 @@
 </style>
 
 <div class="container-fluid mt-4">
-    <p style="text-align: center; font-size: 20px; font-family: 'Arial', 'sans-serif';"> Наші кінотеатри</p>
+    <p style="text-align: center; font-size: 20px; font-family: 'Arial', 'sans-serif';">
+        {% trans "Наші кінотеатри" %}
+    </p>
     <br>
      <div class="row">
         {% for cinema in cinemas %}
@@ -47,7 +47,7 @@
         </div>
         {% empty %}
         <div class="col-12 text-center text-muted mt-5">
-            <h4>Кінотеатрів немає</h4>
+            <h4>{% trans "Кінотеатрів немає" %}</h4>
         </div>
         {% endfor %}
     </div>

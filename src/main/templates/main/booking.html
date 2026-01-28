@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 <div class="container my-4">
@@ -10,47 +11,47 @@
       <p class="text-muted small">{{ schedule.date|date:"d.m" }}<br>{{ schedule.id_hall.id_cinema.title }}</p>
 
       <div class="border rounded d-flex align-items-center justify-content-center bg-light" style="height:200px;">
-        Реклама
+        {% trans "Реклама" %}
       </div>
     </aside>
 
     <main class="col-12 col-md-9">
       <div class="d-flex flex-wrap align-items-center gap-3 mb-3 bg-dark p-3 rounded text-white">
         <div class="badge text-bg-warning p-3">
-          <div class="small text-uppercase">Ціна, грн</div>
+          <div class="small text-uppercase">{% trans "Ціна, грн" %}</div>
           <div class="fs-4 fw-bold" id="pricePerSeat">{{ schedule.price }}</div>
         </div>
         <div class="ms-auto d-flex gap-4 align-items-center">
-          <div>Квитків: <span id="tickets-count" class="fw-bold text-warning">0</span></div>
-          <div>Сума: <span id="sum-amount" class="fw-bold text-warning">0</span> грн</div>
+          <div>{% trans "Квитків" %}: <span id="tickets-count" class="fw-bold text-warning">0</span></div>
+          <div>{% trans "Сума" %}: <span id="sum-amount" class="fw-bold text-warning">0</span> {% trans "грн" %}</div>
         </div>
       </div>
 
       <div class="text-center my-4">
         <div class="screen-glow"></div>
-        <div class="fw-bold small text-muted text-uppercase tracking-widest">Екран</div>
+        <div class="fw-bold small text-muted text-uppercase tracking-widest">{% trans "Екран" %}</div>
       </div>
 
       <div id="hall-container" class="d-flex flex-column gap-2 overflow-auto py-3">
         <div class="text-center text-muted py-5" id="loader">
-          <div class="spinner-border spinner-border-sm me-2"></div> Завантаження схеми залу...
+          <div class="spinner-border spinner-border-sm me-2"></div> {% trans "Завантаження схеми залу..." %}
         </div>
       </div>
 
       <div class="d-flex flex-wrap justify-content-center gap-3 mt-5 p-3 border-top">
         <div class="d-flex align-items-center gap-2">
-            <span class="seat btn btn-outline-warning disabled"></span> <small>Вільне</small>
+            <span class="seat btn btn-outline-warning disabled"></span> <small>{% trans "Вільне" %}</small>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <span class="seat btn btn-warning disabled"></span> <small>Бронь</small>
+            <span class="seat btn btn-warning disabled"></span> <small>{% trans "Бронь" %}</small>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <span class="seat btn btn-secondary disabled"></span> <small>Куплено</small>
+            <span class="seat btn btn-secondary disabled"></span> <small>{% trans "Куплено" %}</small>
         </div>
       </div>
 
       <div class="text-center mt-4">
-          <button id="buy-button" class="btn btn-lg btn-success px-5 fw-bold shadow-sm">Оформити замовлення</button>
+          <button id="buy-button" class="btn btn-lg btn-success px-5 fw-bold shadow-sm">{% trans "Оформити замовлення" %}</button>
       </div>
     </main>
   </div>
@@ -61,8 +62,6 @@
   .screen-glow { height: 6px; background: linear-gradient(to bottom, #f2b400, transparent); margin: 0 auto 10px; width: 80%; border-radius: 50%; opacity: 0.5; }
   .tracking-widest { letter-spacing: 0.3em; }
   #hall-container { background: #1a1a1a; border-radius: 15px; padding: 20px; }
-
-
   .seat.paid { background-color: #6c757d !important; border-color: #6c757d !important; color: white !important; pointer-events: none; }
   .seat.reserved { background-color: #f2b400 !important; border-color: #f2b400 !important; color: black !important; }
 </style>
@@ -72,6 +71,12 @@
     const scheduleId = "{{ schedule.id }}";
     const hallSchemeUrl = "{{ hall_scheme.url }}";
     const price = Number("{{ schedule.price }}") || 0;
+
+    // Переклади для JS
+    const rowLang = "{% trans 'Ряд' %}";
+    const selectSeatsLang = "{% trans 'Будь ласка, спочатку оберіть місця!' %}";
+    const processingLang = "{% trans 'Замовлення обробляється...' %}";
+    const errorSchemeLang = "{% trans 'Помилка завантаження схеми' %}";
 
     const initialBooked = {
         {% for t in booked_tickets %}
@@ -93,7 +98,7 @@
         const reservedCount = document.querySelectorAll('.seat.reserved').length;
 
         if (reservedCount === 0) {
-            alert("Будь ласка, спочатку оберіть місця!");
+            alert(selectSeatsLang);
             return;
         }
 
@@ -101,18 +106,18 @@
             'action': 'purchase_all'
         }));
 
-        alert("Замовлення обробляється...");
+        alert(processingLang);
     });
 
     if (hallSchemeUrl) {
         fetch(hallSchemeUrl)
             .then(res => res.json())
             .then(schema => {
-                loader.remove();
+                if(loader) loader.remove();
                 renderHall(schema);
             })
             .catch(err => {
-                loader.innerHTML = '<span class="text-danger">Помилка завантаження схеми</span>';
+                if(loader) loader.innerHTML = `<span class="text-danger">${errorSchemeLang}</span>`;
             });
     }
 
@@ -123,8 +128,8 @@
 
             const label = document.createElement('div');
             label.className = 'me-3 small text-muted';
-            label.style.width = '50px';
-            label.innerText = `Ряд ${rowData.row_number}`;
+            label.style.width = '60px';
+            label.innerText = `${rowLang} ${rowData.row_number}`;
             rowDiv.appendChild(label);
 
             const seatsWrapper = document.createElement('div');

@@ -10,6 +10,7 @@
         margin-bottom: 20px;
         background-color: #fff;
         position: relative;
+        transition: all 0.3s ease;
     }
     .form-switch .form-check-input {
         width: 3em;
@@ -31,29 +32,57 @@
         max-height: 100%;
         object-fit: contain;
     }
+    .d-none {
+        display: none !important;
+    }
 </style>
 
 <div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12 text-end">
+            <ul class="nav nav-tabs justify-content-end d-inline-flex" id="language-switcher">
+                <li class="nav-item">
+                    <a class="nav-link active fw-bold" href="#" data-lang="uk">UA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-bold" href="#" data-lang="en">EN</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <h3 class="text-center mb-4 fw-bold">Контакти</h3>
+        <h3 class="text-center mb-4 fw-bold">
+            <span class="lang-uk">Налаштування контактів KinoCMS</span>
+            <span class="lang-en d-none">KinoCMS Contacts Settings</span>
+        </h3>
 
         <div id="contact-formset-container">
             {{ formset.management_form }}
 
             {% for form in formset %}
-                <div class="contact-card">
+                <div class="contact-card shadow-sm">
                     {{ form.id }}
                     <div class="d-none">{{ form.DELETE }}</div>
 
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Назва кінотеатру</label>
-                            {{ form.cinema_name }}
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <div class="lang-uk">
+                                <label class="form-label fw-bold">Назва кінотеатру</label>
+                                {{ form.cinema_name_uk }}
+                            </div>
+                            <div class="lang-en d-none">
+                                <label class="form-label fw-bold">Cinema name</label>
+                                {{ form.cinema_name_en }}
+                            </div>
                         </div>
-                        <div class="col-md-6 d-flex justify-content-end align-items-center">
-                            <label class="form-check-label me-3 fw-bold">ВКЛ / ВИКЛ</label>
+                        <div class="col-md-4 d-flex justify-content-end align-items-center mt-4">
+                            <label class="form-check-label me-3 fw-bold small">
+                                <span class="lang-uk">ВКЛ / ВИКЛ</span>
+                                <span class="lang-en d-none">ON / OFF</span>
+                            </label>
                             <div class="form-check form-switch">
                                 {{ form.is_active }}
                             </div>
@@ -62,19 +91,25 @@
 
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label class="form-label fw-bold">Адреса</label>
-                            {{ form.address }}
+                            <div class="lang-uk">
+                                <label class="form-label fw-bold">Адреса</label>
+                                {{ form.address_uk }}
+                            </div>
+                            <div class="lang-en d-none">
+                                <label class="form-label fw-bold">Address</label>
+                                {{ form.address_en }}
+                            </div>
                         </div>
                     </div>
 
-
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Телефон</label>
+                            <label class="form-label fw-bold">
+                                <span class="lang-uk">Телефон</span>
+                                <span class="lang-en d-none">Phone</span>
+                            </label>
                             {{ form.phone_number }}
                         </div>
-
-
                         <div class="col-md-6">
                             <label class="form-label fw-bold">Email</label>
                             {{ form.email }}
@@ -83,149 +118,173 @@
 
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Координати (Широта)</label>
+                            <label class="form-label fw-bold text-muted small">
+                                <span class="lang-uk">Координати (Широта)</span>
+                                <span class="lang-en d-none">Coordinates (Latitude)</span>
+                            </label>
                             {{ form.latitude }}
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Координати (Довгота)</label>
+                            <label class="form-label fw-bold text-muted small">
+                                <span class="lang-uk">Координати (Довгота)</span>
+                                <span class="lang-en d-none">Coordinates (Longitude)</span>
+                            </label>
                             {{ form.longitude }}
                         </div>
                     </div>
 
                     <div class="row mb-3 align-items-center">
-                        <label class="col-sm-2 col-form-label fw-bold">Лого</label>
+                        <label class="col-sm-2 col-form-label fw-bold">
+                            <span class="lang-uk">Логотип</span>
+                            <span class="lang-en d-none">Logo</span>
+                        </label>
                         <div class="col-sm-10 d-flex align-items-center">
-
-                            <div class="logo-preview me-3">
+                            <div class="logo-preview me-3 border shadow-sm">
                                 {% if form.instance.pk and form.instance.logo %}
                                     <img src="{{ form.instance.logo.url }}">
                                 {% else %}
                                     <i class="bi bi-image fs-2 text-muted"></i>
                                 {% endif %}
                             </div>
-
-                            <div class="d-none file-input-wrapper">
-                                {{ form.logo }}
-                            </div>
-
-                            <button type="button" class="btn btn-secondary me-2" onclick="triggerContactUpload(this)">
-                                Завантажити
+                            <div class="d-none">{{ form.logo }}</div>
+                            <button type="button" class="btn btn-outline-secondary btn-sm me-2" onclick="triggerContactUpload(this)">
+                                <span class="lang-uk">Завантажити</span>
+                                <span class="lang-en d-none">Upload</span>
                             </button>
-
-                            <button type="button" class="btn btn-danger ms-auto" onclick="deleteContactBlock(this)">
-                                Видалити
+                            <button type="button" class="btn btn-outline-danger btn-sm ms-auto" onclick="deleteContactBlock(this)">
+                                <i class="bi bi-trash"></i>
+                                <span class="lang-uk">Видалити</span>
+                                <span class="lang-en d-none">Delete</span>
                             </button>
                         </div>
                     </div>
-
                 </div>
             {% endfor %}
         </div>
 
         <div class="text-center mb-5">
-            <button type="button" class="btn btn-outline-success rounded-pill px-4" id="add-contact-btn">
-                <i class="bi bi-plus-lg"></i> Додати ще кінотеатр
+            <button type="button" class="btn btn-success rounded-pill px-4 shadow-sm" id="add-contact-btn">
+                <i class="bi bi-plus-lg"></i>
+                <span class="lang-uk">Додати ще кінотеатр</span>
+                <span class="lang-en d-none">Add another cinema</span>
             </button>
         </div>
 
-        <hr>
+        <hr class="my-5">
 
-        <div class="row mb-3 mt-4">
-            <label class="col-sm-2 col-form-label fw-bold pt-0">SEO блок:</label>
-            <div class="col-sm-10">
-                <div class="row mb-2 align-items-center">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">URL:</label>
-                    <div class="col-sm-11">{{ seo_form.url }}</div>
+        <div class="card p-4 bg-light shadow-sm">
+            <h5 class="fw-bold mb-4">
+                <span class="lang-uk">SEO блок</span>
+                <span class="lang-en d-none">SEO Block</span>
+            </h5>
+            <div class="row mb-3 align-items-center">
+                <label class="col-sm-2 col-form-label fw-bold small">URL:</label>
+                <div class="col-sm-10">{{ seo_form.url }}</div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <label class="col-sm-2 col-form-label fw-bold small">Title:</label>
+                <div class="col-sm-10">
+                    <div class="lang-uk">{{ seo_form.title_uk }}</div>
+                    <div class="lang-en d-none">{{ seo_form.title_en }}</div>
                 </div>
-                <div class="row mb-2 align-items-center">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">Title:</label>
-                    <div class="col-sm-11">{{ seo_form.title }}</div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <label class="col-sm-2 col-form-label fw-bold small">Keywords:</label>
+                <div class="col-sm-10">
+                    <div class="lang-uk">{{ seo_form.keywords_uk }}</div>
+                    <div class="lang-en d-none">{{ seo_form.keywords_en }}</div>
                 </div>
-                <div class="row mb-2 align-items-center">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">Keywords:</label>
-                    <div class="col-sm-11">{{ seo_form.keywords }}</div>
-                </div>
-                <div class="row mb-2">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">Description:</label>
-                    <div class="col-sm-11">{{ seo_form.description }}</div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label fw-bold small">Description:</label>
+                <div class="col-sm-10">
+                    <div class="lang-uk">{{ seo_form.description_uk }}</div>
+                    <div class="lang-en d-none">{{ seo_form.description_en }}</div>
                 </div>
             </div>
         </div>
 
         <div class="text-center mt-5 mb-5">
-            <button type="submit" class="btn btn-secondary px-5">Зберегти</button>
+            <button type="submit" class="btn btn-primary px-5 btn-lg shadow">
+                <span class="lang-uk">Зберегти всі зміни</span>
+                <span class="lang-en d-none">Save all changes</span>
+            </button>
         </div>
-
     </form>
 </div>
 
-<div id="empty-form" style="display:none;">
-    <div class="contact-card">
-        <input type="hidden" name="form-__prefix__-id" id="id_form-__prefix__-id">
-        <div class="d-none">
-            <input type="checkbox" name="form-__prefix__-DELETE" id="id_form-__prefix__-DELETE">
-        </div>
+<div id="empty-form" class="d-none">
+    <div class="contact-card shadow-sm border-success">
+        <input type="hidden" name="form-__prefix__-id">
+        <div class="d-none"><input type="checkbox" name="form-__prefix__-DELETE"></div>
 
-        <div class="row mb-3 align-items-center">
-            <div class="col-md-6">
-                <label class="form-label fw-bold">Назва кінотеатру</label>
-                {{ formset.empty_form.cinema_name }}
-            </div>
-            <div class="col-md-6 d-flex justify-content-end align-items-center">
-                <label class="form-check-label me-3 fw-bold">ВКЛ / ВИКЛ</label>
-                <div class="form-check form-switch">
-                    {{ formset.empty_form.is_active }}
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <div class="lang-uk">
+                    <label class="form-label fw-bold">Назва кінотеатру</label>
+                    {{ formset.empty_form.cinema_name_uk }}
                 </div>
+                <div class="lang-en d-none">
+                    <label class="form-label fw-bold">Cinema name</label>
+                    {{ formset.empty_form.cinema_name_en }}
+                </div>
+            </div>
+            <div class="col-md-4 d-flex justify-content-end align-items-center mt-4">
+                <label class="form-check-label me-3 fw-bold small">
+                    <span class="lang-uk">ВКЛ / ВИКЛ</span>
+                    <span class="lang-en d-none">ON / OFF</span>
+                </label>
+                <div class="form-check form-switch">{{ formset.empty_form.is_active }}</div>
             </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-12">
-                <label class="form-label fw-bold">Адреса</label>
-                {{ formset.empty_form.address }}
+                <div class="lang-uk">
+                    <label class="form-label fw-bold">Адреса</label>
+                    {{ formset.empty_form.address_uk }}
+                </div>
+                <div class="lang-en d-none">
+                    <label class="form-label fw-bold">Address</label>
+                    {{ formset.empty_form.address_en }}
+                </div>
             </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
-                <label class="form-label fw-bold">Телефон</label>
+                <label class="form-label fw-bold"><span class="lang-uk">Телефон</span><span class="lang-en d-none">Phone</span></label>
                 {{ formset.empty_form.phone_number }}
             </div>
-        <div class="col-md-6">
-        <label class="form-label fw-bold">Email</label>
-        {{ formset.empty_form.email }}
-    </div>
-</div>
-
-        <div class="row mb-3">
             <div class="col-md-6">
-                <label class="form-label fw-bold">Координати (Широта)</label>
-                {{ formset.empty_form.latitude }}
-            </div>
-            <div class="col-md-6">
-                <label class="form-label fw-bold">Координати (Довгота)</label>
-                {{ formset.empty_form.longitude }}
+                <label class="form-label fw-bold">Email</label>
+                {{ formset.empty_form.email }}
             </div>
         </div>
 
-        <div class="row mb-3 align-items-center">
-            <label class="col-sm-2 col-form-label fw-bold">Лого</label>
+        <div class="row mb-3">
+            <div class="col-md-6">{{ formset.empty_form.latitude }}</div>
+            <div class="col-md-6">{{ formset.empty_form.longitude }}</div>
+        </div>
+
+        <div class="row align-items-center">
+            <div class="col-sm-2 fw-bold">
+                <span class="lang-uk">Лого</span>
+                <span class="lang-en d-none">Logo</span>
+            </div>
             <div class="col-sm-10 d-flex align-items-center">
-
-                <div class="logo-preview me-3">
-                    <i class="bi bi-image fs-2 text-muted"></i>
-                </div>
-
-                <div class="d-none file-input-wrapper">
-                    {{ formset.empty_form.logo }}
-                </div>
-
-                <button type="button" class="btn btn-secondary me-2" onclick="triggerContactUpload(this)">
-                    Завантажити
+                <div class="logo-preview me-3"><i class="bi bi-image fs-2 text-muted"></i></div>
+                <div class="d-none">{{ formset.empty_form.logo }}</div>
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="triggerContactUpload(this)">
+                    <span class="lang-uk">Завантажити</span>
+                    <span class="lang-en d-none">Upload</span>
                 </button>
-
-                <button type="button" class="btn btn-danger ms-auto" onclick="deleteContactBlock(this)">
-                    Видалити
+                <button type="button" class="btn btn-outline-danger btn-sm ms-auto" onclick="deleteContactBlock(this)">
+                    <span class="lang-uk">Видалити</span>
+                    <span class="lang-en d-none">Delete</span>
                 </button>
             </div>
         </div>
@@ -236,30 +295,24 @@
     function triggerContactUpload(btn) {
         const card = btn.closest('.contact-card');
         const fileInput = card.querySelector('input[type="file"]');
-
         if (fileInput) {
             fileInput.click();
-
             fileInput.onchange = function() {
                 const file = this.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        const previewBox = card.querySelector('.logo-preview');
-                        previewBox.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 100%; object-fit: contain;">`;
+                        card.querySelector('.logo-preview').innerHTML = `<img src="${e.target.result}">`;
                     }
                     reader.readAsDataURL(file);
                 }
             };
-        } else {
-            console.error("Поле файлу не знайдено! Перевірте forms.py");
         }
     }
 
     function deleteContactBlock(btn) {
         const card = btn.closest('.contact-card');
         const deleteInput = card.querySelector('input[name$="-DELETE"]');
-
         if (deleteInput) {
             deleteInput.checked = true;
             card.style.display = 'none';
@@ -269,16 +322,41 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        const switcher = document.getElementById('language-switcher');
         const addBtn = document.getElementById('add-contact-btn');
         const container = document.getElementById('contact-formset-container');
         const totalForms = document.getElementById('id_form-TOTAL_FORMS');
         const emptyTemplate = document.getElementById('empty-form').innerHTML;
+
+        switcher.querySelectorAll('.nav-link').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                switcher.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                const lang = this.getAttribute('data-lang');
+                if (lang === 'uk') {
+                    document.querySelectorAll('.lang-uk').forEach(el => el.classList.remove('d-none'));
+                    document.querySelectorAll('.lang-en').forEach(el => el.classList.add('d-none'));
+                } else {
+                    document.querySelectorAll('.lang-uk').forEach(el => el.classList.add('d-none'));
+                    document.querySelectorAll('.lang-en').forEach(el => el.classList.remove('d-none'));
+                }
+            });
+        });
 
         addBtn.addEventListener('click', function() {
             const count = parseInt(totalForms.value);
             const newForm = emptyTemplate.replace(/__prefix__/g, count);
             container.insertAdjacentHTML('beforeend', newForm);
             totalForms.value = count + 1;
+
+            const currentLang = switcher.querySelector('.nav-link.active').getAttribute('data-lang');
+            const lastCard = container.lastElementChild;
+            if (currentLang === 'en') {
+                lastCard.querySelectorAll('.lang-uk').forEach(el => el.classList.add('d-none'));
+                lastCard.querySelectorAll('.lang-en').forEach(el => el.classList.remove('d-none'));
+            }
         });
     });
 </script>

@@ -1,0 +1,325 @@
+# KinoCMS Translation File.
+# Copyright (C) 2026
+# This file is distributed under the same license as the KinoCMS package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: KinoCMS 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-28 16:00+0200\n"
+"PO-Revision-Date: 2026-01-28 16:15+0200\n"
+"Last-Translator: Gemini\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\src\cms\templates\cms\cinema.html:17
+#: .\src\main\templates\main\booking.html:14
+#: .\src\main\templates\main\schedule.html:65 .\templates\base.html:136
+msgid "Реклама"
+msgstr "Advertising"
+
+#: .\src\cms\templates\cms\cinema.html:23
+msgid "Кількість залів"
+msgstr "Number of halls"
+
+#: .\src\cms\templates\cms\cinema.html:27 .\src\cms\templates\cms\hall.html:34
+#: .\src\main\templates\main\schedule.html:51
+msgid "Зал"
+msgstr "Hall"
+
+#: .\src\cms\templates\cms\cinema.html:36
+msgid "Сьогодні"
+msgstr "Today"
+
+#: .\src\cms\templates\cms\cinema.html:47 .\src\cms\templates\cms\hall.html:29
+msgid "Розклад всіх сеансів"
+msgstr "All sessions schedule"
+
+#: .\src\cms\templates\cms\cinema.html:66
+msgid "Розклад сеансів"
+msgstr "Sessions schedule"
+
+#: .\src\cms\templates\cms\cinema.html:76
+msgid "Умови та сервіси"
+msgstr "Terms and services"
+
+#: .\src\cms\templates\cms\cinema.html:81
+msgid "Дитяча кімната"
+msgstr "Children's room"
+
+#: .\src\cms\templates\cms\cinema.html:82
+msgid "Окремий простір для дітей з доглядом та ігровою зоною під час сеансів."
+msgstr "A separate space for children with supervision and a play area during sessions."
+
+#: .\src\cms\templates\cms\cinema.html:87
+msgid "VIP-зал"
+msgstr "VIP hall"
+
+#: .\src\cms\templates\cms\cinema.html:88
+msgid "Комфортні крісла, обслуговування та розширене меню напоїв і закусок."
+msgstr "Comfortable seats, service, and an expanded menu of drinks and snacks."
+
+#: .\src\cms\templates\cms\cinema.html:93
+msgid "Бар Hitchcock"
+msgstr "Hitchcock Bar"
+
+#: .\src\cms\templates\cms\cinema.html:94
+msgid "Попкорн, начос, десерти, коктейлі та спеціальні комбо-набори."
+msgstr "Popcorn, nachos, desserts, cocktails, and special combo sets."
+
+#: .\src\cms\templates\cms\cinema.html:99
+msgid "Подарункові сертифікати"
+msgstr "Gift certificates"
+
+#: .\src\cms\templates\cms\cinema.html:100
+msgid "Сертифікати на будь-яку суму та абонементи на прем’єри."
+msgstr "Certificates for any amount and season tickets for premieres."
+
+#: .\src\cms\templates\cms\cinema.html:108 .\src\cms\templates\cms\hall.html:50
+#: .\src\main\templates\main\main_page.html:106
+#: .\src\main\templates\main\page.html:79
+msgid "Фотогалерея"
+msgstr "Photo gallery"
+
+#: .\src\cms\templates\cms\cinema.html:143
+msgid "Адреса"
+msgstr "Address"
+
+#: .\src\cms\templates\cms\cinema.html:151 .\templates\base.html:40
+#: .\templates\base.html:142
+msgid "Контакти"
+msgstr "Contacts"
+
+#: .\src\cms\templates\cms\cinema.html:152
+msgid "Каса"
+msgstr "Ticket office"
+
+#: .\src\cms\templates\cms\cinemas.html:21
+msgid "Наші кінотеатри"
+msgstr "Our cinemas"
+
+#: .\src\cms\templates\cms\cinemas.html:50
+msgid "Кінотеатрів немає"
+msgstr "No cinemas available"
+
+#: .\src\cms\templates\cms\hall.html:16
+msgid "Сеанси"
+msgstr "Sessions"
+
+#: .\src\cms\templates\cms\hall.html:40
+msgid "Схема залу"
+msgstr "Hall scheme"
+
+#: .\src\cms\templates\cms\hall.html:45
+#: .\src\main\templates\main\booking.html:37
+msgid "Завантаження схеми залу..."
+msgstr "Loading hall scheme..."
+
+#: .\src\cms\templates\cms\hall.html:66 .\src\main\templates\main\page.html:96
+msgid "Слайд"
+msgstr "Slide"
+
+#: .\src\cms\templates\cms\hall.html:92
+#: .\src\main\templates\main\booking.html:76
+msgid "Ряд"
+msgstr "Row"
+
+#: .\src\cms\templates\cms\hall.html:93
+#: .\src\main\templates\main\booking.html:79
+msgid "Помилка завантаження схеми"
+msgstr "Error loading scheme"
+
+#: .\src\main\templates\main\booking.html:21
+#: .\src\main\templates\main\schedule.html:52
+msgid "Ціна, грн"
+msgstr "Price, UAH"
+
+#: .\src\main\templates\main\booking.html:25
+msgid "Квитків"
+msgstr "Tickets"
+
+#: .\src\main\templates\main\booking.html:26
+msgid "Сума"
+msgstr "Total"
+
+#: .\src\main\templates\main\booking.html:26
+msgid "грн"
+msgstr "UAH"
+
+#: .\src\main\templates\main\booking.html:32
+msgid "Екран"
+msgstr "Screen"
+
+#: .\src\main\templates\main\booking.html:43
+msgid "Вільне"
+msgstr "Available"
+
+#: .\src\main\templates\main\booking.html:46
+msgid "Бронь"
+msgstr "Reserved"
+
+#: .\src\main\templates\main\booking.html:49
+msgid "Куплено"
+msgstr "Sold"
+
+#: .\src\main\templates\main\booking.html:54
+msgid "Оформити замовлення"
+msgstr "Place order"
+
+#: .\src\main\templates\main\booking.html:77
+msgid "Будь ласка, спочатку оберіть місця!"
+msgstr "Please select seats first!"
+
+#: .\src\main\templates\main\booking.html:78
+msgid "Замовлення обробляється..."
+msgstr "Processing order..."
+
+#: .\src\main\templates\main\main_page.html:4
+msgid "Головна сторінка"
+msgstr "Home page"
+
+#: .\src\main\templates\main\main_page.html:60
+msgid "Дивіться сьогодні!"
+msgstr "Watch today!"
+
+#: .\src\main\templates\main\main_page.html:73
+#: .\src\main\templates\main\main_page.html:96
+msgid "Купити квиток"
+msgstr "Buy a ticket"
+
+#: .\src\main\templates\main\main_page.html:82
+msgid "Скоро на екранах!"
+msgstr "Coming soon!"
+
+#: .\src\main\templates\main\news_and_actions.html:79
+msgid "Список"
+msgstr "List"
+
+#: .\src\main\templates\main\news_or_action.html:27
+msgid "Banner Image"
+msgstr "Banner Image"
+
+#: .\src\main\templates\main\news_or_action.html:79
+msgid "До всіх новин"
+msgstr "To all news"
+
+#: .\src\main\templates\main\news_or_action.html:81
+msgid "До всіх акцій"
+msgstr "To all promotions"
+
+#: .\src\main\templates\main\news_or_action.html:90
+msgid "Кадри з події"
+msgstr "Event photos"
+
+#: .\src\main\templates\main\page.html:104
+msgid "Назад"
+msgstr "Back"
+
+#: .\src\main\templates\main\page.html:108
+msgid "Вперед"
+msgstr "Next"
+
+#: .\src\main\templates\main\partials\schedule_rows.html:25
+#: .\src\main\templates\main\schedule.html:53
+msgid "Бронювати"
+msgstr "Book"
+
+#: .\src\main\templates\main\partials\schedule_rows.html:32
+msgid "На жаль, сеансів за вказаними параметрами не знайдено."
+msgstr "Unfortunately, no sessions were found for the specified parameters."
+
+#: .\src\main\templates\main\poster.html:3
+#: .\src\main\templates\main\poster.html:15 .\templates\base.html:29
+#: .\templates\base.html:112
+msgid "Афіша"
+msgstr "Billboard"
+
+#: .\src\main\templates\main\poster.html:20
+msgid "Скоро на екранах"
+msgstr "Coming soon"
+
+#: .\src\main\templates\main\schedule.html:7
+msgid "Показувати тільки:"
+msgstr "Show only:"
+
+#: .\src\main\templates\main\schedule.html:18
+msgid "Кінотеатр: всі"
+msgstr "Cinema: all"
+
+#: .\src\main\templates\main\schedule.html:27
+msgid "Фільм: всі"
+msgstr "Movie: all"
+
+#: .\src\main\templates\main\schedule.html:34
+#: .\src\main\templates\main\schedule.html:83
+msgid "Зал: всі"
+msgstr "Hall: all"
+
+#: .\src\main\templates\main\schedule.html:41
+#: .\src\main\templates\main\schedule.html:84
+msgid "Оберіть дату та фільтри"
+msgstr "Select date and filters"
+
+#: .\src\main\templates\main\schedule.html:49
+msgid "Час"
+msgstr "Time"
+
+#: .\src\main\templates\main\schedule.html:50
+msgid "Фільм"
+msgstr "Movie"
+
+#: .\src\main\templates\main\schedule.html:85
+msgid "Помилка завантаження розкладу:"
+msgstr "Error loading schedule:"
+
+#: .\templates\base.html:28
+msgid "Головна"
+msgstr "Home"
+
+#: .\templates\base.html:30 .\templates\base.html:115
+msgid "Розклад"
+msgstr "Schedule"
+
+#: .\templates\base.html:31 .\templates\base.html:121
+msgid "Кінотеатри"
+msgstr "Cinemas"
+
+#: .\templates\base.html:36
+msgid "Про нас"
+msgstr "About us"
+
+#: .\templates\base.html:39 .\templates\base.html:133
+msgid "Новини"
+msgstr "News"
+
+#: .\templates\base.html:80
+msgid "Пошук..."
+msgstr "Search..."
+
+#: .\templates\base.html:93
+msgid "Увійти"
+msgstr "Login"
+
+#: .\templates\base.html:94
+msgid "Реєстрація"
+msgstr "Register"
+
+#: .\templates\base.html:118
+msgid "Скоро в прокаті"
+msgstr "Soon in theaters"
+
+#: .\templates\base.html:124
+msgid "Акції"
+msgstr "Promotions"
+
+#: .\templates\base.html:130
+msgid "Про кінотеатр"
+msgstr "About cinema"
+
+#: .\templates\base.html:139
+msgid "Кафе-Бар"
+msgstr "Cafe-Bar"

@@ -6,50 +6,72 @@
     .form-label { font-weight: 500; }
     .seo-block-label { font-weight: 500; padding-top: 7px; }
     .form-switch .form-check-input { width: 3em; height: 1.5em; cursor: pointer; }
+    .d-none { display: none !important; }
 </style>
 
 <div class="container-fluid mt-4">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div class="card card-outline card-secondary">
+            <div class="card card-outline card-secondary shadow-sm">
                 <div class="card-body">
 
                     <form method="post">
                         {% csrf_token %}
 
                         <div class="d-flex justify-content-end align-items-center mb-4 border-bottom pb-3">
-                            <div class="btn-group">
-                                <label class="btn btn-outline-secondary active">Український</label>
-                                <label class="btn btn-outline-secondary disabled">English</label>
-                            </div>
+                            <ul class="nav nav-tabs border-0" id="language-switcher">
+                                <li class="nav-item">
+                                    <a class="nav-link active fw-bold" href="#" data-lang="uk">UA</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link fw-bold" href="#" data-lang="en">EN</a>
+                                </li>
+                            </ul>
                         </div>
 
-                        <div class="row mb-4">
-                            <label class="col-sm-2 col-form-label">Телефон</label>
+                        <div class="row mb-4 border-bottom pb-4">
+                            <label class="col-sm-2 col-form-label fw-bold">Телефони</label>
                             <div class="col-sm-10">
-                                <div class="mb-2">
-                                    {{ main_form.phone_number1 }} <div class="text-danger small">{{ main_form.phone_number1.errors }}</div>
-                                </div>
-                                <div>
-                                    {{ main_form.phone_number2 }} <div class="text-danger small">{{ main_form.phone_number2.errors }}</div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        {{ main_form.phone_number1 }}
+                                        <div class="text-danger small">{{ main_form.phone_number1.errors }}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ main_form.phone_number2 }}
+                                        <div class="text-danger small">{{ main_form.phone_number2.errors }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row mb-5">
-                            <label class="col-sm-2 col-form-label">SEO текст:</label>
+                            <div class="col-sm-2">
+                                <label class="col-form-label fw-bold lang-uk">SEO текст</label>
+                                <label class="col-form-label fw-bold lang-en d-none">SEO text</label>
+                            </div>
                             <div class="col-sm-10">
-                                {{ main_form.seo_text }}
-                                <div class="text-danger small">{{ main_form.seo_text.errors }}</div>
+                                <div class="lang-uk">
+                                    {{ main_form.seo_text_uk }}
+                                    <div class="text-danger small">{{ main_form.seo_text_uk.errors }}</div>
+                                </div>
+                                <div class="lang-en d-none">
+                                    {{ main_form.seo_text_en }}
+                                    <div class="text-danger small">{{ main_form.seo_text_en.errors }}</div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label pt-0">SEO блок:</label>
+                        <hr>
+
+                        <div class="row mb-3 mt-4">
+                            <div class="col-sm-2">
+                                <label class="col-form-label fw-bold pt-0">SEO блок:</label>
+                            </div>
                             <div class="col-sm-10">
 
                                 <div class="row mb-3 align-items-center">
-                                    <label class="col-sm-2 col-form-label seo-block-label text-end text-muted">URL:</label>
+                                    <label class="col-sm-2 col-form-label seo-block-label text-end text-muted small">URL:</label>
                                     <div class="col-sm-10">
                                         {{ seo_form.url }}
                                         <div class="text-danger small">{{ seo_form.url.errors }}</div>
@@ -57,26 +79,35 @@
                                 </div>
 
                                 <div class="row mb-3 align-items-center">
-                                    <label class="col-sm-2 col-form-label seo-block-label text-end text-muted">Title:</label>
+                                    <div class="col-sm-2 text-end">
+                                        <label class="col-form-label seo-block-label text-muted small lang-uk">Заголовок (Title):</label>
+                                        <label class="col-form-label seo-block-label text-muted small lang-en d-none">Title:</label>
+                                    </div>
                                     <div class="col-sm-10">
-                                        {{ seo_form.title }}
-                                        <div class="text-danger small">{{ seo_form.title.errors }}</div>
+                                        <div class="lang-uk">{{ seo_form.title_uk }}</div>
+                                        <div class="lang-en d-none">{{ seo_form.title_en }}</div>
                                     </div>
                                 </div>
 
                                 <div class="row mb-3 align-items-center">
-                                    <label class="col-sm-2 col-form-label seo-block-label text-end text-muted">Keywords:</label>
+                                    <div class="col-sm-2 text-end">
+                                        <label class="col-form-label seo-block-label text-muted small lang-uk">Ключові слова:</label>
+                                        <label class="col-form-label seo-block-label text-muted small lang-en d-none">Keywords:</label>
+                                    </div>
                                     <div class="col-sm-10">
-                                        {{ seo_form.keywords }}
-                                        <div class="text-danger small">{{ seo_form.keywords.errors }}</div>
+                                        <div class="lang-uk">{{ seo_form.keywords_uk }}</div>
+                                        <div class="lang-en d-none">{{ seo_form.keywords_en }}</div>
                                     </div>
                                 </div>
 
                                 <div class="row align-items-start">
-                                    <label class="col-sm-2 col-form-label seo-block-label text-end text-muted">Description:</label>
+                                    <div class="col-sm-2 text-end">
+                                        <label class="col-form-label seo-block-label text-muted small lang-uk">Опис (Description):</label>
+                                        <label class="col-form-label seo-block-label text-muted small lang-en d-none">Description:</label>
+                                    </div>
                                     <div class="col-sm-10">
-                                        {{ seo_form.description }}
-                                        <div class="text-danger small">{{ seo_form.description.errors }}</div>
+                                        <div class="lang-uk">{{ seo_form.description_uk }}</div>
+                                        <div class="lang-en d-none">{{ seo_form.description_en }}</div>
                                     </div>
                                 </div>
 
@@ -85,7 +116,10 @@
 
                         <div class="row mt-5 mb-3">
                             <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-secondary px-5 py-2">Зберегти</button>
+                                <button type="submit" class="btn btn-primary px-5 py-2 shadow-sm">
+                                    <span class="lang-uk">Зберегти</span>
+                                    <span class="lang-en d-none">Save changes</span>
+                                </button>
                             </div>
                         </div>
 
@@ -96,4 +130,33 @@
         </div>
     </div>
 </div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const switcher = document.getElementById('language-switcher');
+
+        if (switcher) {
+            switcher.querySelectorAll('.nav-link').forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    switcher.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const lang = this.getAttribute('data-lang');
+
+                    if (lang === 'uk') {
+                        document.querySelectorAll('.lang-uk').forEach(el => el.classList.remove('d-none'));
+                        document.querySelectorAll('.lang-en').forEach(el => el.classList.add('d-none'));
+                    } else {
+                        document.querySelectorAll('.lang-uk').forEach(el => el.classList.add('d-none'));
+                        document.querySelectorAll('.lang-en').forEach(el => el.classList.remove('d-none'));
+                    }
+                });
+            });
+        }
+    });
+</script>
 {% endblock %}

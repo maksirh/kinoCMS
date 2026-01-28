@@ -62,6 +62,7 @@
         font-weight: bold;
         z-index: 10;
     }
+    .d-none { display: none !important; }
 </style>
 
 <div class="container-fluid mt-4">
@@ -77,71 +78,58 @@
                 <label class="form-label fw-bold me-3" style="white-space: nowrap;">Номер залу</label>
                 <div class="flex-grow-1">
                     {{ hall_form.number }}
-                    {% if hall_form.number.errors %}<div class="text-danger small">{{ hall_form.number.errors }}</div>{% endif %}
                 </div>
             </div>
-            <div class="col-md-6">
-                <ul class="nav nav-tabs justify-content-end border-0">
+            <div class="col-md-6 text-end">
+                <ul class="nav nav-tabs justify-content-end d-inline-flex border-0" id="language-switcher">
                     <li class="nav-item">
-                        <a class="nav-link active border border-bottom-0" href="#">Українська</a>
+                        <a class="nav-link active fw-bold" href="#" data-lang="uk">UA</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link border border-bottom-0" href="#">English</a>
+                        <a class="nav-link fw-bold" href="#" data-lang="en">EN</a>
                     </li>
                 </ul>
             </div>
         </div>
 
         <div class="row mb-4">
-            <label class="col-sm-2 col-form-label fw-bold">Опис залу</label>
+            <div class="col-sm-2">
+                <label class="form-label fw-bold lang-uk">Опис залу</label>
+                <label class="form-label fw-bold lang-en d-none">Hall Description</label>
+            </div>
             <div class="col-sm-10">
-                {{ hall_form.description }}
+                <div class="lang-uk">{{ hall_form.description_uk }}</div>
+                <div class="lang-en d-none">{{ hall_form.description_en }}</div>
             </div>
         </div>
 
         <div class="row mb-4 align-items-center">
             <label class="col-sm-2 col-form-label fw-bold">Схема залу</label>
             <div class="col-sm-10 d-flex align-items-center">
-
-
                 <div class="d-none">
-                    {{ hall_form.scheme_of_hall }}</div>
-
+                    {{ hall_form.scheme_of_hall }}
+                </div>
                 <div class="d-flex align-items-center me-3">
-    <i class="bi bi-filetype-json fs-3 me-2" id="schemaIcon"
-       style="{% if hall_form.instance.scheme_of_hall %}display: inline-block;{% else %}display: none;{% endif %}">
-    </i>
-
-    <span id="fileNameDisplay" class="{% if hall_form.instance.scheme_of_hall %}fw-bold{% else %}text-muted{% endif %}">
-        {% if hall_form.instance.scheme_of_hall %}
-            <a href="{{ hall_form.instance.scheme_of_hall.url }}" target="_blank" style="text-decoration: none; color: inherit;">
-                {{ hall_form.instance.scheme_of_hall.name }}
-            </a>
-        {% else %}
-            Файл не обрано
-        {% endif %}
-    </span>
-</div>
-
-
-                <button type="button" class="btn btn-secondary me-2"
-                onclick="document.getElementById('id_scheme_of_hall').click()">
-            Завантажити JSON
-        </button>
-
-            <button type="button" class="btn btn-outline-danger"
-                onclick="clearFile('id_scheme_of_hall', 'fileNameDisplay', 'schemaIcon')">
-            Видалити
-        </button>
-
+                    <i class="bi bi-filetype-json fs-3 me-2" id="schemaIcon"
+                       style="{% if hall_form.instance.scheme_of_hall %}display: inline-block;{% else %}display: none;{% endif %}">
+                    </i>
+                    <span id="fileNameDisplay" class="{% if hall_form.instance.scheme_of_hall %}fw-bold{% else %}text-muted{% endif %}">
+                        {% if hall_form.instance.scheme_of_hall %}
+                            {{ hall_form.instance.scheme_of_hall.name }}
+                        {% else %}
+                            Файл не обрано
+                        {% endif %}
+                    </span>
+                </div>
+                <button type="button" class="btn btn-secondary me-2" onclick="document.getElementById('id_scheme_of_hall').click()">Завантажити JSON</button>
+                <button type="button" class="btn btn-outline-danger" onclick="clearFile('id_scheme_of_hall', 'fileNameDisplay', 'schemaIcon')">Видалити</button>
             </div>
         </div>
 
         <div class="row mb-5 align-items-center">
             <label class="col-sm-2 col-form-label fw-bold">Верхній банер</label>
             <div class="col-sm-10 d-flex align-items-center">
-
-                <div class="single-img-preview me-3">
+                <div class="single-img-preview me-3 shadow-sm">
                     {% if hall_form.instance.banner_image %}
                         <img src="{{ hall_form.instance.banner_image.url }}" id="bannerPreview">
                         <i class="bi bi-image fs-2 text-muted" id="bannerIcon" style="display: none;"></i>
@@ -150,12 +138,8 @@
                         <i class="bi bi-image fs-2 text-muted" id="bannerIcon"></i>
                     {% endif %}
                 </div>
-
-                <div class="d-none">
-                    {{ hall_form.banner_image }}
-                </div>
-
-                <button type="button" class="btn btn-secondary me-2" onclick="triggerUpload('id_banner_image')">Завантажити</button>
+                <div class="d-none">{{ hall_form.banner_image }}</div>
+                <button type="button" class="btn btn-secondary me-2" onclick="document.getElementById('id_banner_image').click()">Завантажити</button>
                 <button type="button" class="btn btn-outline-danger" onclick="clearSingleImage('id_banner_image', 'bannerPreview', 'bannerIcon')">Видалити</button>
             </div>
         </div>
@@ -163,152 +147,114 @@
         <div class="row mb-5">
             <label class="col-sm-2 col-form-label fw-bold">Галерея картинок</label>
             <div class="col-sm-10">
-                <div class="text-muted small mb-2">Розмір: 1000x190</div>
-
                 <div class="gallery-wrapper" id="gallery-container">
                     {{ gallery_formset.management_form }}
-
                     {% for g_form in gallery_formset %}
                         <div class="gallery-item">
                             {{ g_form.id }}
                             <span class="d-none">{{ g_form.DELETE }}</span>
-
                             <div class="btn-remove-gallery" onclick="deleteGalleryItem(this)">x</div>
-
                             <div class="gallery-preview-box">
                                 {% if g_form.instance.pk and g_form.instance.image %}
                                     <img src="{{ g_form.instance.image.url }}">
                                 {% else %}
-                                    <i class="bi bi-image placeholder-icon fs-2 text-muted"></i>
+                                    <i class="bi bi-image fs-2 text-muted"></i>
                                 {% endif %}
                             </div>
-
-                            {% if not g_form.instance.pk %}
-                                <div class="mt-1">
-                                    <button type="button" class="btn btn-light btn-sm border w-100" onclick="this.closest('.gallery-item').querySelector('input[type=file]').click()">Додати</button>
-                                </div>
-                                <div class="d-none">{{ g_form.image }}</div>
-                            {% else %}
-                                <div class="mt-1 text-center small text-success">Завантажено</div>
-                            {% endif %}
+                            <div class="d-none">{{ g_form.image }}</div>
+                            <button type="button" class="btn btn-light btn-sm border w-100" onclick="this.closest('.gallery-item').querySelector('input[type=file]').click()">Додати</button>
                         </div>
                     {% endfor %}
                 </div>
-
-                <div class="mt-3">
-                    <button type="button" class="btn btn-outline-success" id="add-gallery-btn">
-                        <i class="bi bi-plus-lg"></i> Додати фото
-                    </button>
-                </div>
+                <button type="button" class="btn btn-outline-success mt-3" id="add-gallery-btn">
+                    <i class="bi bi-plus-lg"></i> Додати фото
+                </button>
             </div>
         </div>
 
         <hr class="my-5">
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label fw-bold pt-0">SEO блок:</label>
-            <div class="col-sm-10">
-                <div class="row mb-2 align-items-center">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">URL:</label>
-                    <div class="col-sm-11">{{ seo_form.url }}</div>
-                </div>
-                <div class="row mb-2 align-items-center">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">Title:</label>
-                    <div class="col-sm-11">{{ seo_form.title }}</div>
-                </div>
-                <div class="row mb-2 align-items-center">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">Keywords:</label>
-                    <div class="col-sm-11">{{ seo_form.keywords }}</div>
-                </div>
-                <div class="row mb-2">
-                    <label class="col-sm-1 col-form-label text-end text-muted small">Description:</label>
-                    <div class="col-sm-11">{{ seo_form.description }}</div>
-                </div>
-            </div>
+        <div class="card p-4 bg-light shadow-sm mb-5">
+    <h5 class="fw-bold mb-4">
+        <span class="lang-uk">SEO блок</span>
+        <span class="lang-en d-none">SEO Block</span>
+    </h5>
+
+    <div class="row mb-3 align-items-center">
+        <label class="col-sm-2 col-form-label fw-bold small text-muted">URL:</label>
+        <div class="col-sm-10">
+            {{ seo_form.url }}
         </div>
+    </div>
 
-        <div class="text-center mt-5 mb-5">
-            <button type="submit" class="btn btn-secondary px-5">Зберегти</button>
+    <div class="row mb-3 align-items-center">
+        <div class="col-sm-2">
+            <label class="col-form-label fw-bold small text-muted lang-uk">Заголовок (Title):</label>
+            <label class="col-form-label fw-bold small text-muted lang-en d-none">Title:</label>
         </div>
-
-    </form>
-</div>
-
-<div id="empty-form" style="display: none;">
-    <div class="gallery-item">
-        <input type="hidden" name="gallery-__prefix__-id" id="id_gallery-__prefix__-id">
-        <input type="checkbox" name="gallery-__prefix__-DELETE" id="id_gallery-__prefix__-DELETE" style="display:none;">
-
-        <div class="btn-remove-gallery" onclick="deleteGalleryItem(this)">x</div>
-
-        <div class="gallery-preview-box">
-            <i class="bi bi-image placeholder-icon fs-2 text-muted"></i>
+        <div class="col-sm-10">
+            <div class="lang-uk">{{ seo_form.title_uk }}</div>
+            <div class="lang-en d-none">{{ seo_form.title_en }}</div>
         </div>
+    </div>
 
-        <div class="mt-1">
-            <button type="button" class="btn btn-light btn-sm border w-100" onclick="this.closest('.gallery-item').querySelector('input[type=file]').click()">Додати</button>
+    <div class="row mb-3 align-items-center">
+        <div class="col-sm-2">
+            <label class="col-form-label fw-bold small text-muted lang-uk">Ключові слова:</label>
+            <label class="col-form-label fw-bold small text-muted lang-en d-none">Keywords:</label>
         </div>
-        <div class="d-none">
-            <input type="file" name="gallery-__prefix__-image" accept="image/*" id="id_gallery-__prefix__-image">
+        <div class="col-sm-10">
+            <div class="lang-uk">{{ seo_form.keywords_uk }}</div>
+            <div class="lang-en d-none">{{ seo_form.keywords_en }}</div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-2">
+            <label class="col-form-label fw-bold small text-muted lang-uk">Опис (Description):</label>
+            <label class="col-form-label fw-bold small text-muted lang-en d-none">Description:</label>
+        </div>
+        <div class="col-sm-10">
+            <div class="lang-uk">{{ seo_form.description_uk }}</div>
+            <div class="lang-en d-none">{{ seo_form.description_en }}</div>
         </div>
     </div>
 </div>
 
+        <div class="text-center mt-5 mb-5">
+            <button type="submit" class="btn btn-primary px-5 btn-lg shadow">Зберегти зал</button>
+        </div>
+    </form>
+</div>
+
+<div id="empty-form" class="d-none">
+    <div class="gallery-item">
+        <input type="hidden" name="gallery-__prefix__-id">
+        <input type="checkbox" name="gallery-__prefix__-DELETE" class="d-none">
+        <div class="btn-remove-gallery" onclick="deleteGalleryItem(this)">x</div>
+        <div class="gallery-preview-box"><i class="bi bi-image fs-2 text-muted"></i></div>
+        <button type="button" class="btn btn-light btn-sm border w-100" onclick="this.closest('.gallery-item').querySelector('input[type=file]').click()">Додати</button>
+        <div class="d-none"><input type="file" name="gallery-__prefix__-image" accept="image/*" onchange="previewGalleryImage(this)"></div>
+    </div>
+</div>
+
 <script>
-
-    function triggerUpload(inputId) {
-        const input = document.getElementById(inputId);
-        if(input) input.click();
-    }
-
     function clearSingleImage(inputId, previewId, iconId) {
-        const input = document.getElementById(inputId);
+        document.getElementById(inputId).value = '';
         const preview = document.getElementById(previewId);
         const icon = document.getElementById(iconId);
-
-        if(input) input.value = '';
-
         preview.src = '';
         preview.style.display = 'none';
         icon.style.display = 'block';
-
     }
 
-    function setupSinglePreview(inputId, previewId, iconId) {
-        const input = document.getElementById(inputId);
-        const preview = document.getElementById(previewId);
+    function clearFile(inputId, displayId, iconId) {
+        document.getElementById(inputId).value = '';
+        const display = document.getElementById(displayId);
         const icon = document.getElementById(iconId);
-
-        if(input) {
-            input.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        preview.style.display = 'block';
-                        icon.style.display = 'none';
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        setupSinglePreview('id_banner_image', 'bannerPreview', 'bannerIcon');
-    });
-
-
-    function deleteGalleryItem(btn) {
-        const wrapper = btn.closest('.gallery-item');
-        const deleteInput = wrapper.querySelector('input[name$="-DELETE"]');
-        if (deleteInput) {
-            deleteInput.checked = true;
-            wrapper.style.display = 'none';
-        } else {
-            wrapper.remove();
-        }
+        display.textContent = 'Файл не обрано';
+        display.classList.replace('fw-bold', 'text-muted');
+        if(icon) icon.style.display = 'none';
     }
 
     function previewGalleryImage(input) {
@@ -316,74 +262,75 @@
         const imgContainer = wrapper.querySelector('.gallery-preview-box');
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                imgContainer.innerHTML = `<img src="${e.target.result}">`;
-            }
+            reader.onload = e => { imgContainer.innerHTML = `<img src="${e.target.result}">`; }
             reader.readAsDataURL(input.files[0]);
         }
     }
 
+    function deleteGalleryItem(btn) {
+        const item = btn.closest('.gallery-item');
+        const delInput = item.querySelector('input[name$="-DELETE"]');
+        if (delInput) { delInput.checked = true; item.style.display = 'none'; }
+        else { item.remove(); }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
+        // 1. Перемикач мов
+        const switcher = document.getElementById('language-switcher');
+        switcher.querySelectorAll('.nav-link').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                switcher.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const lang = this.getAttribute('data-lang');
+                document.querySelectorAll('.lang-uk').forEach(el => el.classList.toggle('d-none', lang !== 'uk'));
+                document.querySelectorAll('.lang-en').forEach(el => el.classList.toggle('d-none', lang !== 'en'));
+            });
+        });
+
+        // 2. Прев'ю банера
+        const bannerInput = document.getElementById('id_banner_image');
+        if(bannerInput) {
+            bannerInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        const preview = document.getElementById('bannerPreview');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                        document.getElementById('bannerIcon').style.display = 'none';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        const schemeInput = document.getElementById('id_scheme_of_hall');
+        if(schemeInput) {
+            schemeInput.addEventListener('change', function() {
+                const display = document.getElementById('fileNameDisplay');
+                const icon = document.getElementById('schemaIcon');
+                if (this.files.length > 0) {
+                    display.textContent = this.files[0].name;
+                    display.classList.replace('text-muted', 'fw-bold');
+                    icon.style.display = 'inline-block';
+                }
+            });
+        }
+
         const addBtn = document.getElementById('add-gallery-btn');
         const container = document.getElementById('gallery-container');
-        const totalFormsInput = document.getElementById('id_gallery-TOTAL_FORMS');
-        const emptyFormTemplate = document.getElementById('empty-form').innerHTML;
+        const totalForms = document.querySelector('[id$="-TOTAL_FORMS"]');
+        const template = document.getElementById('empty-form').innerHTML;
 
         if (addBtn) {
             addBtn.addEventListener('click', function() {
-                const formCount = parseInt(totalFormsInput.value);
-                const newFormHtml = emptyFormTemplate.replace(/__prefix__/g, formCount);
-                container.insertAdjacentHTML('beforeend', newFormHtml);
-                totalFormsInput.value = formCount + 1;
-
-                const newInputs = container.querySelectorAll('input[type="file"]');
-                const lastInput = newInputs[newInputs.length - 1];
-                lastInput.addEventListener('change', function() {
-                    previewGalleryImage(this);
-                });
+                const count = parseInt(totalForms.value);
+                container.insertAdjacentHTML('beforeend', template.replace(/__prefix__/g, count));
+                totalForms.value = count + 1;
             });
         }
-
-        const existingInputs = container.querySelectorAll('input[type="file"]');
-        existingInputs.forEach(input => {
-            input.addEventListener('change', function() {
-                previewGalleryImage(this);
-            });
-        });
     });
-
-
-    document.getElementById('id_scheme_of_hall').addEventListener('change', function(event) {
-        const fileInput = event.target;
-        const fileNameDisplay = document.getElementById('fileNameDisplay');
-        const schemaIcon = document.getElementById('schemaIcon');
-
-        if (fileInput.files.length > 0) {
-            fileNameDisplay.textContent = fileInput.files[0].name;
-            fileNameDisplay.classList.remove('text-muted');
-            fileNameDisplay.classList.add('fw-bold');
-
-            if(schemaIcon) schemaIcon.style.display = 'inline-block';
-        } else {
-            resetDisplay(fileNameDisplay, schemaIcon);
-        }
-    });
-
-    function clearFile(inputId, displayId, iconId) {
-        const fileInput = document.getElementById(inputId);
-        const fileNameDisplay = document.getElementById(displayId);
-        const schemaIcon = document.getElementById(iconId);
-
-        fileInput.value = '';
-
-        resetDisplay(fileNameDisplay, schemaIcon);
-    }
-
-    function resetDisplay(displayElement, iconElement) {
-        displayElement.textContent = 'Файл не обрано';
-        displayElement.classList.add('text-muted');
-        displayElement.classList.remove('fw-bold');
-        if(iconElement) iconElement.style.display = 'none';
-    }
 </script>
 {% endblock %}

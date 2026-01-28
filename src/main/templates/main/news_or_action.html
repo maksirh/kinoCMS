@@ -1,23 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block content %}
+{% load i18n %} {% block content %}
 
     <style>
     .carousel-item img {
         width: 100%;
         height: 400px;
-
         object-fit: cover;
-
         object-position: center center;
     }
     </style>
+
 <div class="banner">
 
     {% if top_banner %}
 
-    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="{{ top_banner.speed}}">
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="{{ top_banner.speed }}">
     <div class="carousel-inner">
         {% for component in top_banner.banner_component.all %}
             <div class="carousel-item {% if forloop.first %}active{% endif %}">
@@ -26,7 +24,7 @@
                 {% endif %}
 
                 {% if component.image %}
-                    <img class="d-block w-100" src="{{ component.image.url }}" alt="{{ component.text|default:'Banner Image' }}">
+                    <img class="d-block w-100" src="{{ component.image.url }}" alt="{{ component.text|default:_('Banner Image') }}">
                 {% endif %}
                 {% if component.url %}
                     </a>
@@ -60,8 +58,7 @@
 <article class="container mt-5 px-4 text-light">
     <header class="mb-4 border-start border-primary border-4 ps-3">
         <h2 class="text-uppercase fw-bold m-0" style="letter-spacing: 1px; font-family: 'Segoe UI', Roboto, sans-serif;">
-            {{ item.title }}
-        </h2>
+            {{ item.title }} </h2>
     </header>
 
     <div class="row gx-lg-5 align-items-start">
@@ -73,13 +70,16 @@
 
         <section class="col-lg-8 col-md-7">
             <div class="fs-5 lh-base text-secondary-emphasis" style="text-align: justify; white-space: pre-line;">
-                {{ item.description|linebreaks }}
-            </div>
+                {{ item.description|linebreaks }} </div>
 
             <div class="mt-4">
                 <a href="{% url 'main:news_page' %}" class="btn btn-outline-secondary btn-sm rounded-pill px-4">
-                    <i class="bi bi-arrow-left me-2"></i>{% if item.is_news %} До всіх новин {% endif %}
-                        {% if not item.is_news %} До всіх акцій {% endif %}
+                    <i class="bi bi-arrow-left me-2"></i>
+                    {% if item.is_news %}
+                        {% trans "До всіх новин" %}
+                    {% else %}
+                        {% trans "До всіх акцій" %}
+                    {% endif %}
                 </a>
             </div>
         </section>
@@ -87,7 +87,7 @@
 
     {% if item.gallery_images.all %}
     <div class="mt-5 pt-4 border-top border-secondary">
-        <h4 class="mb-4">Кадри з події</h4>
+        <h4 class="mb-4">{% trans "Кадри з події" %}</h4>
         <div class="row g-2">
             {% for img in item.gallery_images.all %}
             <div class="col-6 col-md-3">
@@ -98,6 +98,5 @@
     </div>
     {% endif %}
 </article>
-
 
 {% endblock %}
