@@ -5,7 +5,7 @@ from src.cms.models import Banner, Movie, ThroughBanner
 from src.main.models import MainPage, Page, NewsAndActions, Hall, Schedule, Cinema, Ticket
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-
+from django.contrib.auth.decorators import login_required
 
 def main_page(request):
 
@@ -90,7 +90,7 @@ def schedule(request):
     return render(request, "main/schedule.html", context)
 
 
-
+@login_required
 def booking(request, schedule_id):
     schedule = get_object_or_404(Schedule, id=schedule_id)
 

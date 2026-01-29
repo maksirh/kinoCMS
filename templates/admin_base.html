@@ -34,7 +34,7 @@
 
     <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
       <div class="sidebar-wrapper">
-         <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
+         <ul class="nav sidebar-menu flex-column d-flex h-100" data-lte-toggle="treeview" role="menu">
           <li class="nav-item">
             <a href="{% url 'adminlte:statistics' %}" class="nav-link">
               <i class="nav-icon bi bi-speedometer2"></i>
@@ -84,6 +84,14 @@
             </a>
           </li>
 
+
+          <li class="nav-item">
+            <a href="{% url 'adminlte:schedule_list' %}" class="nav-link">
+              <i class="nav-icon bi bi-calendar-event"></i>
+              <p>Керування розкладом</p>
+            </a>
+          </li>
+
            <li class="nav-item">
             <a href="{% url 'adminlte:users_list' %}" class="nav-link">
               <i class="nav-icon bi bi-cup-hot"></i>
@@ -97,6 +105,14 @@
               <p>Розсилання</p>
             </a>
           </li>
+
+
+         <li class="nav-item" style="margin-top: auto">
+             <a href="{% url 'main:main_page' %}" class="nav-link">
+             <i class="bi bi-box-arrow-left"></i>
+             <p>Назад на головну</p>
+             </a>
+         </li>
         </ul>
       </div>
     </aside>

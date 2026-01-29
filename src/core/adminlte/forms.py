@@ -1,7 +1,7 @@
 from django import forms
 from src.cms.models import BannerComponent, Banner, ThroughBanner, SeoBlock, Movie, Cinema, ContactComponent, Contacts, \
     Hall, Mailing
-from src.main.models import MainPage, Page, Gallery, NewsAndActions
+from src.main.models import MainPage, Page, Gallery, NewsAndActions, Schedule
 from django.forms import modelformset_factory
 import json
 from django.core.exceptions import ValidationError
@@ -342,4 +342,22 @@ class MailingForm(forms.ModelForm):
         }
         
 
+class ScheduleForm(forms.ModelForm):
+    class Meta:
+        model = Schedule
+        fields = ['id_cinema', 'id_hall', 'id_movie', 'date', 'price']
+        labels = {
+            'id_cinema': 'Кінотеатр',
+            'id_hall': 'Зал',
+            'id_movie': 'Фільм',
+            'date': 'Дата та час сеансу',
+            'price': 'Ціна квитка (грн)',
+        }
+        widgets = {
+            'id_cinema': forms.Select(attrs={'class': 'form-control select2', 'id': 'id_cinema'}),
+            'id_hall': forms.Select(attrs={'class': 'form-control select2', 'id': 'id_hall'}),
+            'id_movie': forms.Select(attrs={'class': 'form-control select2'}),
+            'date': forms.DateTimeInput(attrs={'class': 'form-control datetimepicker-input', 'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+            'price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.5', 'placeholder': 'Наприклад: 150.00'}),
+        }
 

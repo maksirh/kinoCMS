@@ -48,6 +48,12 @@
 
         <div class="d-flex align-items-center">
 
+        {% if request.user.is_superuser %}
+            <div class="me-4 text-end">
+                <a class="btn btn-primary" href="{% url 'adminlte:statistics' %}">Адмін панель</a>
+            </div>
+        {% endif %}
+
             <div class="me-4 text-end">
                 <div>{{ phone1 }}</div>
                 <div>{{ phone2 }}</div>

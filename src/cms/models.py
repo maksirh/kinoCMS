@@ -28,6 +28,8 @@ class Movie(models.Model):
     images = models.ManyToManyField(Gallery)
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
 
+    def __str__(self):
+        return self.title
 
 class Cinema(models.Model):
     seo_block = models.OneToOneField(SeoBlock, on_delete=models.CASCADE, null=True, blank=True)
@@ -38,6 +40,9 @@ class Cinema(models.Model):
     description = models.TextField()
     main_image = models.ImageField()
     address = models.CharField(max_length=120)
+
+    def __str__(self):
+        return self.title
 
 
 class Hall(models.Model):
@@ -50,6 +55,10 @@ class Hall(models.Model):
     banner_image = models.ImageField(upload_to='halls_banners/', null=True, blank=True)
     creation_date = models.DateField(auto_now_add=True, blank=True, null=True)
     is_removable = models.BooleanField(default=True)
+
+
+    def __str__(self):
+        return f"Зал №{self.number}"
 
 
     def delete(self, *args, **kwargs):

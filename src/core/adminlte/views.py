@@ -13,9 +13,9 @@ from .tasks import send_mass_mail_task
 import datetime
 import json
 from django.db.models import Count
+from django.contrib.auth.decorators import user_passes_test
 
-
-
+@user_passes_test(lambda u: u.is_superuser)
 def banners_edit(request):
     banner_top = Banner.objects.order_by('pk').filter(is_promo=True).first()
     if banner_top is None:
@@ -52,7 +52,7 @@ def banners_edit(request):
         "formset_through": formset_through,
     })
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def through_banner_update(request):
     banner = ThroughBanner.objects.first()
     if not banner:
@@ -92,6 +92,7 @@ def through_banner_update(request):
         "formset_through": formset,
     })
 
+@user_passes_test(lambda u: u.is_superuser)
 def banners_top_update(request):
     banner = Banner.objects.order_by('pk').filter(is_promo=True).first()
     if not banner:
@@ -126,7 +127,7 @@ def banners_top_update(request):
 
     return redirect("adminlte:banners")
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def news_and_actions_update(request):
     banner = Banner.objects.order_by('pk').filter(is_promo=False).first()
     if not banner:
@@ -160,7 +161,7 @@ def news_and_actions_update(request):
 
     return redirect("adminlte:banners")
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def film_list(request):
     now = timezone.now()
 
@@ -177,6 +178,7 @@ def film_list(request):
 
 User = get_user_model()
 
+@user_passes_test(lambda u: u.is_superuser)
 def user_edit(request, pk):
     user_obj = get_object_or_404(User, pk=pk)
 
@@ -195,6 +197,7 @@ def user_edit(request, pk):
     }
     return render(request, 'adminlte/user_edit.html', context)
 
+@user_passes_test(lambda u: u.is_superuser)
 def user_delete(request, pk):
     user_obj = get_object_or_404(User, pk=pk)
 
@@ -206,7 +209,7 @@ def user_delete(request, pk):
 
     return redirect('adminlte:users_list')
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def users_list(request):
     queryset = User.objects.all().order_by('-date_joined')
 
@@ -233,7 +236,7 @@ def users_list(request):
 
     return render(request, 'adminlte/users_list.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def main_page(request):
     main_page_obj, created = MainPage.objects.get_or_create(id=1)
 
@@ -263,7 +266,7 @@ def main_page(request):
     return render(request, 'adminlte/main_page.html', context)
 
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def pages(request):
     main_page = MainPage.load()
     contacts = Contacts.load()
@@ -276,7 +279,7 @@ def pages(request):
 
     return render(request, 'adminlte/pages.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def page_add(request):
 
     if request.method == 'POST':
@@ -322,7 +325,7 @@ def page_add(request):
 
 
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def page_edit(request, pk):
 
     page = get_object_or_404(Page, pk=pk)
@@ -377,13 +380,13 @@ def page_edit(request, pk):
 
     return render(request, 'adminlte/page.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def page_delete(request, pk):
     page = get_object_or_404(Page, pk=pk)
     page.delete()
     return redirect('adminlte:pages')
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def edit_mainpage(request):
     main_page = get_object_or_404(MainPage, pk=1)
     seo_instance = main_page.seo_block
@@ -413,6 +416,7 @@ def edit_mainpage(request):
     return render(request, 'adminlte/main_page.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def contacts(request):
     contact_page = Contacts.load()
     seo_instance = contact_page.seo_block
@@ -447,7 +451,7 @@ def contacts(request):
 
     return render(request, 'adminlte/contacts.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def add_movie(request):
 
     if request.method == 'POST':
@@ -491,6 +495,7 @@ def add_movie(request):
     return render(request, 'adminlte/film.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def edit_movie(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
     seo_instance = movie.seo_block
@@ -548,13 +553,13 @@ def edit_movie(request, pk):
 
     return render(request, 'adminlte/film.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def delete_movie(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
     movie.delete()
     return redirect('adminlte:film_list')
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def cinemas_list(request):
     cinemas = Cinema.objects.all()
     context = {
@@ -562,7 +567,7 @@ def cinemas_list(request):
     }
     return render(request, 'adminlte/cinemas.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def cinema_add(request):
     if request.method == 'POST':
         cinema_form = CinemaForm(request.POST, request.FILES)
@@ -617,7 +622,7 @@ def cinema_add(request):
 
     return render(request, 'adminlte/cinema_add.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def edit_cinema(request, pk):
     cinema = get_object_or_404(Cinema, pk=pk)
     seo_instance = cinema.seo_block
@@ -678,13 +683,14 @@ def edit_cinema(request, pk):
 
     return render(request, 'adminlte/cinema_add.html', context)
 
+@user_passes_test(lambda u: u.is_superuser)
 def delete_cinema(request, pk):
     cinema = get_object_or_404(Cinema, pk=pk)
     cinema.delete()
     return redirect('adminlte:cinemas_list')
 
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def hall_add(request, cinema_pk):
 
     if request.method == 'POST':
@@ -741,7 +747,7 @@ def hall_add(request, cinema_pk):
 
     return render(request, 'adminlte/hall.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def hall_edit(request, cinema_pk, pk):
     hall = get_object_or_404(Hall, pk=pk)
     seo_instance = hall.seo_block
@@ -796,14 +802,14 @@ def hall_edit(request, cinema_pk, pk):
 
     return render(request, 'adminlte/hall.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def hall_delete(request, cinema_pk, pk):
     hall = get_object_or_404(Hall, pk=pk)
     hall.delete()
     return redirect('adminlte:edit_cinema', pk=cinema_pk)
 
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def news_and_actions(request, is_news):
     is_news_bool = bool(is_news)
 
@@ -817,7 +823,7 @@ def news_and_actions(request, is_news):
     return render(request, 'adminlte/news_and_actions.html', context)
 
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def news_and_actions_add(request, is_news):
     if request.method == 'POST':
         news_and_actions_form = NewsAndActionsForm(request.POST, request.FILES)
@@ -867,7 +873,7 @@ def news_and_actions_add(request, is_news):
 
     return render(request, 'adminlte/news_and_actions_add.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def news_and_actions_edit(request, pk):
     news_and_actions = get_object_or_404(NewsAndActions, pk=pk)
     seo_instance = news_and_actions.seo_block
@@ -925,7 +931,7 @@ def news_and_actions_edit(request, pk):
 
     return render(request, 'adminlte/news_and_actions_add.html', context)
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def news_and_actions_delete(request, pk):
     news_and_actions = get_object_or_404(NewsAndActions, pk=pk)
     is_news = int(news_and_actions.is_news)
@@ -933,7 +939,7 @@ def news_and_actions_delete(request, pk):
     return redirect('adminlte:news_and_actions', is_news=is_news)
 
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def mailing(request):
     recent_templates = Mailing.objects.all()[:5]
 
@@ -961,6 +967,7 @@ def mailing(request):
     return render(request, 'adminlte/mailing.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def mailing_users_view(request, mailing_id):
     mailing = get_object_or_404(Mailing, pk=mailing_id)
     users = User.objects.all()
@@ -980,12 +987,14 @@ def mailing_users_view(request, mailing_id):
     return render(request, 'adminlte/mailing_users.html', {'users': users, 'mailing': mailing})
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def delete_template(request, pk):
     template = get_object_or_404(Mailing, pk=pk)
     template.delete()
     return redirect('adminlte:mailing')
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def dashboard_stats(request):
     total_users = User.objects.count()
 
@@ -1038,3 +1047,68 @@ def dashboard_stats(request):
     }
 
     return render(request, 'adminlte/dashboard.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def schedule_list(request):
+    schedules = Schedule.objects.select_related('id_movie', 'id_hall', 'id_cinema').order_by('-date')
+
+    context = {
+        'schedules': schedules,
+    }
+    return render(request, 'adminlte/schedule_list.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def add_schedule(request):
+
+    if request.method == "POST":
+        form = ScheduleForm(request.POST)
+        if form.is_valid():
+            schedule = form.save()
+            messages.success(request, f"Сеанс на фільм '{schedule.id_movie}' успішно додано!")
+            return redirect('adminlte:schedule_list')
+        else:
+            messages.error(request, "Помилка при заповненні форми. Перевірте введені дані.")
+    else:
+        form = ScheduleForm()
+
+    context = {
+        'form': form,
+        'title': 'Додати новий сеанс',
+        'button_text': 'Створити',
+    }
+
+    return render(request, 'adminlte/edit_schedule_page.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def edit_schedule(request, pk):
+    schedule = get_object_or_404(Schedule, pk=pk)
+
+    if request.method == "POST":
+        form = ScheduleForm(request.POST, instance=schedule)
+        if form.is_valid():
+            form.save()
+            return redirect('adminlte:schedule_list')
+    else:
+        form = ScheduleForm(instance=schedule)
+
+    context = {
+        'form': form,
+        'schedule': schedule,
+    }
+
+    return render(request, 'adminlte/edit_schedule_page.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def delete_schedule(request, pk):
+    schedule = get_object_or_404(Schedule, pk=pk)
+    schedule.delete()
+    messages.success(request, "Сеанс успішно видалено")
+    return redirect('adminlte:schedule_list')
+
+
+
+

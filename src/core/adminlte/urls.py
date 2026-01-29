@@ -6,7 +6,8 @@ from .views import (banners_top_update, film_list, banners_edit, news_and_action
                     cinema_add, contacts, edit_cinema, delete_cinema, hall_add,
                     hall_edit, hall_delete, news_and_actions_add,
                     news_and_actions, news_and_actions_edit, news_and_actions_delete,
-                    mailing, mailing_users_view, delete_template, dashboard_stats)
+                    mailing, mailing_users_view, delete_template, dashboard_stats,
+                    edit_schedule, schedule_list, add_schedule, delete_schedule)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -47,6 +48,10 @@ urlpatterns = [
     path('mailing/', mailing, name="mailing"),
     path('mailing/users/<int:mailing_id>/', mailing_users_view, name='mailing_users'),
     path('mailing/delete/<int:pk>/', delete_template, name='delete_template'),
+    path('schedule/list', schedule_list, name='schedule_list'),
+    path('schedule/edit/<int:pk>/', edit_schedule, name='edit_schedule'),
+    path('schedule/add/', add_schedule, name='schedule_add'),
+    path('schedule/delete/<int:pk>/', delete_schedule, name='delete_schedule'),
 
 ]
 

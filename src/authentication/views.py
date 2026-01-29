@@ -30,17 +30,15 @@ def logout_user(request):
 
 
 def register(request):
-
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('authentication:login')
-
         else:
-            print(form.errors)
-            messages.error(request, 'Error')
-
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{error}")
     else:
         form = UserRegistrationForm()
 

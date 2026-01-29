@@ -1,0 +1,91 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1>Розклад сеансів</h1>
+        </div>
+        <div class="col-sm-6 text-right">
+            <a href="{% url 'adminlte:schedule_add' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Додати сеанс
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Усі заплановані покази</h3>
+            </div>
+            <div class="card-body">
+                <table id="scheduleTable" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Дата та час</th>
+                            <th>Фільм</th>
+                            <th>Кінотеатр</th>
+                            <th>Зал</th>
+                            <th>Ціна (грн)</th>
+                            <th style="width: 120px;">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in schedules %}
+                        <tr>
+                            <td>{{ item.date|date:"d.m.Y H:i" }}</td>
+                            <td><strong>{{ item.id_movie.title }}</strong></td>
+                            <td>{{ item.id_cinema.title }}</td>
+                            <td><span class="badge badge-info">{{ item.id_hall.number }}</span></td>
+                            <td>{{ item.price }} ₴</td>
+                            <td class="text-center">
+                                <div class="btn-group">
+    <a href="{% url 'adminlte:edit_schedule' item.pk %}" class="btn btn-sm btn-info shadow-sm">
+        <i class="fas fa-pencil-alt"></i> Редагувати
+    </a>
+    <a href="{% url 'adminlte:delete_schedule' item.pk %}" class="btn btn-sm btn-danger shadow-sm">
+        <i class="fas fa-pencil-alt"></i> Видалити
+    </a>
+</div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">Розклад поки порожній.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  $(function () {
+    $("#scheduleTable").DataTable({
+      "responsive": true,
+      "lengthChange": true,
+      "autoWidth": false,
+      "language": {
+          "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/uk.json"
+      },
+      "order": [[0, "desc"]]
+    });
+
+    $('.delete-btn').on('click', function() {
+        const id = $(this).data('id');
+        if (confirm('Ви впевнені, що хочете видалити цей сеанс?')) {
+            window.location.href = `/admin/schedule/delete/${id}/`;
+        }
+    });
+  });
+</script>
+{% endblock %}
