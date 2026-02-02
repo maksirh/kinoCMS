@@ -70,7 +70,7 @@
                         <p class="card-text text-muted small">
                             {{ today_movie.description|truncatewords:20 }}
                         </p>
-                        <a href="#" class="btn btn-primary mt-auto">{% trans "Купити квиток" %}</a>
+                        <a href="{% url 'main:schedule_page' %}" class="btn btn-primary mt-auto">{% trans "Купити квиток" %}</a>
                     </div>
                 </div>
             </div>

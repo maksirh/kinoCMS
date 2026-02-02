@@ -1,0 +1,10 @@
+services:
+  backend:
+    volumes:
+      - .:/app
+    environment:
+      - DEBUG=True
+
+  channels:
+    volumes:
+      - .:/app
