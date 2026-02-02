@@ -6,10 +6,10 @@ import os
 
 
 class SeoBlock(models.Model):
-    url = models.URLField()
-    title = models.CharField(max_length=120)
-    keywords = models.CharField(max_length=120)
-    description = models.TextField()
+    url = models.URLField(null=True, blank=True)
+    title = models.CharField(max_length=120, null=True, blank=True)
+    keywords = models.CharField(max_length=120, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
 
 class Gallery(models.Model):
