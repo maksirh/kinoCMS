@@ -1,8 +1,16 @@
 services:
-  nginx:
+  backend:
+    env_file:
+      - local.env
     ports:
-      - "80:80"
+      - "8000:8000"
+
+  channels:
+    env_file:
+      - local.env
 
   db:
+    env_file:
+      - local.env
     ports:
       - "5432:5432"
