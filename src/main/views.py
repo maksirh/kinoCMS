@@ -17,7 +17,12 @@ def main_page(request):
     current_movies = movies.filter(date_of_show__date__lte=today, date_of_end_show__date__gte=today)
     recent_movies = movies.filter(date_of_show__date__gt=today)
 
-    seo = MainPage.objects.first().seo_block
+    main_page_obj = MainPage.objects.first()
+
+    if main_page_obj:
+        seo = main_page_obj.seo_block
+    else:
+        seo = None
 
     news_or_action = Banner.objects.filter(is_active=True, is_promo=False).first()
 
