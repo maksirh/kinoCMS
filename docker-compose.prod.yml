@@ -1,0 +1,23 @@
+services:
+  nginx:
+    ports:
+      - "80:80"
+    restart: always
+
+  backend:
+    restart: always
+    env_file:
+      - .env
+
+  channels:
+    restart: always
+    env_file:
+      - .env
+
+  db:
+    restart: always
+    env_file:
+      - .env
+
+  redis:
+    restart: always
