@@ -6,10 +6,10 @@ while ! nc -z db 5432; do
 done
 echo "PostgreSQL started"
 
-python src/manage.py migrate
+python manage.py migrate
 
-python src/manage.py collectstatic --noinput
+python manage.py collectstatic --noinput
 
-python src/manage.py compilemessages
+python manage.py compilemessages
 
 exec "$@"
