@@ -9,7 +9,7 @@ services:
       - "80:80"
     volumes:
       - static_volume:/app/static
-      - media_volume:/app/src/media
+      - media_volume:/app/src/core/media
     depends_on:
       - backend
 
@@ -21,7 +21,7 @@ services:
     volumes:
       - ./src:/app/src
       - static_volume:/app/static_root
-      - media_volume:/app/src/media
+      - media_volume:/app/src/core/media
     depends_on:
       - db
       - redis
@@ -34,7 +34,7 @@ services:
     volumes:
       - ./src:/app/src
       - static_volume:/app/static_root
-      - media_volume:/app/src/media
+      - media_volume:/app/src/core/media
     depends_on:
       - db
       - redis
