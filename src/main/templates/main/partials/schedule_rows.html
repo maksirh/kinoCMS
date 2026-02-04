@@ -1,11 +1,14 @@
 {% load i18n %}
 
 {% for item in schedules %}
-<tr>
-  <td>{{ item.date|date:"d.m H:i" }}</td>
+<tr class="table-dark text-white align-middle">
+
+  <td class="text-center">{{ item.date|date:"d.m H:i" }}</td>
 
   <td>
-    <a href="#" class="link-light text-decoration-none fw-bold">{{ item.id_movie.title }}</a>
+    <a href="#" class="text-white text-decoration-none fw-bold" style="color: #fff !important;">
+        {{ item.id_movie.title }}
+    </a>
 
     {% if item.id_movie.is_3d %}
       <span class="badge bg-primary ms-2">3D</span>
@@ -21,14 +24,14 @@
   <td class="text-center">{{ item.price }}</td>
 
   <td class="text-end">
-    <a href="{% url 'main:booking' item.id %}" class="btn btn-sm btn-warning fw-bold">
+    <a href="{% url 'main:booking' item.id %}" class="btn btn-sm btn-warning fw-bold text-dark">
         {% trans "Бронювати" %}
     </a>
   </td>
 </tr>
 {% empty %}
-<tr>
-  <td colspan="5" class="text-center py-4 text-muted">
+<tr class="table-dark text-white">
+  <td colspan="5" class="text-center py-4 text-white">
     {% trans "На жаль, сеансів за вказаними параметрами не знайдено." %}
   </td>
 </tr>

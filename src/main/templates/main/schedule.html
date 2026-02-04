@@ -4,7 +4,7 @@
 <div class="container my-4">
   <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
     <div class="d-flex align-items-center gap-2">
-      <span class="me-2 text-uppercase small text-muted">{% trans "Показувати тільки:" %}</span>
+      <span class="me-2 text-uppercase small text-white">{% trans "Показувати тільки:" %}</span>
       <span class="badge rounded-pill bg-primary" style="cursor:pointer">3D</span>
       <span class="badge rounded-pill bg-info text-dark" style="cursor:pointer">DBOX</span>
       <span class="badge rounded-pill bg-danger" style="cursor:pointer">VIP</span>
@@ -79,7 +79,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Константи для перекладів у JS
     const langAllHalls = "{% trans 'Зал: всі' %}";
     const langDefaultDate = "{% trans 'Оберіть дату та фільтри' %}";
     const langErrorLoad = "{% trans 'Помилка завантаження розкладу:' %}";

@@ -13,9 +13,55 @@
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/headers.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/bootstrap-icons.min.css' %}">
+
+    <style>
+
+        header a, header .nav-link {
+            color: #ffffff !important;
+            text-decoration: none;
+        }
+        header a:hover, header .nav-link:hover {
+            color: #ffc107 !important;
+            opacity: 0.8;
+        }
+
+
+        footer a:hover, footer .nav-link:hover {
+            color: #ffffff !important;
+            opacity: 1;
+        }
+
+        .dropdown-menu a {
+            color: #212529 !important;
+        }
+        .dropdown-menu a:hover {
+            background-color: #e9ecef;
+        }
+
+        .dropdown-menu-dark a {
+            color: #dee2e6 !important;
+        }
+        .dropdown-menu-dark a:hover {
+            color: #fff !important;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-control-dark::placeholder {
+            color: #ffffff !important;
+            opacity: 1;
+        }
+        .form-control-dark::-webkit-input-placeholder {
+            color: #ffffff !important;
+        }
+        .form-control-dark::-moz-placeholder {
+            color: #ffffff !important;
+            opacity: 1;
+        }
+    </style>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
+
     <header class="d-flex flex-wrap align-items-center justify-content-between py-3 mb-4 border-bottom bg-dark text-white px-3">
 
         <div class="d-flex align-items-center">
@@ -25,13 +71,13 @@
             </a>
 
             <ul class="nav mb-0">
-                <li><a href="{% url 'main:main_page' %}" class="nav-link px-2 text-white fw-bold">{% trans "Головна" %}</a></li>
-                <li><a href="{% url 'main:poster' %}" class="nav-link px-2 text-white-50">{% trans "Афіша" %}</a></li>
-                <li><a href="{% url 'main:schedule_page' %}" class="nav-link px-2 text-white-50">{% trans "Розклад" %}</a></li>
-                <li><a href="{% url 'cms:cinemas_list' %}" class="nav-link px-2 text-white-50">{% trans "Кінотеатри" %}</a></li>
+                <li><a href="{% url 'main:main_page' %}" class="nav-link px-2 fw-bold">{% trans "Головна" %}</a></li>
+                <li><a href="{% url 'main:poster' %}" class="nav-link px-2">{% trans "Афіша" %}</a></li>
+                <li><a href="{% url 'main:schedule_page' %}" class="nav-link px-2">{% trans "Розклад" %}</a></li>
+                <li><a href="{% url 'cms:cinemas_list' %}" class="nav-link px-2">{% trans "Кінотеатри" %}</a></li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle px-2 text-white-50" href="#" id="aboutDropdown" role="button"
+                    <a class="nav-link dropdown-toggle px-2" href="#" id="aboutDropdown" role="button"
                        data-toggle="dropdown" aria-expanded="false">
                         {% trans "Про нас" %}
                     </a>
@@ -50,17 +96,17 @@
 
         {% if request.user.is_superuser %}
             <div class="me-4 text-end">
-                <a class="btn btn-primary" href="{% url 'adminlte:statistics' %}">Адмін панель</a>
+                <a class="btn btn-primary text-white" href="{% url 'adminlte:statistics' %}">Адмін панель</a>
             </div>
         {% endif %}
 
-            <div class="me-4 text-end">
+            <div class="me-4 text-end text-white">
                 <div>{{ phone1 }}</div>
                 <div>{{ phone2 }}</div>
             </div>
 
             <div class="dropdown me-4">
-                <a class="nav-link dropdown-toggle text-white text-uppercase" href="#" data-toggle="dropdown">
+                <a class="nav-link dropdown-toggle text-uppercase" href="#" data-toggle="dropdown">
                     {{ CURRENT_LANG }}
                 </a>
 
@@ -83,12 +129,12 @@
             </div>
 
             <form class="me-3" role="search">
-                <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="{% trans 'Пошук...' %}" aria-label="Search">
+                <input type="search" class="form-control form-control-dark text-bg-dark text-white" placeholder="{% trans 'Пошук...' %}" aria-label="Search">
             </form>
 
             {% if request.user.is_authenticated %}
-            <a href="{% url 'authentication:profile' %}" class="link-dark me-3">
-                <i class="bi bi-person-bounding-box" style="font-size: 1.7rem; color: #6f42c1;"></i>
+            <a href="{% url 'authentication:profile' %}" class="link-light me-3">
+                <i class="bi bi-person-bounding-box" style="font-size: 1.7rem;"></i>
             </a>
 
             <a href="{% url 'authentication:logout' %}" class="link-danger">
@@ -97,7 +143,7 @@
 
             {% else %}
             <a href="{% url 'authentication:login' %}" class="btn btn-outline-light me-2">{% trans "Увійти" %}</a>
-            <a href="{% url 'authentication:register' %}" class="btn btn-warning">{% trans "Реєстрація" %}</a>
+            <a href="{% url 'authentication:register' %}" class="btn btn-warning text-dark">{% trans "Реєстрація" %}</a>
             {% endif %}
 
         </div>
@@ -105,60 +151,62 @@
 
     {% block content %}{% endblock %}
 
-    <div class="container">
-        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-            <div class="col-md-4 d-flex align-items-center">
-                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-                    <img src="{% static 'img/logo.png' %}" width="30" height="30" alt="logo">
-                </a>
-                <span class="mb-3 mb-md-0 text-body-secondary">© 2026 Company, Inc</span>
-            </div>
+    <div class="container-fluid bg-dark mt-auto">
+        <div class="container">
+            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top border-secondary">
+                <div class="col-md-4 d-flex align-items-center">
+                    <a href="/" class="mb-3 me-2 mb-md-0 text-decoration-none lh-1">
+                        <img src="{% static 'img/logo.png' %}" width="30" height="30" alt="logo">
+                    </a>
+                    <span class="mb-3 mb-md-0 text-white-50">© 2026 Company, Inc</span>
+                </div>
 
-            <div class="col mb-3">
-                <h5>{% trans "Афіша" %}</h5>
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-2">
-                        <a href="{% url 'main:schedule_page' %}" class="nav-link p-0 text-body-secondary">{% trans "Розклад" %}</a>
+                <div class="col mb-3">
+                    <h5 class="text-white border-bottom border-secondary pb-2">{% trans "Афіша" %}</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2">
+                            <a href="{% url 'main:schedule_page' %}" class="nav-link p-0 text-white-50">{% trans "Розклад" %}</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{% url 'main:poster_coming_soon' %}" class="nav-link p-0 text-white-50">{% trans "Скоро в прокаті" %}</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{% url 'cms:cinemas_list' %}" class="nav-link p-0 text-white-50">{% trans "Кінотеатри" %}</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{% url 'main:actions_page' %}" class="nav-link p-0 text-white-50">{% trans "Акції" %}</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col mb-3">
+                    <h5 class="text-white border-bottom border-secondary pb-2">{% trans "Про кінотеатр" %}</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2">
+                            <a href="{% url 'main:news_page' %}" class="nav-link p-0 text-white-50">{% trans "Новини" %}</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="#" class="nav-link p-0 text-white-50">{% trans "Реклама" %}</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{% url 'main:page' 2 %}" class="nav-link p-0 text-white-50">{% trans "Кафе-Бар" %}</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="#" class="nav-link p-0 text-white-50">{% trans "Контакти" %}</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                    <li class="ms-3">
+                        <a class="text-white-50" href="#"><img src="{% static 'img/logo_facebook.jpg' %}" width="30" height="30" alt="Facebook" style="border-radius: 50%;"></a>
                     </li>
-                    <li class="nav-item mb-2">
-                        <a href="{% url 'main:poster_coming_soon' %}" class="nav-link p-0 text-body-secondary">{% trans "Скоро в прокаті" %}</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a href="{% url 'cms:cinemas_list' %}" class="nav-link p-0 text-body-secondary">{% trans "Кінотеатри" %}</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a href="{% url 'main:actions_page' %}" class="nav-link p-0 text-body-secondary">{% trans "Акції" %}</a>
+                    <li class="ms-3">
+                        <a class="text-white-50" href="#"><img src="{% static 'img/logo_inst.jpg' %}" width="30" height="30" alt="Instagram" style="border-radius: 50%;"></a>
                     </li>
                 </ul>
-            </div>
-
-            <div class="col mb-3">
-                <h5>{% trans "Про кінотеатр" %}</h5>
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-2">
-                        <a href="{% url 'main:news_page' %}" class="nav-link p-0 text-body-secondary">{% trans "Новини" %}</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a href="#" class="nav-link p-0 text-body-secondary">{% trans "Реклама" %}</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a href="{% url 'main:page' 2 %}" class="nav-link p-0 text-body-secondary">{% trans "Кафе-Бар" %}</a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a href="#" class="nav-link p-0 text-body-secondary">{% trans "Контакти" %}</a>
-                    </li>
-                </ul>
-            </div>
-
-            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-                <li class="ms-3">
-                    <a class="text-body-secondary" href="#"><img src="{% static 'img/logo_facebook.jpg' %}" width="30" height="30" alt="Facebook"></a>
-                </li>
-                <li class="ms-3">
-                    <a class="text-body-secondary" href="#"><img src="{% static 'img/logo_inst.jpg' %}" width="30" height="30" alt="Instagram"></a>
-                </li>
-            </ul>
-        </footer>
+            </footer>
+        </div>
     </div>
 
     <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>

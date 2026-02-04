@@ -40,7 +40,7 @@
                 <h4 class="mb-2 d-flex justify-content-center fw-bold">{% trans "Схема залу" %}</h4>
 
                 <div class="mb-4">
-                    <div id="hall-container" class="d-flex flex-column gap-2 overflow-auto py-3 border rounded bg-light">
+                    <div id="hall-container" class="d-flex flex-column gap-2 overflow-auto py-3 border-secondary rounded bg-dark">
                         <div class="text-center text-muted py-5" id="loader">
                             <div class="spinner-border spinner-border-sm me-2"></div> {% trans "Завантаження схеми залу..." %}
                         </div>
@@ -119,7 +119,7 @@
             rowDiv.className = 'd-flex align-items-center justify-content-center gap-2 mb-1';
 
             const label = document.createElement('div');
-            label.className = 'me-3 small text-muted';
+            label.className = 'me-3 small text-white';
             label.style.width = '60px';
             label.innerText = `${rowTranslation} ${rowData.row_number}`;
             rowDiv.appendChild(label);

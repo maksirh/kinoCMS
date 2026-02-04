@@ -1,5 +1,6 @@
 services:
   backend:
+    command: python manage.py runserver 0.0.0.0:8000
     env_file:
       - local.env
     ports:
