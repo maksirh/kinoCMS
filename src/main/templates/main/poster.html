@@ -38,6 +38,7 @@
                                 <p class="card-text small text-muted">
                                     {{ movie.description|truncatewords:20 }}
                                 </p>
+                                <a href="{% url 'main:schedule_page' %}" class="btn btn-primary mt-auto">{% trans "Купити квиток" %}</a>
                             </div>
                         </div>
                     </div>
