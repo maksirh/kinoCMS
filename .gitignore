@@ -5,4 +5,8 @@ __pycache__/
 local.env
 src/core/media/
 src/core/static/img/temporarily/
-*.mo
+*.mo*.pyc
+.idea/
+.vscode/
+.venv/
+db.sqlite3

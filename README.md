@@ -1,82 +1,116 @@
-# KinoCMS 🎬
+# KinoCMS
 
-**KinoCMS** — це система управління контентом для мережі кінотеатрів, розроблена за допомогою Python та фреймворку Django. Проект надає зручні інструменти для адміністрування фільмів, кінотеатрів, залів та розкладу сеансів, а також клієнтську частину для взаємодії з користувачами.
+Website and content management system for a cinema network: movies, cinemas, halls, showtimes and **real-time seat booking over WebSockets**, with a custom admin panel and bilingual (UA/EN) content.
 
-## 🌟 Основний функціонал
+> **Demo:** TODO — add a live demo link (or remove this line)
+>
+> **Screenshots:** TODO — add screenshots of the seat booking page, schedule and admin dashboard (e.g. `docs/screenshots/*.png`)
 
-* **Управління фільмами:** Додавання нових фільмів, редагування інформації (постери, описи, трейлери, акторський склад).
-* **Мережа кінотеатрів:** Створення та налаштування кінотеатрів, управління інформацією про них (галерея, контакти, умови).
-* **Управління залами:** Створення залів для кожного кінотеатру, налаштування кількості місць, схеми залу та їх характеристик.
-* **Розклад сеансів:** Формування сітки сеансів із прив'язкою до конкретних фільмів, залів та часу.
-* **Багатомовність:** Налаштовано підтримку локалізації (папка `locale`).
+## Features
 
-## 🛠 Стек технологій
+**Public website**
+- Home page with banners, "now showing" and "coming soon" posters
+- Showtime schedule with filtering by cinema, hall and date
+- **Live seat booking** — Django Channels consumer (`ws/booking/<schedule_id>/`) broadcasts seat reservations, cancellations and purchases to everyone viewing the same showtime
+- Cinemas, halls, contacts, news and promotions, custom content pages
+- Registration, login and profile editing
+- Ukrainian / English UI and content (Django i18n + `django-modeltranslation`)
 
-* **Backend:** Python 3, Django
-* **Frontend:** HTML5, CSS3
-* **База даних:** PostgreSQL / SQLite (в залежності від конфігурації)
-* **Контейнеризація:** Docker, Docker Compose
+**Admin panel (`/adminlte/`, superuser only)**
+- Dashboard with charts: users by gender, sessions for the last 7 days, traffic sources
+- CRUD for movies, cinemas, halls, showtimes, news & promotions, pages, contacts
+- Banner and slider management (top, news, background banners)
+- User management
+- **Email campaigns**: upload an HTML template and send it to all or selected users via a **Celery** task (Redis broker)
 
-## 📁 Структура проекту
+**Management commands**
+- `init_pages` — creates the mandatory static pages, main page and contacts singletons
+- `init_schedule` — generates showtimes for every hall/movie within the movie's showing period
 
-* `config/` — головні налаштування Django-проекту.
-* `src/` — основні додатки та бізнес-логіка (models, views, forms).
-* `templates/` — HTML-шаблони сторінок.
-* `deploy/` — файли для розгортання проекту.
-* `locale/` — файли перекладів.
+## Tech stack
 
-## 🚀 Встановлення та запуск
+- Python 3.12, Django 5.2
+- Django Channels + Daphne (ASGI), channels-redis
+- Celery + Redis
+- PostgreSQL 15
+- django-modeltranslation, python-decouple, Pillow
+- Gunicorn, Nginx (HTTP + WebSocket proxy), Docker / Docker Compose
+- Frontend: Django templates, Bootstrap, AdminLTE, Chart.js
 
-Проект налаштований для швидкого запуску за допомогою Docker.
+## Project structure
 
-### Попередні вимоги
-Переконайся, що на твоєму комп'ютері встановлені:
-* [Docker](https://www.docker.com/get-started)
-* [Docker Compose](https://docs.docker.com/compose/install/)
-
-### Кроки для локального розгортання
-
-1. **Клонуй репозиторій:**
-   ```bash
-   git clone [https://github.com/maksirh/kinoCMS.git](https://github.com/maksirh/kinoCMS.git)
-   cd kinoCMS
-   ```
-
-2. **Запусти проект через Docker Compose (режим розробки):**
-   ```bash
-   docker-compose -f docker-compose.dev.yml up -d --build
-   ```
-
-3. **Застосуй міграції бази даних:**
-   ```bash
-   docker-compose -f docker-compose.dev.yml exec web python manage.py migrate
-   ```
-
-4. **Створи суперкористувача (адміністратора):**
-   ```bash
-   docker-compose -f docker-compose.dev.yml exec web python manage.py createsuperuser
-   ```
-
-5. **Збери статичні файли (за потреби):**
-   ```bash
-   docker-compose -f docker-compose.dev.yml exec web python manage.py collectstatic --no-input
-   ```
-
-Відкрий браузер і перейди за адресою `http://127.0.0.1:8000/`. Панель адміністратора буде доступна за адресою `http://127.0.0.1:8000/admin/`.
-
-## ⚙️ Запуск у Production
-
-Для запуску проекту на бойовому сервері використовуй спеціальний файл конфігурації `docker-compose.prod.yml`:
-
-```bash
-docker-compose -f docker-compose.prod.yml up -d --build
+```
+config/          settings, URLs (i18n patterns), ASGI routing, Celery app
+src/
+  main/          public pages, schedule, booking, WebSocket consumer, management commands
+  cms/           movies, cinemas, halls, banners, contacts, SEO, mailing models
+  core/adminlte/ custom admin panel views and the Celery mailing task
+  authentication/ login, registration, profile
+  user/          custom User model
+templates/       base layouts
+locale/          translations
+deploy/          Dockerfiles (backend, nginx, db), Nginx config, entrypoint
 ```
 
-## 🤝 Контриб'юція
+## Running locally (Docker Compose)
 
-Якщо ви хочете внести свій вклад у розвиток проекту:
-1. Зробіть Fork репозиторію.
-2. Створіть нову гілку для вашої фічі (`git checkout -b feature/AmazingFeature`).
-3. Зробіть коміт змін (`git commit -m 'Add some AmazingFeature'`).
-4. Відправте зміни в гілку (`git push origin feature/AmazingFeature`).
-5. Створіть Pull Request.
+1. Create `local.env` in the project root (git-ignored):
+
+   ```env
+   SECRET_KEY=change-me
+   DEBUG=True
+   ALLOWED_HOSTS=localhost,127.0.0.1
+
+   DB_NAME=kinocms
+   DB_USER=kinocms
+   DB_PASSWORD=kinocms
+   DB_HOST=db
+   DB_PORT=5432
+   POSTGRES_DB=kinocms
+   POSTGRES_USER=kinocms
+   POSTGRES_PASSWORD=kinocms
+
+   REDIS_HOST=redis
+   REDIS_PORT=6379
+
+   EMAIL_HOST_USER=you@gmail.com
+   EMAIL_HOST_PASSWORD=app-password
+   ```
+
+2. Start the stack (`docker-compose.yml` + `docker-compose.override.yml` are picked up automatically; the override runs Django's dev server on port 8000):
+
+   ```bash
+   docker compose up -d --build
+   docker compose exec backend python manage.py migrate
+   docker compose exec backend python manage.py createsuperuser
+   docker compose exec backend python manage.py init_pages
+   ```
+
+3. Open http://localhost:8000/ (dev server) or http://localhost/ (Nginx, which also proxies `/ws/` to the Daphne `channels` service). Admin panel: `/uk/adminlte/` or `/en/adminlte/`.
+
+4. Email campaigns need a Celery worker (not defined as a separate Compose service yet):
+
+   ```bash
+   docker compose exec backend celery -A config worker -l info
+   ```
+
+To mount the full project directory for live code reload, add the dev overlay:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.dev.yml up --build
+```
+
+### Production
+
+`docker-compose.prod.yml` reads variables from `.env`; the base compose file runs `collectstatic`, `migrate` and Gunicorn behind Nginx:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+```
+
+## TODO
+
+- [ ] Screenshots / demo link
+- [ ] Add a `celery` worker service to Compose
+- [ ] Add a `local.env.example`
+- [ ] Automated tests
